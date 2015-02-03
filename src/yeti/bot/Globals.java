@@ -46,6 +46,8 @@ public class Globals
    public static String               username, serverName, channel;
    public static int                  port;
 
+   public static boolean statusEnabled = true;
+
    public static HashSet<String>      voted         = new HashSet<String>();
    public static Faction              votingFaction = Faction.COUNCIL;
    public static boolean              voting   = false;
@@ -72,16 +74,18 @@ public class Globals
 
    public static void reloadCommands()
    {
-      commands.clear();;
+      commands.clear();
 
       commands.add(new CmdYay());
       commands.add(new CmdNay());
       commands.add(new CmdCards());
+      commands.add(new CmdAddXP());
 
       subCommands.add(new CmdJoin());
       subCommands.add(new CmdPick());
       subCommands.add(new CmdStatus());
       subCommands.add(new CmdDecision());
+      subCommands.add(new CmdDuel());
 
       modCommands.add(new CmdRoll());
       modCommands.add(new CmdVote());

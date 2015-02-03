@@ -4,7 +4,7 @@ package yeti.bot;
  * Created by Z on 7/23/2014.
  */
 public enum UserClass {
-   NEWB, ROGUE, FIGHTER, RANGER, ADEPT, CLERIC;
+   NEWB, ROGUE, FIGHTER, RANGER, ADEPT, CLERIC, ALCHEMIST;
 
    public String name;
    public String[] levelNames;
@@ -27,10 +27,13 @@ public enum UserClass {
       RANGER.levelNames = new String[] {"Ranger", "Hunter", "Marksman", "Sniper", "Deadshot"};
 
       ADEPT.name = "Adept";
-      ADEPT.levelNames = new String[] {"Adept", "Illusionist", "Mage", "Sorcerer", "Grand Wizard"};
+      ADEPT.levelNames = new String[] {"Adept", "Illusionist", "Mage", "Sorcerer", "Great Wizard"};
 
       CLERIC.name = "Cleric";
-      CLERIC.levelNames = new String[] {"Cleric", "Priest", "Inquisitor", "Enlightened", "Transcendant"};
+      CLERIC.levelNames = new String[] {"Acolyte", "Cleric", "Prophet", "Exalted", "Transcendant"};
+
+      ALCHEMIST.name = "Alchemist";
+      ALCHEMIST.levelNames = new String[] {"Herbalist", "Technician", "Chemist", "Thaumaturge", "Alchemist"};
    }
 
    public String getLevelName(float xp)

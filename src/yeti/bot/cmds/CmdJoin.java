@@ -97,7 +97,7 @@ public class CmdJoin implements Command
       else if (sub.faction == Faction.KNIGHTS)
          str += " koolKNIGHTS Make sure to change the color of your name to blue.";
       else if (sub.faction == Faction.ROCKBITER)
-         str += " koolClan Make sure to change the color of your name to yellow.";
+         str += " koolCLAN Make sure to change the color of your name to yellow.";
       else if (sub.faction == Faction.SCHOOL)
          str += " koolSchool Make sure to change the color of your name to red.";
 

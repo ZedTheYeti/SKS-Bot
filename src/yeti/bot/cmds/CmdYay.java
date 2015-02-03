@@ -54,7 +54,7 @@ public class CmdYay implements Command
    public void process(String user, String msg)
    {
       Globals.yays++;
-      Logger.logDebug("One vote for yay");
+      Logger.logDebug(user + " voted for yay");
       Globals.voted.add(user);
    }
 

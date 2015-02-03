@@ -42,6 +42,8 @@ public class CmdPick implements Command
          user.userClass = UserClass.ADEPT;
       else if (userClass.contains("cleric"))
          user.userClass = UserClass.CLERIC;
+      else if (userClass.contains("alchemist"))
+         user.userClass = UserClass.ALCHEMIST;
       else
          return;
 

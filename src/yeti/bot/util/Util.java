@@ -52,7 +52,7 @@ public class Util
 
       if (os.startsWith("Windows"))
       {
-         if (os.contains("7") || os.contains("Vista"))
+         if (os.contains("8") || os.contains("7") || os.contains("Vista"))
             pathStr += FILE_SEPARATOR + "AppData" + FILE_SEPARATOR + "Roaming" + FILE_SEPARATOR;
          else if (os.contains("XP"))
             pathStr += FILE_SEPARATOR + "Application Data" + FILE_SEPARATOR;

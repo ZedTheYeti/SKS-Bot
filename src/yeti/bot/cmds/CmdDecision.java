@@ -39,7 +39,6 @@ public class CmdDecision implements Command {
 
             if(pick > 0 && pick <= votes.length)
             {
-               Logger.logDebug(name + " " + (isSub || (usr != null && usr.captain)) + " " + voted.contains(name));
                if(votingFaction == Faction.ALL)
                   return (isSub || (usr != null && usr.captain)) && !voted.contains(name);
                else
@@ -59,6 +58,7 @@ public class CmdDecision implements Command {
       {
          // pick gets parsed in check(), it's a Global Var to save time re-parsing it here
          votes[pick - 1]++;
+         Logger.logDebug(name + " voted for " + pick);
       }else
       {
          StringBuilder bldr = new StringBuilder("/me ");

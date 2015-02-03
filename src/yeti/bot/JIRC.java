@@ -103,6 +103,8 @@ public class JIRC
       for (User usr : users.values())
          save.set(usr.name, usr.getInfo());
       save.save();
+
+      Logger.logDebug("Finished saving all users");
       saving = false;
    }
 
@@ -143,10 +145,10 @@ public class JIRC
                      @Override
                      public void send(String text)
                      {
-                        if (text.startsWith("/"))
+                        if (text.startsWith("/") && !text.startsWith("/me"))
                            server.processCmd(text.substring(1));
                         else
-                           sendMessage("#sourkoolaidshow", text);
+                           sendMessage(Globals.channel, text);
                      }
                   });
                } catch (Exception e)
@@ -161,6 +163,7 @@ public class JIRC
       }
 
       final Options options = new Options("sksbot/settings.opt");
+      frame.addText(options.getPath() + "\n");
       options.load();
 
       try
@@ -231,9 +234,10 @@ public class JIRC
                } else if (parts[1].equalsIgnoreCase("-o"))
                {
                   User sub = users.get(parts[2]);
-                  if (sub != null)
+                  if (sub != null) {
                      sub.captain = false;
-                  Logger.logDebug(sub.name + " is no longer a mod " + sub.captain);
+                     Logger.logDebug(sub.name + " is no longer a mod " + sub.captain);
+                  }
                }
             } else if (input.contains(" PRIVMSG " + channel))
             {
@@ -281,7 +285,7 @@ public class JIRC
                                  break;
                            }
                         }
-                        sendMessage(channel, "Online Factions | koolBREATH Guildies: " + guildies + "   | koolClan Rockbiters: " + rockbiters + "   | koolKNIGHTS Knights: " + knights + "   | koolSchool Students: " + students);
+                        sendMessage(channel, "Online Factions | koolBREATH Guildies: " + guildies + "   | koolCLAN Rockbiters: " + rockbiters + "   | koolKNIGHTS Knights: " + knights + "   | koolSchool Students: " + students);
                      } else if(target.contains("class"))
                      {
                         int rouges = 0, fighters = 0, adepts = 0, rangers = 0, clerics = 0;
@@ -400,6 +404,7 @@ public class JIRC
       Logger.logDebug("Loading user info..");
       save = new Options("sksbot/user.info");
       save.load();
+      frame.addText(save.getPath() + "\n");
       for(Entry<String, String> entry : save.getAllOptions())
       {
          //Logger.logDebug(entry.getValue());
@@ -421,7 +426,7 @@ public class JIRC
 
       server.joinChannel(channel);
       server.sendLine("TWITCHCLIENT 1");
-      sendMessage(channel, "I have returned from the astral plane!");
+      sendMessage(channel, "/me has returned from the astral plane!");
 
 
       Timer timer = new Timer();

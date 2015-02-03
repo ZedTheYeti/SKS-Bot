@@ -26,6 +26,8 @@
  */
 package yeti.bot;
 
+import yeti.bot.util.Logger;
+
 public class User
 {
    public Faction faction;
@@ -58,7 +60,10 @@ public class User
    public User(String name, Faction fac, UserClass userClass, int level, float exp)
    {
       if(name.equalsIgnoreCase("zedtheyeti"))
+      {
          captain = true;
+         Logger.logDebug(name + " is a mod " + captain);
+      }
       this.name = name.substring(0, 1).toUpperCase() + name.substring(1);
       faction = fac;
       this.userClass = userClass;
@@ -99,7 +104,7 @@ public class User
             str += " koolKNIGHTS";
             break;
          case ROCKBITER:
-            str += " koolClan";
+            str += " koolCLAN";
             break;
          case SCHOOL:
             str += " koolSchool";

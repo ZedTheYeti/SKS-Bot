@@ -24,7 +24,7 @@ public class CmdInfo implements Command
          return;
 
       if(parts[1].contains("class"))
-         JIRC.sendMessage(Globals.channel, "/me The age of adventurers has begun! Subscribers, choose a class today with !pick Rogue, !pick Fighter, !pick Ranger, !pick Cleric or !pick Adept");
+         JIRC.sendMessage(Globals.channel, "/me The age of adventurers has begun! Subscribers, choose a class today with !pick Rogue, !pick Fighter, !pick Ranger, !pick Cleric, !pick Alchemist or !pick Adept");
       else if(parts[1].contains("faction"))
          JIRC.sendMessage(Globals.channel, "/me Subscribers, if you haven't joined a faction then join one today! Use !join Guild, !join Knights, !join School, !join Rockbiters, or !join InsertFactionEmoteHere");
    }

@@ -63,7 +63,7 @@ public class CmdStatus implements Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      return !cooling.containsKey(user) && Globals.users.containsKey(user) && cmd.startsWith("!status");
+      return Globals.statusEnabled && !cooling.containsKey(user) && Globals.users.containsKey(user) && cmd.startsWith("!status");
    }
 
    @Override

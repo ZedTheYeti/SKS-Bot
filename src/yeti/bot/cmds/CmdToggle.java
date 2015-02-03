@@ -44,6 +44,10 @@ public class CmdToggle implements Command
    public void process(String user, String msg)
    {
       String[] parts = msg.split(" ");
+
+      if(parts.length < 2)
+         return;
+
       if(parts[1].equalsIgnoreCase("xp"))
       {
          if(parts[0].startsWith("!toggle"))
@@ -90,6 +94,22 @@ public class CmdToggle implements Command
             Globals.trackXp = false;
             JIRC.sendMessage(Globals.channel, "/me XP tracking has been turned off.");
          }
+      }else if(parts[1].equalsIgnoreCase("status"))
+      {
+         if(parts[0].startsWith("!toggle"))
+            Globals.statusEnabled = !Globals.statusEnabled;
+         else if(parts[0].startsWith("!enable"))
+            Globals.statusEnabled = true;
+         else if(parts[0].startsWith("!disable"))
+            Globals.statusEnabled = false;
+
+         String str = "/me The !status command has been turned ";
+         if(Globals.statusEnabled)
+            str += " on.";
+         else
+            str += " off.";
+
+         JIRC.sendMessage(Globals.channel, str);
       }
    }
 

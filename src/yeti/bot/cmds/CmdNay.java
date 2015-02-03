@@ -53,7 +53,7 @@ public class CmdNay implements Command
    public void process(String user, String msg)
    {
       Globals.nays++;
-      Logger.logDebug("One vote for nay");
+      Logger.logDebug(user + " voted for nay");
       Globals.voted.add(user);
    }
 
