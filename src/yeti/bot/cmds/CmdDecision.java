@@ -40,14 +40,14 @@ public class CmdDecision extends Command {
             if(pick > 0 && pick <= votes.length)
             {
                if(votingFaction == Faction.ALL)
-                  return (isSub || (usr != null && usr.captain)) && !voted.contains(name);
+                  return isEnabled() && (isSub || (usr != null && usr.captain)) && !voted.contains(name);
                else
-                  return usr != null && usr.faction == votingFaction && !voted.contains(name);
+                  return isEnabled() && usr != null && usr.faction == votingFaction && !voted.contains(name);
             }
          }
       }else
       {
-         return usr != null && usr.captain && cmd.startsWith("!decision");
+         return isEnabled() && usr != null && usr.captain && cmd.startsWith("!decision");
       }
       return false;
    }

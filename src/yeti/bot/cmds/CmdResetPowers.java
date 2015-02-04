@@ -37,9 +37,7 @@ public class CmdResetPowers extends Command
    {
 
       User sub = Globals.users.get(user);
-      if (sub != null && sub.captain && cmd.startsWith("!resetpowers"))
-         return true;
-      return false;
+      return isEnabled() && sub != null && sub.captain && cmd.startsWith("!resetpowers");
    }
 
    @Override

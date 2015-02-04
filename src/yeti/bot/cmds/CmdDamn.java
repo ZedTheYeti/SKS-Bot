@@ -39,11 +39,10 @@ public class CmdDamn extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      if (!Globals.voting && !Globals.damnUsed)
+      if (isEnabled() && !Globals.voting && !Globals.damnUsed)
       {
          User sub = Globals.users.get(user);
-         if (sub != null && sub.captain && cmd.startsWith("!damn"))
-            return true;
+         return sub != null && sub.captain && cmd.startsWith("!damn");
       }
       return false;
    }

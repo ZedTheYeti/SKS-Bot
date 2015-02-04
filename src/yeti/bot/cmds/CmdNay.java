@@ -36,7 +36,7 @@ public class CmdNay extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      if (Globals.voting)
+      if (isEnabled() && Globals.voting)
          if (Globals.votingFaction == Faction.COUNCIL)
          {
             User sub = Globals.users.get(user);

@@ -39,7 +39,7 @@ public class CmdDraw extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      if (!Globals.voting && Globals.draws < 2)
+      if (isEnabled() && !Globals.voting && Globals.draws < 2)
       {
          User sub = Globals.users.get(user);
          if (sub != null && sub.captain && cmd.startsWith("!draw"))

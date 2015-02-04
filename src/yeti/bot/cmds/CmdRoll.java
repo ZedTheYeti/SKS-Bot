@@ -15,7 +15,7 @@ public class CmdRoll extends Command
    {
       User usr = Globals.users.get(name);
 
-      return usr != null && (cmd.startsWith("!d4") || cmd.startsWith("!d6") || cmd.startsWith("!d8") || cmd.startsWith("!d10") || cmd.startsWith("!d12") || cmd.startsWith("!d20") || cmd.startsWith("!d100"));
+      return isEnabled() && usr != null && (cmd.startsWith("!d4") || cmd.startsWith("!d6") || cmd.startsWith("!d8") || cmd.startsWith("!d10") || cmd.startsWith("!d12") || cmd.startsWith("!d20") || cmd.startsWith("!d100"));
    }
 
    public void process(String name, String cmd)

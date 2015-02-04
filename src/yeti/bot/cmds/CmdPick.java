@@ -14,7 +14,7 @@ public class CmdPick extends Command
 
    public boolean check(String user, String cmd, boolean isSub)
    {
-      return isSub && !cooling.containsKey(user) && cmd.startsWith("!pick");
+      return isEnabled() && isSub && !cooling.containsKey(user) && cmd.startsWith("!pick");
    }
 
    @Override

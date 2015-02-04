@@ -37,7 +37,7 @@ public class CmdToggle extends Command
    public boolean check(String user, String cmd, boolean isSub)
    {
       User sub = Globals.users.get(user);
-      return sub != null && sub.captain && (cmd.startsWith("!toggle") || cmd.startsWith("!enable") || cmd.startsWith("!disable"));
+      return isEnabled() && sub != null && sub.captain && (cmd.startsWith("!toggle") || cmd.startsWith("!enable") || cmd.startsWith("!disable"));
    }
 
    @Override

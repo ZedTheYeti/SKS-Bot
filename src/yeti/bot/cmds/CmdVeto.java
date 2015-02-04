@@ -39,7 +39,7 @@ public class CmdVeto extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      if (!Globals.voting && !Globals.vetoUsed)
+      if (isEnabled() && !Globals.voting && !Globals.vetoUsed)
       {
          User sub = Globals.users.get(user);
          if (sub != null && sub.captain && cmd.startsWith("!veto"))

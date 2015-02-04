@@ -39,7 +39,7 @@ public class CmdSneak extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      if (!Globals.voting && !Globals.sneakUsed)
+      if (isEnabled() && !Globals.voting && !Globals.sneakUsed)
       {
          User sub = Globals.users.get(user);
          if (sub != null && sub.captain && cmd.startsWith("!sneakattack"))

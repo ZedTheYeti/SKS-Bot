@@ -39,7 +39,7 @@ public class CmdDouble extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      if (!Globals.voting && !Globals.doubleUsed)
+      if (isEnabled() && !Globals.voting && !Globals.doubleUsed)
       {
          User sub = Globals.users.get(user);
          if (sub != null && sub.captain && cmd.startsWith("!double"))

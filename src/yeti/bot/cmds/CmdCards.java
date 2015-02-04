@@ -31,7 +31,7 @@ public class CmdCards extends Command{
    {
       User usr = Globals.users.get(name);
 
-      if(usr == null)
+      if(!isEnabled() || usr == null)
          return false;
 
       if (!voting)

@@ -35,7 +35,7 @@ public class CmdDuel extends Command
    public boolean check(String user, String cmd, boolean isSub)
    {
       User usr = Globals.users.get(user);
-      return usr != null && (cmd.startsWith("!duel") || cmd.startsWith("!accept") || cmd.startsWith("!decline"));
+      return isEnabled() && usr != null && (cmd.startsWith("!duel") || cmd.startsWith("!accept") || cmd.startsWith("!decline"));
    }
 
    @Override

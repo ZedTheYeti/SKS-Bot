@@ -29,9 +29,31 @@ package yeti.bot.cmds;
 
 public abstract class Command
 {
+   private boolean enabled = true;
+
    public abstract boolean check(String user, String cmd, boolean isSub);
 
    public abstract void process(String user, String msg);
 
    public abstract String getUsage();
+
+   public boolean isEnabled()
+   {
+      return enabled;
+   }
+
+   public void enable()
+   {
+      enabled = true;
+   }
+
+   public void disable()
+   {
+      enabled = false;
+   }
+
+   public void toggle()
+   {
+      enabled = !enabled;
+   }
 }

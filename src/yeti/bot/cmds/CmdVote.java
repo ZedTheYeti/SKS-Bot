@@ -15,7 +15,7 @@ public class CmdVote extends Command
 {
    public boolean check(String user, String cmd, boolean isSub)
    {
-      if (!Globals.voting)
+      if (isEnabled() && !Globals.voting)
       {
          User sub = Globals.users.get(user);
          if (sub != null && sub.captain && cmd.startsWith("!vote"))

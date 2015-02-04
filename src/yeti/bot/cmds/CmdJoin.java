@@ -65,7 +65,7 @@ public class CmdJoin extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      return isSub && !cooling.containsKey(user) && cmd.startsWith("!join");
+      return isEnabled() && isSub && !cooling.containsKey(user) && cmd.startsWith("!join");
    }
 
    @Override
