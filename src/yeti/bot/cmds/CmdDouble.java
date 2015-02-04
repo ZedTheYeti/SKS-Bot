@@ -34,7 +34,7 @@ import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
 
-public class CmdDouble implements Command
+public class CmdDouble extends Command
 {
    @Override
    public boolean check(String user, String cmd, boolean isSub)

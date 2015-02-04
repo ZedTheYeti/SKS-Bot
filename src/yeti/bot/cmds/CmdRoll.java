@@ -8,7 +8,7 @@ import yeti.bot.util.Util;
 /**
  * Created by Z on 7/28/2014.
  */
-public class CmdRoll implements Command
+public class CmdRoll extends Command
 {
    @Override
    public boolean check(String name, String cmd, boolean isSub)

@@ -7,7 +7,7 @@ import yeti.bot.User;
 /**
  * Created by Z on 7/23/2014.
  */
-public class CmdInfo implements Command
+public class CmdInfo extends Command
 {
    @Override
    public boolean check(String user, String cmd, boolean isSub)

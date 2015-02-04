@@ -31,7 +31,7 @@ import yeti.bot.JIRC;
 import yeti.bot.User;
 import yeti.bot.util.Logger;
 
-public class CmdToggle implements Command
+public class CmdToggle extends Command
 {
    @Override
    public boolean check(String user, String cmd, boolean isSub)

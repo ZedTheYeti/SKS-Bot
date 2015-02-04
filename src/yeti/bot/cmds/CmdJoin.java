@@ -36,7 +36,7 @@ import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
 
-public class CmdJoin implements Command
+public class CmdJoin extends Command
 {
    private static long           COOLDOWN = 60 * 60 * 1000;
    private HashMap<String, Long> cooling  = new HashMap<String, Long>();

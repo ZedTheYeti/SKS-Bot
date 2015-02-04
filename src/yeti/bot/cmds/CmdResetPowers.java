@@ -30,7 +30,7 @@ import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
 
-public class CmdResetPowers implements Command
+public class CmdResetPowers extends Command
 {
    @Override
    public boolean check(String user, String cmd, boolean isSub)

@@ -11,7 +11,7 @@ import java.util.HashSet;
 /**
  * Created by Z on 7/26/2014.
  */
-public class CmdCards implements Command{
+public class CmdCards extends Command{
    private final class Votes
    {
       public int card1 = 0;

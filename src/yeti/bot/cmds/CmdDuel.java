@@ -12,7 +12,7 @@ import java.util.HashMap;
 /**
  * Created by Z on 1/15/2015.
  */
-public class CmdDuel implements Command
+public class CmdDuel extends Command
 {
    private HashMap<String, DuelInfo> duels = new HashMap<String, DuelInfo>();
 

@@ -10,7 +10,7 @@ import yeti.bot.util.Logger;
 /**
  * Created by Z on 1/14/2015.
  */
-public class CmdAddXP implements Command
+public class CmdAddXP extends Command
 {
 
    @Override

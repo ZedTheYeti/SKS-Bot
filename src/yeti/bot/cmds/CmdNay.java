@@ -31,7 +31,7 @@ import yeti.bot.Globals;
 import yeti.bot.User;
 import yeti.bot.util.Logger;
 
-public class CmdNay implements Command
+public class CmdNay extends Command
 {
    @Override
    public boolean check(String user, String cmd, boolean isSub)

@@ -33,7 +33,7 @@ import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
 
-public class CmdCommands implements Command
+public class CmdCommands extends Command
 {
    private static long           COOLDOWN = 3 * 60 * 1000;
    private boolean     cooling  = false;

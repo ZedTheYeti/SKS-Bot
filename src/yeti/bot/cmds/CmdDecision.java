@@ -13,7 +13,7 @@ import java.util.TimerTask;
 /**
  * Created by Z on 7/28/2014.
  */
-public class CmdDecision implements Command {
+public class CmdDecision extends Command {
    private boolean voting = false;
    private Faction votingFaction = Faction.ALL;
    private HashSet<String> voted = new HashSet<String>();

@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Created by Z on 7/23/2014.
  */
-public class CmdPick implements Command
+public class CmdPick extends Command
 {
    private static long           COOLDOWN = 60 * 60 * 1000;
    private HashMap<String, Long> cooling  = new HashMap<String, Long>();

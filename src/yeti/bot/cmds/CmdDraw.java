@@ -34,7 +34,7 @@ import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
 
-public class CmdDraw implements Command
+public class CmdDraw extends Command
 {
    @Override
    public boolean check(String user, String cmd, boolean isSub)

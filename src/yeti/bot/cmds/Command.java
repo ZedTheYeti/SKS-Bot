@@ -27,11 +27,11 @@
 package yeti.bot.cmds;
 
 
-public interface Command
+public abstract class Command
 {
-   public boolean check(String user, String cmd, boolean isSub);
+   public abstract boolean check(String user, String cmd, boolean isSub);
 
-   public void process(String user, String msg);
+   public abstract void process(String user, String msg);
 
-   public String getUsage();
+   public abstract String getUsage();
 }

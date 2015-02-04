@@ -11,7 +11,7 @@ import java.util.TimerTask;
 /**
  * Created by Z on 7/24/2014.
  */
-public class CmdVote implements Command
+public class CmdVote extends Command
 {
    public boolean check(String user, String cmd, boolean isSub)
    {

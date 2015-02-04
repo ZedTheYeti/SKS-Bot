@@ -34,7 +34,7 @@ import java.util.TimerTask;
 import yeti.bot.Globals;
 import yeti.bot.JIRC;
 
-public class CmdStatus implements Command
+public class CmdStatus extends Command
 {
    private static long           COOLDOWN = 2 * 60 * 1000;
    private HashMap<String, Long> cooling  = new HashMap<String, Long>();
