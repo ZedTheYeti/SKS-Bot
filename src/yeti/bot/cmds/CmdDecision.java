@@ -103,6 +103,8 @@ public class CmdDecision extends Command {
                StringBuilder bldr = new StringBuilder("/me The voting has ended. ");
                bldr.append(votingFaction.getName()).append(" have agreed upon choice ");
 
+               // TODO Deal with ties better
+
                int mostIndex = 0;
                for(int i = 0; i < votes.length; i++)
                {
