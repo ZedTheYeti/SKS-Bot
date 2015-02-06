@@ -255,66 +255,8 @@ public class JIRC
                      sendMessage(channel,
                            "/me The faction portion of this bot is still in a VERY early beta. So expect hiccups ;) Zedtheyeti is monitoring things and will do his best to fix any bugs that pop up. Most importantly just have fun and don't worry about it koolWALLY");
                      return;
-                  } else if (msg.startsWith("!count"))
-                  {
-                     String parts[] = msg.split(" ");
-
-                     if(parts.length <= 1)
-                        return;
-
-                     String target = parts[1].toLowerCase();
-                     if(target.contains("faction")) {
-                        int guildies = 0, rockbiters = 0, knights = 0, students = 0;
-                        for (User usr : users.values()) {
-                           if (!usr.inChannel)
-                              continue;
-
-                           Faction fac = usr.faction;
-                           switch (fac) {
-                              case GUILD:
-                                 guildies++;
-                                 break;
-                              case KNIGHTS:
-                                 knights++;
-                                 break;
-                              case ROCKBITER:
-                                 rockbiters++;
-                                 break;
-                              case SCHOOL:
-                                 students++;
-                                 break;
-                           }
-                        }
-                        sendMessage(channel, "Online Factions | koolBREATH Guildies: " + guildies + "   | koolCLAN Rockbiters: " + rockbiters + "   | koolKNIGHTS Knights: " + knights + "   | koolSchool Students: " + students);
-                     } else if(target.contains("class"))
-                     {
-                        int rouges = 0, fighters = 0, adepts = 0, rangers = 0, clerics = 0;
-                        for (User usr : users.values()) {
-                           if (!usr.inChannel)
-                              continue;
-
-                           UserClass uClass = usr.userClass;
-                           switch (uClass) {
-                              case ROGUE:
-                                 rouges++;
-                                 break;
-                              case FIGHTER:
-                                 fighters++;
-                                 break;
-                              case ADEPT:
-                                 adepts++;
-                                 break;
-                              case RANGER:
-                                 rangers++;
-                                 break;
-                              case CLERIC:
-                                 clerics++;
-                                 break;
-                           }
-                        }
-                        sendMessage(channel, "Online Classes | Rogues: " + rouges + "   | Fighters: " + fighters + "   | Adepts: " + adepts + "   | Rangers: " + rangers + "  | Clerics: " + clerics);
-                     }
                   }
+
                boolean isSub = user != null && user.isSub;
                boolean isMod = user != null && user.captain;
 
