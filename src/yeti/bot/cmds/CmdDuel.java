@@ -14,6 +14,8 @@ import java.util.HashMap;
  */
 public class CmdDuel extends Command
 {
+   // TODO Change to HashMap<String, ArrayList<DuelInfo>> to allow multiple challenges then !accept them in order
+
    private HashMap<String, DuelInfo> duels = new HashMap<String, DuelInfo>();
 
    class DuelInfo
@@ -35,7 +37,7 @@ public class CmdDuel extends Command
    public boolean check(String user, String cmd, boolean isSub)
    {
       User usr = Globals.users.get(user);
-      return isEnabled() && usr != null && (cmd.startsWith("!duel") || cmd.startsWith("!accept") || cmd.startsWith("!decline"));
+      return isEnabled() && Globals.duelEnabled && usr != null && (cmd.startsWith("!duel") || cmd.startsWith("!accept") || cmd.startsWith("!decline"));
    }
 
    @Override
@@ -80,7 +82,7 @@ public class CmdDuel extends Command
          }
 
          duels.put(opponent.name, new DuelInfo(challenger, opponent, amount, System.currentTimeMillis()));
-         JIRC.sendMessage(Globals.channel, "/me " + challenger.name + " has challenged " + opponent.name + " to a duel for " + amount + " xp! " + opponent.name + ", use !accept or !decline to answer the chalenge.");
+         JIRC.sendMessage(Globals.channel, "/me " + challenger.name + " has challenged " + opponent.name + " to a duel for " + amount + " xp! " + opponent.name + ", use !accept or !decline to answer the challenge.");
       } else if (msg.startsWith("!accept"))
       {
          User usr = Globals.users.get(user);

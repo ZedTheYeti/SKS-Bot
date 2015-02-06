@@ -37,7 +37,7 @@ public class CmdToggle extends Command
    public boolean check(String user, String cmd, boolean isSub)
    {
       User sub = Globals.users.get(user);
-      return isEnabled() && sub != null && sub.captain && (cmd.startsWith("!toggle") || cmd.startsWith("!enable") || cmd.startsWith("!disable"));
+      return isEnabled() && sub != null && (cmd.startsWith("!toggle") || cmd.startsWith("!enable") || cmd.startsWith("!disable"));
    }
 
    @Override
@@ -105,6 +105,23 @@ public class CmdToggle extends Command
 
          String str = "/me The !status command has been turned ";
          if(Globals.statusEnabled)
+            str += " on.";
+         else
+            str += " off.";
+
+         JIRC.sendMessage(Globals.channel, str);
+      }
+      else if(parts[1].equalsIgnoreCase("duel"))
+      {
+         if(parts[0].startsWith("!toggle"))
+            Globals.duelEnabled = !Globals.duelEnabled;
+         else if(parts[0].startsWith("!enable"))
+            Globals.duelEnabled = true;
+         else if(parts[0].startsWith("!disable"))
+            Globals.duelEnabled = false;
+
+         String str = "/me The !duel command has been turned ";
+         if(Globals.duelEnabled)
             str += " on.";
          else
             str += " off.";

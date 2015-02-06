@@ -43,10 +43,13 @@ public class Globals
    public static ArrayList<Command>    subCommands     = new ArrayList<Command>();
    public static ArrayList<Command>       commands = new ArrayList<Command>();
 
+   public static HashMap<String, Command> commandMap = new HashMap<String, Command>();
+
    public static String               username, serverName, channel;
    public static int                  port;
 
    public static boolean statusEnabled = true;
+   public static boolean duelEnabled = true;
 
    public static HashSet<String>      voted         = new HashSet<String>();
    public static Faction              votingFaction = Faction.COUNCIL;
@@ -75,18 +78,21 @@ public class Globals
    public static void reloadCommands()
    {
       commands.clear();
-
+      // TODO !gitemwally command
+      // TODO Revamp commands to use HashMap, getUsages() for Cmds with multiple !<cmd> triggers
+      // TODO start dynamically loading Cmd classes
+      // TODO Combine !yay !nay into CmdVote
       commands.add(new CmdYay());
       commands.add(new CmdNay());
+      commands.add(new CmdDecision());
       commands.add(new CmdCards());
-      commands.add(new CmdAddXP());
 
       subCommands.add(new CmdJoin());
       subCommands.add(new CmdPick());
       subCommands.add(new CmdStatus());
-      subCommands.add(new CmdDecision());
       subCommands.add(new CmdDuel());
 
+      modCommands.add(new CmdAddXP());
       modCommands.add(new CmdRoll());
       modCommands.add(new CmdVote());
       modCommands.add(new CmdSneak());
