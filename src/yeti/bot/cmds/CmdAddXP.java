@@ -41,7 +41,7 @@ public class CmdAddXP extends Command
          return;
       }
 
-      User targetUsr = Globals.users.get(parts[1]);
+      User targetUsr = Globals.users.get(parts[1].toLowerCase());
       if(targetUsr == null)
       {
          if(parts[1].equalsIgnoreCase("rockbitters"))
