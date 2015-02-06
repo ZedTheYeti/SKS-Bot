@@ -45,12 +45,12 @@ public class CmdToggle extends Command
    {
       String[] parts = msg.split(" ");
 
-      if(parts.length < 2)
+      if (parts.length < 2)
          return;
 
-      if(parts[1].equalsIgnoreCase("xp"))
+      if (parts[1].equalsIgnoreCase("xp"))
       {
-         if(parts[0].startsWith("!toggle"))
+         if (parts[0].startsWith("!toggle"))
          {
             Globals.trackXp = !Globals.trackXp;
             String str = "/me XP tracking has been turned ";
@@ -64,9 +64,9 @@ public class CmdToggle extends Command
                usr.joinTime = time;
 
             JIRC.sendMessage(Globals.channel, str);
-         }else if(parts[0].startsWith("!enable"))
+         } else if (parts[0].startsWith("!enable"))
          {
-            if(!Globals.trackXp)
+            if (!Globals.trackXp)
             {
                Logger.logDebug("Resetting join times");
                long time = System.currentTimeMillis();
@@ -77,51 +77,52 @@ public class CmdToggle extends Command
             Globals.trackXp = true;
             String str = "/me XP tracking has been turned on.";
 
-            if(parts.length >= 3)
+            if (parts.length >= 3)
             {
-               try {
+               try
+               {
                   int time = Integer.parseInt(parts[2]);
                   Globals.xpStartTime = System.currentTimeMillis();
                   Globals.xpTrackTime = time * 60 * 60 * 1000;
                   str += " XP tracking will be turned off in " + time + " hour(s).";
-               }catch(NumberFormatException nfe)
-               {}
+               } catch (NumberFormatException nfe)
+               {
+               }
             }
 
             JIRC.sendMessage(Globals.channel, str);
-         }else if(parts[0].startsWith("!disable"))
+         } else if (parts[0].startsWith("!disable"))
          {
             Globals.trackXp = false;
             JIRC.sendMessage(Globals.channel, "/me XP tracking has been turned off.");
          }
-      }else if(parts[1].equalsIgnoreCase("status"))
+      } else if (parts[1].equalsIgnoreCase("status"))
       {
-         if(parts[0].startsWith("!toggle"))
+         if (parts[0].startsWith("!toggle"))
             Globals.statusEnabled = !Globals.statusEnabled;
-         else if(parts[0].startsWith("!enable"))
+         else if (parts[0].startsWith("!enable"))
             Globals.statusEnabled = true;
-         else if(parts[0].startsWith("!disable"))
+         else if (parts[0].startsWith("!disable"))
             Globals.statusEnabled = false;
 
          String str = "/me The !status command has been turned ";
-         if(Globals.statusEnabled)
+         if (Globals.statusEnabled)
             str += " on.";
          else
             str += " off.";
 
          JIRC.sendMessage(Globals.channel, str);
-      }
-      else if(parts[1].equalsIgnoreCase("duel"))
+      } else if (parts[1].equalsIgnoreCase("duel"))
       {
-         if(parts[0].startsWith("!toggle"))
+         if (parts[0].startsWith("!toggle"))
             Globals.duelEnabled = !Globals.duelEnabled;
-         else if(parts[0].startsWith("!enable"))
+         else if (parts[0].startsWith("!enable"))
             Globals.duelEnabled = true;
-         else if(parts[0].startsWith("!disable"))
+         else if (parts[0].startsWith("!disable"))
             Globals.duelEnabled = false;
 
          String str = "/me The !duel command has been turned ";
-         if(Globals.duelEnabled)
+         if (Globals.duelEnabled)
             str += " on.";
          else
             str += " off.";

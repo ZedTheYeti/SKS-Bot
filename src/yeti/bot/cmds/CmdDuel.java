@@ -1,6 +1,5 @@
 package yeti.bot.cmds;
 
-import jdk.nashorn.internal.objects.Global;
 import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
@@ -43,7 +42,7 @@ public class CmdDuel extends Command
    @Override
    public void process(String user, String msg)
    {
-      if(msg.startsWith("!duel"))
+      if (msg.startsWith("!duel"))
       {
          Logger.logDebug("DUEL " + msg);
          String[] parts = msg.split(" ");
@@ -89,13 +88,13 @@ public class CmdDuel extends Command
 
          System.err.println("accept");
 
-         if(usr == null)
+         if (usr == null)
             return;
 
          System.err.println("boop");
 
          DuelInfo info = duels.remove(usr.name);
-         if(info != null)
+         if (info != null)
          {
             System.err.println("bedoop");
 
@@ -105,35 +104,34 @@ public class CmdDuel extends Command
 
             StringBuilder bldr = new StringBuilder("/me ");
             bldr.append(info.challenger.name).append(" rolls a ");
-            if(challengerRoll == 20)
+            if (challengerRoll == 20)
                bldr.append("koolCRIT");
-            else if(challengerRoll == 1)
+            else if (challengerRoll == 1)
                bldr.append("koolFAIL");
             else
                bldr.append(challengerRoll);
             bldr.append(", ");
 
             bldr.append(info.opponent.name).append(" rolls a ");
-            if(opponentRoll == 20)
+            if (opponentRoll == 20)
                bldr.append("koolCRIT");
-            else if(opponentRoll == 1)
+            else if (opponentRoll == 1)
                bldr.append("koolFAIL");
             else
                bldr.append(opponentRoll);
             bldr.append(". ");
 
-            if(challengerRoll > opponentRoll)
+            if (challengerRoll > opponentRoll)
             {
                bldr.append(info.challenger.name).append(" wins ").append(info.xpAmount).append(" xp!");
                info.challenger.exp += info.xpAmount;
                info.opponent.exp -= info.xpAmount;
-            } else if(opponentRoll > challengerRoll)
+            } else if (opponentRoll > challengerRoll)
             {
                bldr.append(info.opponent.name).append(" wins ").append(info.xpAmount).append(" xp!");
                info.opponent.exp += info.xpAmount;
                info.challenger.exp -= info.xpAmount;
-            }
-            else
+            } else
             {
                bldr.append("It's a tie!");
             }
@@ -152,15 +150,15 @@ public class CmdDuel extends Command
 
             JIRC.sendMessage(Globals.channel, bldr.toString());
          }
-      } else if(msg.startsWith("!decline"))
+      } else if (msg.startsWith("!decline"))
       {
          User usr = Globals.users.get(user);
 
-         if(usr == null)
+         if (usr == null)
             return;
 
          DuelInfo info = duels.remove(usr);
-         if(info != null)
+         if (info != null)
             JIRC.sendMessage(Globals.channel, info.opponent + " has declined " + info.challenger + "'s challenge.");
       }
    }

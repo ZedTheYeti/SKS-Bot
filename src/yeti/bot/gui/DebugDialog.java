@@ -26,24 +26,17 @@
  */
 package yeti.bot.gui;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Frame;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.border.EmptyBorder;
 
 public class DebugDialog extends JDialog
 {
 
    private final JPanel contentPanel = new JPanel();
-   private JTextArea    textArea;
+   private JTextArea textArea;
 
    /**
     * Create the dialog.

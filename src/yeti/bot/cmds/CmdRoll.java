@@ -22,12 +22,12 @@ public class CmdRoll extends Command
    {
       String[] parts = cmd.trim().split(" ");
 
-      if(parts.length < 1)
+      if (parts.length < 1)
          return;
 
       parts[0] = parts[0].substring(2);
       int sides = Integer.parseInt(parts[0]);
-      if(sides > 0)
+      if (sides > 0)
       {
          int outcome = Util.rollDie(sides);
          int index = cmd.indexOf(' ');
@@ -36,13 +36,13 @@ public class CmdRoll extends Command
          bldr.append("/me rolls a ").append(outcome);
          bldr.append(" on a d").append(sides);
 
-         if(index != -1)
+         if (index != -1)
             bldr.append(" for ").append(cmd.substring(index));
          bldr.append('.');
 
-         if(outcome == sides)
+         if (outcome == sides)
             bldr.append(" Critical!");
-         else if(outcome == 1)
+         else if (outcome == 1)
             bldr.append(" Critical failure!");
 
          JIRC.sendMessage(Globals.channel, bldr.toString());

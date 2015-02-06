@@ -17,27 +17,27 @@ public class Logger
 
    public static void logMsg(String msg)
    {
-      if(logLevel >= ALL)
+      if (logLevel >= ALL)
          System.out.println("OUTPUT: " + msg);
    }
 
    public static void logDebug(String msg)
    {
-      if(logLevel >= DEBUG)
+      if (logLevel >= DEBUG)
          System.out.println("DEBUG:  " + msg);
    }
 
    public static void logError(String errorMsg)
    {
-      if(logLevel >= ERROR)
+      if (logLevel >= ERROR)
          System.err.println("ERROR:  " + errorMsg);
    }
 
    public static void logError(String errorMsg, boolean showDialog)
    {
-      if(logLevel >= ERROR)
+      if (logLevel >= ERROR)
       {
-         if(showDialog)
+         if (showDialog)
             JOptionPane.showMessageDialog(null, errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
          System.err.println("ERROR:  " + errorMsg);
       }

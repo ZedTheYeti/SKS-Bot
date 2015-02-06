@@ -26,13 +26,13 @@
  */
 package yeti.bot.cmds;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import yeti.bot.Faction;
 import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CmdVeto extends Command
 {

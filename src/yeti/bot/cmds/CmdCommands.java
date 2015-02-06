@@ -26,19 +26,19 @@
  */
 package yeti.bot.cmds;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class CmdCommands extends Command
 {
-   private static long           COOLDOWN = 3 * 60 * 1000;
-   private boolean     cooling  = false;
-   private Timer       timer    = new Timer();
-   private TimerTask   task;
+   private static long COOLDOWN = 3 * 60 * 1000;
+   private boolean cooling = false;
+   private Timer timer = new Timer();
+   private TimerTask task;
 
    public CmdCommands()
    {
@@ -67,10 +67,10 @@ public class CmdCommands extends Command
 
       StringBuilder bldr = new StringBuilder("/me ");
 
-      if(Globals.commands.size() > 0)
+      if (Globals.commands.size() > 0)
       {
          bldr.append("General Commands: ");
-         for(int i = 0; i < Globals.commands.size(); i++)
+         for (int i = 0; i < Globals.commands.size(); i++)
          {
             bldr.append(Globals.commands.get(i).getUsage());
             if (i < Globals.commands.size() - 1)
@@ -78,10 +78,10 @@ public class CmdCommands extends Command
          }
       }
 
-      if(Globals.subCommands.size() > 0)
+      if (Globals.subCommands.size() > 0)
       {
          bldr.append(" - Subscriber Commands: ");
-         for(int i = 0; i < Globals.subCommands.size(); i++)
+         for (int i = 0; i < Globals.subCommands.size(); i++)
          {
             bldr.append(Globals.subCommands.get(i).getUsage());
             if (i < Globals.subCommands.size() - 1)
@@ -89,10 +89,10 @@ public class CmdCommands extends Command
          }
       }
 
-      if(Globals.modCommands.size() > 0)
+      if (Globals.modCommands.size() > 0)
       {
          bldr.append(" - General Commands: ");
-         for(int i = 0; i < Globals.modCommands.size(); i++)
+         for (int i = 0; i < Globals.modCommands.size(); i++)
          {
             bldr.append(Globals.modCommands.get(i).getUsage());
             if (i < Globals.modCommands.size() - 1)

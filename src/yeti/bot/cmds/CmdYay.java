@@ -41,8 +41,7 @@ public class CmdYay extends Command
          {
             User sub = Globals.users.get(user);
             return !Globals.voted.contains(user) && cmd.startsWith("!yay");
-         }
-         else if(isSub)
+         } else if (isSub)
          {
             User sub = Globals.users.get(user);
             return sub.faction == Globals.votingFaction && !Globals.voted.contains(user) && cmd.startsWith("!yay");

@@ -1,6 +1,9 @@
 package yeti.bot.cmds;
 
-import yeti.bot.*;
+import yeti.bot.Globals;
+import yeti.bot.JIRC;
+import yeti.bot.User;
+import yeti.bot.UserClass;
 
 import java.util.HashMap;
 
@@ -9,8 +12,8 @@ import java.util.HashMap;
  */
 public class CmdPick extends Command
 {
-   private static long           COOLDOWN = 60 * 60 * 1000;
-   private HashMap<String, Long> cooling  = new HashMap<String, Long>();
+   private static long COOLDOWN = 60 * 60 * 1000;
+   private HashMap<String, Long> cooling = new HashMap<String, Long>();
 
    public boolean check(String user, String cmd, boolean isSub)
    {
@@ -29,7 +32,7 @@ public class CmdPick extends Command
       User user = Globals.users.get(name);
 
       // || user.userClass != UserClass.NEWB
-      if(user == null)
+      if (user == null)
          return;
 
       if (userClass.contains("rogue"))

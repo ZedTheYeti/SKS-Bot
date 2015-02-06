@@ -32,13 +32,13 @@ public class User
 {
    public Faction faction;
    public UserClass userClass;
-   public int     level;
-   public float   exp;
-   public String  name;
+   public int level;
+   public float exp;
+   public String name;
    public boolean captain;
    public boolean isSub;
    public boolean inChannel = false;
-   public long    joinTime;
+   public long joinTime;
 
    public User(String name)
    {
@@ -55,11 +55,14 @@ public class User
       this(name, fac, userClass, 0, 0);
    }
 
-   public User(String name, Faction fac, int level, float exp) { this(name, fac, UserClass.NEWB, level, exp); }
+   public User(String name, Faction fac, int level, float exp)
+   {
+      this(name, fac, UserClass.NEWB, level, exp);
+   }
 
    public User(String name, Faction fac, UserClass userClass, int level, float exp)
    {
-      if(name.equalsIgnoreCase("zedtheyeti"))
+      if (name.equalsIgnoreCase("zedtheyeti"))
       {
          captain = true;
          Logger.logDebug(name + " is a mod " + captain);
@@ -89,7 +92,7 @@ public class User
       String str = name + " - ";
       if (captain)
          str += "Captain and ";
-      if(name.equalsIgnoreCase("zeldaslullaby"))
+      if (name.equalsIgnoreCase("zeldaslullaby"))
          str += "Dragon Demon Raider Person";
       else
          str += userClass.getLevelName(exp);

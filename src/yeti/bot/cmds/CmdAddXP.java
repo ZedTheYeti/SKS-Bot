@@ -1,6 +1,5 @@
 package yeti.bot.cmds;
 
-import jdk.nashorn.internal.objects.Global;
 import yeti.bot.Faction;
 import yeti.bot.Globals;
 import yeti.bot.JIRC;
@@ -25,7 +24,7 @@ public class CmdAddXP extends Command
    {
       String parts[] = msg.split(" ");
 
-      if(parts.length < 3)
+      if (parts.length < 3)
       {
          Logger.logDebug("Incorrect usage of !addxp: \"" + msg + "\"");
          return;
@@ -35,28 +34,28 @@ public class CmdAddXP extends Command
       try
       {
          amount = Integer.parseInt(parts[2]);
-      }catch(NumberFormatException exc)
+      } catch (NumberFormatException exc)
       {
          Logger.logDebug("Incorrect usage of !addxp: \"" + msg + "\"");
          return;
       }
 
       User targetUsr = Globals.users.get(parts[1].toLowerCase());
-      if(targetUsr == null)
+      if (targetUsr == null)
       {
-         if(parts[1].equalsIgnoreCase("rockbitters"))
+         if (parts[1].equalsIgnoreCase("rockbitters"))
          {
             awardFactionXP(Faction.ROCKBITER, amount);
             return;
-         } else if(parts[1].equalsIgnoreCase("school"))
+         } else if (parts[1].equalsIgnoreCase("school"))
          {
             awardFactionXP(Faction.SCHOOL, amount);
             return;
-         } else if(parts[1].equalsIgnoreCase("knights"))
+         } else if (parts[1].equalsIgnoreCase("knights"))
          {
             awardFactionXP(Faction.KNIGHTS, amount);
             return;
-         } else if(parts[1].equalsIgnoreCase("guild"))
+         } else if (parts[1].equalsIgnoreCase("guild"))
          {
             awardFactionXP(Faction.GUILD, amount);
             return;
@@ -76,9 +75,9 @@ public class CmdAddXP extends Command
          @Override
          public void run()
          {
-            for(User usr : Globals.users.values())
+            for (User usr : Globals.users.values())
             {
-               if(usr.faction == faction)
+               if (usr.faction == faction)
                   usr.exp += amount;
             }
             JIRC.sendMessage(Globals.channel, "/me All members of " + faction.getName() + " have been given " + amount + " xp point(s)");

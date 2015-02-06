@@ -13,7 +13,8 @@ import java.util.TimerTask;
 /**
  * Created by Z on 7/28/2014.
  */
-public class CmdDecision extends Command {
+public class CmdDecision extends Command
+{
    private boolean voting = false;
    private Faction votingFaction = Faction.ALL;
    private HashSet<String> voted = new HashSet<String>();
@@ -25,27 +26,27 @@ public class CmdDecision extends Command {
    {
       User usr = Globals.users.get(name);
 
-      if(voting)
+      if (voting)
       {
-         if(cmd.length() >= 2)
+         if (cmd.length() >= 2)
          {
             try
             {
                pick = Integer.parseInt(cmd.trim().substring(1));
-            }catch(NumberFormatException nfe)
+            } catch (NumberFormatException nfe)
             {
                return false;
             }
 
-            if(pick > 0 && pick <= votes.length)
+            if (pick > 0 && pick <= votes.length)
             {
-               if(votingFaction == Faction.ALL)
+               if (votingFaction == Faction.ALL)
                   return isEnabled() && (isSub || (usr != null && usr.captain)) && !voted.contains(name);
                else
                   return isEnabled() && usr != null && usr.faction == votingFaction && !voted.contains(name);
             }
          }
-      }else
+      } else
       {
          return isEnabled() && usr != null && usr.captain && cmd.startsWith("!decision");
       }
@@ -54,35 +55,35 @@ public class CmdDecision extends Command {
 
    public void process(String name, String cmd)
    {
-      if(voting)
+      if (voting)
       {
          // pick gets parsed in check(), it's a Global Var to save time re-parsing it here
          votes[pick - 1]++;
          Logger.logDebug(name + " voted for " + pick);
-      }else
+      } else
       {
          StringBuilder bldr = new StringBuilder("/me ");
 
          String[] parts = cmd.toLowerCase().split(" ");
-         if(parts.length < 3)
+         if (parts.length < 3)
             return;
 
          int choices = Integer.parseInt(parts[2]);
-         if(choices <= 0)
+         if (choices <= 0)
             return;
          votes = new int[choices];
 
          votingFaction = Faction.getByName(parts[1]);
-         if(votingFaction == Faction.NONE)
+         if (votingFaction == Faction.NONE)
             return;
 
-         if(votingFaction != Faction.ALL)
+         if (votingFaction != Faction.ALL)
             bldr.append("The ");
          bldr.append(votingFaction.getName()).append(" has been presented with ").append(choices).append(" choices. Choose wisely! You may vote with ");
-         for(int i = 1; i <= choices; i++)
+         for (int i = 1; i <= choices; i++)
          {
             bldr.append("!").append(i);
-            if(i != choices)
+            if (i != choices)
                bldr.append(", ");
          }
 
@@ -106,9 +107,9 @@ public class CmdDecision extends Command {
                // TODO Deal with ties better
 
                int mostIndex = 0;
-               for(int i = 0; i < votes.length; i++)
+               for (int i = 0; i < votes.length; i++)
                {
-                  if(votes[i] > votes[mostIndex])
+                  if (votes[i] > votes[mostIndex])
                      mostIndex = i;
                }
                bldr.append(mostIndex + 1).append('.');

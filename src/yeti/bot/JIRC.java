@@ -26,9 +26,18 @@
  */
 package yeti.bot;
 
-import static yeti.bot.Globals.*;
+import yeti.bot.cmds.Command;
+import yeti.bot.gui.ChatFrame;
+import yeti.bot.gui.SendListener;
+import yeti.bot.gui.StartDialog;
+import yeti.bot.util.Logger;
+import yeti.bot.util.Options;
+import yeti.bot.util.Util;
+import yeti.irc.IRCServer;
+import yeti.irc.Parser;
 
-import java.awt.EventQueue;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -40,37 +49,27 @@ import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.WindowConstants;
-
-import yeti.bot.cmds.Command;
-import yeti.bot.gui.ChatFrame;
-import yeti.bot.gui.SendListener;
-import yeti.bot.gui.StartDialog;
-import yeti.bot.util.Options;
-import yeti.bot.util.Util;
-import yeti.irc.IRCServer;
-import yeti.irc.Parser;
-import yeti.bot.util.Logger;
+import static yeti.bot.Globals.*;
 
 public class JIRC
 {
-   private static ChatFrame          frame;
-   private static Options   save;
-   private static boolean   saved = false;
-   private static boolean   saving = false;
+   private static ChatFrame frame;
+   private static Options save;
+   private static boolean saved = false;
+   private static boolean saving = false;
 
    public static void main(String args[])
    {
       try
       {
          String logging = System.getProperty("logging", "none");
-         if(logging.equalsIgnoreCase("none"))
+         if (logging.equalsIgnoreCase("none"))
             Logger.setLevel(Logger.NONE);
-         else if(logging.equalsIgnoreCase("error"))
+         else if (logging.equalsIgnoreCase("error"))
             Logger.setLevel(Logger.ERROR);
-         else if(logging.equalsIgnoreCase("DEBUG"))
+         else if (logging.equalsIgnoreCase("DEBUG"))
             Logger.setLevel(Logger.DEBUG);
-         else if(logging.equalsIgnoreCase("ALL"))
+         else if (logging.equalsIgnoreCase("ALL"))
             Logger.setLevel(Logger.ALL);
 
          main();
@@ -234,7 +233,8 @@ public class JIRC
                } else if (parts[1].equalsIgnoreCase("-o"))
                {
                   User sub = users.get(parts[2]);
-                  if (sub != null) {
+                  if (sub != null)
+                  {
                      sub.captain = false;
                      Logger.logDebug(sub.name + " is no longer a mod " + sub.captain);
                   }
@@ -245,12 +245,12 @@ public class JIRC
                String msg = input.substring(input.indexOf(':', 1) + 1);
                frame.addText(name + ": " + msg + "\n");
 
-               if(msg.length() == 0 || msg.charAt(0) != '!')
+               if (msg.length() == 0 || msg.charAt(0) != '!')
                   return;
 
                User user = users.get(name);
                if (user != null && user.captain)
-                  if(msg.startsWith("!beta"))
+                  if (msg.startsWith("!beta"))
                   {
                      sendMessage(channel,
                            "/me The faction portion of this bot is still in a VERY early beta. So expect hiccups ;) Zedtheyeti is monitoring things and will do his best to fix any bugs that pop up. Most importantly just have fun and don't worry about it koolWALLY");
@@ -295,8 +295,7 @@ public class JIRC
                // No idea how this would happen, but oh well
                if (user.joinTime > time || user.joinTime == 0)
                   user.joinTime = time;
-            }
-            else if (input.contains(" PART "))
+            } else if (input.contains(" PART "))
             {
                String name = input.substring(1, input.indexOf('!'));
                Logger.logDebug(name + " left");
@@ -347,7 +346,7 @@ public class JIRC
       save = new Options("sksbot/user.info");
       save.load();
       frame.addText(save.getPath() + "\n");
-      for(Entry<String, String> entry : save.getAllOptions())
+      for (Entry<String, String> entry : save.getAllOptions())
       {
          //Logger.logDebug(entry.getValue());
          String name = entry.getKey().toLowerCase();
@@ -356,7 +355,7 @@ public class JIRC
          sub.faction = Faction.valueOf(parts[0]);
          sub.level = Integer.parseInt(parts[1]);
          sub.exp = Float.valueOf(parts[2]);
-         if(parts.length > 3)
+         if (parts.length > 3)
             sub.userClass = UserClass.valueOf(parts[3]);
          // sub.exp = 0f;
          offlineUsers.put(name, sub);
@@ -377,9 +376,9 @@ public class JIRC
          @Override
          public void run()
          {
-            if(!trackXp)
+            if (!trackXp)
             {
-               if(!saved)
+               if (!saved)
                   saveAll();
                saved = !saved;
                return;
@@ -390,7 +389,7 @@ public class JIRC
                   save.set(usr.name, usr.getInfo());
 
             long time = System.currentTimeMillis();
-            for(User sub : users.values())
+            for (User sub : users.values())
             {
                if (sub.joinTime == 0)
                {
@@ -398,14 +397,13 @@ public class JIRC
                   {
                      Logger.logError("0 JOIN TIME " + sub.name);
                      sub.joinTime = time;
-                  }
-                  else
+                  } else
                      Logger.logError("NOT IN CHANNEL " + sub.name);
                   continue;
                }
 
                long diff = time - sub.joinTime;
-               if(diff >= XP_AWARD_TIME)
+               if (diff >= XP_AWARD_TIME)
                {
                   Logger.logDebug(sub.name + " joined at " + sub.joinTime + " the difference between then and now is " + diff + " award time is " + XP_AWARD_TIME);
                   Logger.logDebug(sub.name + " is at " + sub.exp + "10xp");
@@ -418,9 +416,9 @@ public class JIRC
                   save.set(sub.name, sub.getInfo());
             }
 
-            if(xpTrackTime!= 0)
+            if (xpTrackTime != 0)
             {
-               if(time - xpStartTime >= xpTrackTime)
+               if (time - xpStartTime >= xpTrackTime)
                {
                   trackXp = false;
                   JIRC.sendMessage(Globals.channel, "XP tracking has been turned off.");

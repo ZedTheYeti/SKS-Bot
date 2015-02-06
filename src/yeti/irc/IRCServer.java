@@ -9,7 +9,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class IRCServer {
+public class IRCServer
+{
    private String nick, ident, realName;
    private String server, serverPass;
    private int port = 6667;
@@ -24,7 +25,8 @@ public class IRCServer {
    private ArrayList<Parser> cmdParsers = new ArrayList<Parser>();
    private ArrayList<Parser> msgParsers = new ArrayList<Parser>();
 
-   public IRCServer(String serverAddress, int portNum) {
+   public IRCServer(String serverAddress, int portNum)
+   {
       server = serverAddress;
       port = portNum;
    }
@@ -32,26 +34,33 @@ public class IRCServer {
    // TODO keep track of channels
    // TODO command processors
 
-   public void connect() {
+   public void connect()
+   {
       running = true;
 
-      try {
+      try
+      {
          connection = new Socket(server, port);
          out = new DataOutputStream(connection.getOutputStream());
          in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
-         inThread = new Thread(new Runnable() {
+         inThread = new Thread(new Runnable()
+         {
             @Override
-            public void run() {
-               while (running) {
+            public void run()
+            {
+               while (running)
+               {
                   // Process
                   readInput();
 
                   // Wait
                   Thread.yield();
-                  try {
+                  try
+                  {
                      Thread.sleep(1);
-                  } catch (InterruptedException ie) {
+                  } catch (InterruptedException ie)
+                  {
                      ie.printStackTrace();
                   }
                }
@@ -63,7 +72,8 @@ public class IRCServer {
             sendLine("PASS " + serverPass);
          sendLine("NICK " + nick);
          sendLine("USER " + ident + " " + server + " bla :" + realName);
-      } catch (IOException e) {
+      } catch (IOException e)
+      {
          e.printStackTrace();
       }
    }
@@ -76,100 +86,126 @@ public class IRCServer {
       sendLine("JOIN " + channelName);
    }
 
-   public void sendMessage(String dest, String msg) {
+   public void sendMessage(String dest, String msg)
+   {
       sendLine("PRIVMSG " + dest + " :" + msg);
    }
 
-   public void addCmdParser(Parser parser) {
+   public void addCmdParser(Parser parser)
+   {
       cmdParsers.add(parser);
    }
 
-   public void processCmd(String cmd) {
+   public void processCmd(String cmd)
+   {
       for (Parser p : cmdParsers)
          p.parse(cmd);
    }
 
-   public void processMsg(String msg) {
+   public void processMsg(String msg)
+   {
       for (Parser p : msgParsers)
          p.parse(msg);
    }
 
-   public void addMsgParser(Parser pasrser) {
+   public void addMsgParser(Parser pasrser)
+   {
       msgParsers.add(pasrser);
    }
 
-   private void readInput() {
-      try {
-         if (in.ready()) {
+   private void readInput()
+   {
+      try
+      {
+         if (in.ready())
+         {
             String line;
-            while ((line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null)
+            {
                Logger.logMsg(line);
                processMsg(line);
             }
          }
-      } catch (IOException ioe) {
+      } catch (IOException ioe)
+      {
          ioe.printStackTrace();
       }
    }
 
-   public void sendLine(String string) {
+   public void sendLine(String string)
+   {
       Logger.logMsg(string);
       sendRaw(string + "\r\n");
    }
 
-   private void sendRaw(String string) {
-      try {
+   private void sendRaw(String string)
+   {
+      try
+      {
          out.writeBytes(string);
-      } catch (IOException ioe) {
+      } catch (IOException ioe)
+      {
          ioe.printStackTrace();
       }
    }
 
-   public String getNick() {
+   public String getNick()
+   {
       return nick;
    }
 
-   public void setNick(String nick) {
+   public void setNick(String nick)
+   {
       this.nick = nick;
    }
 
-   public String getIdent() {
+   public String getIdent()
+   {
       return ident;
    }
 
-   public void setIdent(String ident) {
+   public void setIdent(String ident)
+   {
       this.ident = ident;
    }
 
-   public String getRealName() {
+   public String getRealName()
+   {
       return realName;
    }
 
-   public void setRealName(String realName) {
+   public void setRealName(String realName)
+   {
       this.realName = realName;
    }
 
-   public String getServer() {
+   public String getServer()
+   {
       return server;
    }
 
-   public void setServer(String server) {
+   public void setServer(String server)
+   {
       this.server = server;
    }
 
-   public String getServerPass() {
+   public String getServerPass()
+   {
       return serverPass;
    }
 
-   public void setServerPass(String serverPass) {
+   public void setServerPass(String serverPass)
+   {
       this.serverPass = serverPass;
    }
 
-   public int getPort() {
+   public int getPort()
+   {
       return port;
    }
 
-   public void setPort(int port) {
+   public void setPort(int port)
+   {
       this.port = port;
    }
 }

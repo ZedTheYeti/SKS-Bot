@@ -45,7 +45,7 @@ public enum Faction
 
    public static Faction getByName(String facName)
    {
-      if(facName.contains("all"))
+      if (facName.contains("all"))
          return Faction.ALL;
       else if (facName.contains("guild") || facName.contains("koolbreath"))
          return Faction.GUILD;
@@ -55,7 +55,7 @@ public enum Faction
          return Faction.SCHOOL;
       else if (facName.contains("rockbiter") || facName.contains("koolclan"))
          return Faction.ROCKBITER;
-      else if(facName.contains("council"))
+      else if (facName.contains("council"))
          return Faction.COUNCIL;
       else
          return NONE;

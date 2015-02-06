@@ -26,43 +26,41 @@
  */
 package yeti.bot.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.ArrayList;
+import yeti.bot.Globals;
+import yeti.bot.JIRC;
+import yeti.bot.User;
+import yeti.bot.util.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
-
-import yeti.bot.Globals;
-import yeti.bot.JIRC;
-import yeti.bot.User;
-import yeti.bot.util.Logger;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 // give Mufflinn 1xp
 
 
 public class ChatFrame extends JFrame
 {
-   private JPanel       contentPane;
-   private JTextField   textField;
-   private JTextPane    textPane;
+   private JPanel contentPane;
+   private JTextField textField;
+   private JTextPane textPane;
    private SendListener listener;
-   private JScrollPane  scrollPane;
-   private JMenuBar     menuBar;
-   private JMenu        mnFile;
-   private JMenuItem    mntmSave;
-   private JMenuItem    mntmExit;
-   private JMenu        mnDebug;
-   private JMenuItem    mntmListOnlineUsers;
-   private JMenuItem    mntmListOfflineUsers;
-   private JMenuItem    mntmListAllUsers;
-   private JMenuItem    mntmGeneralDebug;
-   private JMenuItem    mntmReload;
+   private JScrollPane scrollPane;
+   private JMenuBar menuBar;
+   private JMenu mnFile;
+   private JMenuItem mntmSave;
+   private JMenuItem mntmExit;
+   private JMenu mnDebug;
+   private JMenuItem mntmListOnlineUsers;
+   private JMenuItem mntmListOfflineUsers;
+   private JMenuItem mntmListAllUsers;
+   private JMenuItem mntmGeneralDebug;
+   private JMenuItem mntmReload;
    private JMenuItem mntmFind;
    private TrayIcon trayIcon;
 
@@ -79,9 +77,12 @@ public class ChatFrame extends JFrame
       try
       {
          icon = ImageIO.read(ChatFrame.class.getClassLoader().getResource("resources/koolWALLY.png").openStream());
-      }catch(IOException ioe) { Logger.logError("Couldn't load icon image"); }
+      } catch (IOException ioe)
+      {
+         Logger.logError("Couldn't load icon image");
+      }
 
-      if(icon != null)
+      if (icon != null)
       {
          setIconImage(icon);
 
@@ -103,7 +104,7 @@ public class ChatFrame extends JFrame
 
             popup.addSeparator();
 
-            for(int i = 0; i < mnDebug.getItemCount(); i++)
+            for (int i = 0; i < mnDebug.getItemCount(); i++)
                popup.add(toMenuItem(mnDebug.getItem(i)));
 
             MenuItem mntmShow = new MenuItem("Show");
@@ -131,7 +132,12 @@ public class ChatFrame extends JFrame
             popup.add(mtmExit);
 
             trayIcon = new TrayIcon(icon, "SKS Bot", popup);
-            try { SystemTray.getSystemTray().add(trayIcon); } catch(Exception e) {}
+            try
+            {
+               SystemTray.getSystemTray().add(trayIcon);
+            } catch (Exception e)
+            {
+            }
          }
       }
    }
@@ -141,21 +147,21 @@ public class ChatFrame extends JFrame
       Globals.msgCount++;
       String areaText = textPane.getText();
 
-      if(text.lastIndexOf('\n') != text.length() - 1)
+      if (text.lastIndexOf('\n') != text.length() - 1)
          text += '\n';
 
-      if(Globals.msgCount > 250) {
+      if (Globals.msgCount > 250)
+      {
          int index = areaText.indexOf('\n') + 1;
-         if(index > 0 && index < areaText.length())
+         if (index > 0 && index < areaText.length())
             textPane.setText(areaText.substring(index) + text);
          Globals.msgCount--;
-      }
-      else
+      } else
          textPane.setText(areaText + text);
       textPane.validate();
 
       int caret = textPane.getDocument().getLength() - 1;
-      if(caret >= 0)
+      if (caret >= 0)
          textPane.setCaretPosition(caret);
    }
 
@@ -191,7 +197,7 @@ public class ChatFrame extends JFrame
 
             JIRC.saveAll();
 
-            if(trayIcon != null)
+            if (trayIcon != null)
                SystemTray.getSystemTray().remove(trayIcon);
 
             System.exit(0);
@@ -201,7 +207,7 @@ public class ChatFrame extends JFrame
          {
             super.windowIconified(e);
 
-            if(trayIcon != null)
+            if (trayIcon != null)
                setVisible(false);
          }
       });
@@ -384,10 +390,10 @@ public class ChatFrame extends JFrame
 
             StringBuilder bldr = new StringBuilder("/me ");
 
-            if(Globals.commands.size() > 0)
+            if (Globals.commands.size() > 0)
             {
                bldr.append("General Commands: ");
-               for(int i = 0; i < Globals.commands.size(); i++)
+               for (int i = 0; i < Globals.commands.size(); i++)
                {
                   bldr.append(Globals.commands.get(i).getUsage());
                   if (i < Globals.commands.size() - 1)
@@ -395,10 +401,10 @@ public class ChatFrame extends JFrame
                }
             }
 
-            if(Globals.subCommands.size() > 0)
+            if (Globals.subCommands.size() > 0)
             {
                bldr.append(" - Subscriber Commands: ");
-               for(int i = 0; i < Globals.subCommands.size(); i++)
+               for (int i = 0; i < Globals.subCommands.size(); i++)
                {
                   bldr.append(Globals.subCommands.get(i).getUsage());
                   if (i < Globals.subCommands.size() - 1)
@@ -406,10 +412,10 @@ public class ChatFrame extends JFrame
                }
             }
 
-            if(Globals.modCommands.size() > 0)
+            if (Globals.modCommands.size() > 0)
             {
                bldr.append(" - General Commands: ");
-               for(int i = 0; i < Globals.modCommands.size(); i++)
+               for (int i = 0; i < Globals.modCommands.size(); i++)
                {
                   bldr.append(Globals.modCommands.get(i).getUsage());
                   if (i < Globals.modCommands.size() - 1)
@@ -425,21 +431,23 @@ public class ChatFrame extends JFrame
       mnDebug.add(mntmReload);
 
       mntmFind = new JMenuItem("Find User");
-      mntmFind.addActionListener(new ActionListener() {
+      mntmFind.addActionListener(new ActionListener()
+      {
          @Override
-         public void actionPerformed(ActionEvent e) {
+         public void actionPerformed(ActionEvent e)
+         {
             String input = JOptionPane.showInputDialog(frame, "Username:");
-            if(input != null)
+            if (input != null)
             {
                input = input.trim().toLowerCase();
                StringBuilder bldr = new StringBuilder();
 
-               for(User usr : Globals.users.values())
-                  if(usr.name.toLowerCase().contains(input))
+               for (User usr : Globals.users.values())
+                  if (usr.name.toLowerCase().contains(input))
                      bldr.append(usr.name).append(" = ").append(usr.getInfo().replaceAll(",", ", ")).append('\n');
 
-               for(User usr : Globals.offlineUsers.values())
-                  if(usr.name.toLowerCase().contains(input))
+               for (User usr : Globals.offlineUsers.values())
+                  if (usr.name.toLowerCase().contains(input))
                      bldr.append(usr.name).append(" = ").append(usr.getInfo().replaceAll(",", ", ")).append('\n');
 
                DebugDialog dialog = new DebugDialog(frame, true, bldr.toString());
@@ -496,7 +504,7 @@ public class ChatFrame extends JFrame
       gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(
             Alignment.TRAILING,
             gl_contentPane.createSequentialGroup().addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE).addPreferredGap(ComponentPlacement.RELATED)
-            .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(btnSend).addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))));
+                  .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(btnSend).addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))));
 
       textPane = new JTextPane();
       textPane.setFont(new Font("Monospaced", Font.PLAIN, 11));
@@ -508,7 +516,7 @@ public class ChatFrame extends JFrame
    private static MenuItem toMenuItem(JMenuItem item)
    {
       MenuItem newItem = new MenuItem(item.getLabel());
-      for(ActionListener al : item.getActionListeners())
+      for (ActionListener al : item.getActionListeners())
          newItem.addActionListener(al);
       return newItem;
    }

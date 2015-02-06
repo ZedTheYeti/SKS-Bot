@@ -26,13 +26,13 @@
  */
 package yeti.bot.cmds;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import yeti.bot.Faction;
 import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CmdDraw extends Command
 {
@@ -72,8 +72,7 @@ public class CmdDraw extends Command
             {
                string += "The yays have it! Shawn and DP must draw one card. Make sure you let Shawn and DP know.";
                Globals.draws++;
-            }
-            else if (Globals.yays != Globals.nays)
+            } else if (Globals.yays != Globals.nays)
                string += "The nays have it. The Knights sheath their blades and begin to plot their next move.";
             else
                string += "A tie! The Knights sheath their blades and begin to plot their next move.";

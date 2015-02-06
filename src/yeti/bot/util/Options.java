@@ -26,19 +26,14 @@
  */
 package yeti.bot.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
 public class Options
 {
-   private static final String s  = Util.FILE_SEPARATOR;
+   private static final String s = Util.FILE_SEPARATOR;
    private static final String nl = Util.NEW_LINE;
 
    private File optionsFile;
@@ -91,12 +86,15 @@ public class Options
          if (!optionsFile.getParentFile().exists())
             optionsFile.getParentFile().mkdirs();
 
-         if (optionsFile.getParentFile().isDirectory()) {
+         if (optionsFile.getParentFile().isDirectory())
+         {
             Util.hideFile(optionsFile.getParentFile());
 
-            try {
+            try
+            {
                optionsFile.createNewFile();
-            } catch (IOException e) {
+            } catch (IOException e)
+            {
                e.printStackTrace();
             }
          }
@@ -107,7 +105,7 @@ public class Options
    {
       if (!optionsFile.exists()) try
       {
-            optionsFile.createNewFile();
+         optionsFile.createNewFile();
       } catch (IOException ioe)
       {
          Logger.logError("Options file does not exist, and one could not be created.", true);
@@ -143,12 +141,12 @@ public class Options
       {
          if (br != null)
             try
-         {
+            {
                br.close();
-         } catch (IOException e)
-         {
-            e.printStackTrace();
-         }
+            } catch (IOException e)
+            {
+               e.printStackTrace();
+            }
       }
    }
 
@@ -156,13 +154,13 @@ public class Options
    {
       if (!optionsFile.exists())
          try
-      {
+         {
             optionsFile.createNewFile();
-      } catch (IOException ioe)
-      {
-         Logger.logError("Options file does not exist, and one could not be created.", true);
-         ioe.printStackTrace();
-      }
+         } catch (IOException ioe)
+         {
+            Logger.logError("Options file does not exist, and one could not be created.", true);
+            ioe.printStackTrace();
+         }
 
       BufferedWriter out = null;
 
@@ -180,12 +178,12 @@ public class Options
       {
          if (out != null)
             try
-         {
+            {
                out.close();
-         } catch (IOException e)
-         {
-            e.printStackTrace();
-         }
+            } catch (IOException e)
+            {
+               e.printStackTrace();
+            }
       }
    }
 }

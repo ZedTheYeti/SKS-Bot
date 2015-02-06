@@ -26,47 +26,47 @@
  */
 package yeti.bot;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-
 import yeti.bot.cmds.*;
 import yeti.bot.util.Logger;
 import yeti.irc.IRCServer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+
 public class Globals
 {
-   public static HashMap<String, User> users     = new HashMap<String, User>();
-   public static HashMap<String, User> offlineUsers   = new HashMap<String, User>();
-   public static IRCServer                server;
-   public static ArrayList<Command>    modCommands     = new ArrayList<Command>();
-   public static ArrayList<Command>    subCommands     = new ArrayList<Command>();
-   public static ArrayList<Command>       commands = new ArrayList<Command>();
+   public static HashMap<String, User> users = new HashMap<String, User>();
+   public static HashMap<String, User> offlineUsers = new HashMap<String, User>();
+   public static IRCServer server;
+   public static ArrayList<Command> modCommands = new ArrayList<Command>();
+   public static ArrayList<Command> subCommands = new ArrayList<Command>();
+   public static ArrayList<Command> commands = new ArrayList<Command>();
 
    public static HashMap<String, Command> commandMap = new HashMap<String, Command>();
 
-   public static String               username, serverName, channel;
-   public static int                  port;
+   public static String username, serverName, channel;
+   public static int port;
 
    public static boolean statusEnabled = true;
    public static boolean duelEnabled = true;
 
-   public static HashSet<String>      voted         = new HashSet<String>();
-   public static Faction              votingFaction = Faction.COUNCIL;
-   public static boolean              voting   = false;
-   public static int                  yays     = 0, nays = 0;
-   public static boolean              sneakUsed = false;
-   public static boolean              damnUsed   = false;
-   public static boolean              doubleUsed    = false;
-   public static boolean              vetoUsed      = false;
-   public static int                   draws           = 0;
-   public static final long            VOTE_TIME       = 1 * 60 * 1000;
+   public static HashSet<String> voted = new HashSet<String>();
+   public static Faction votingFaction = Faction.COUNCIL;
+   public static boolean voting = false;
+   public static int yays = 0, nays = 0;
+   public static boolean sneakUsed = false;
+   public static boolean damnUsed = false;
+   public static boolean doubleUsed = false;
+   public static boolean vetoUsed = false;
+   public static int draws = 0;
+   public static final long VOTE_TIME = 1 * 60 * 1000;
 
-   public static boolean              trackXp       = false;
+   public static boolean trackXp = false;
    public static long xpStartTime = 0;
    public static long xpTrackTime = 0;
-   public static final float           XP_AWARD_AMOUNT = 0.08333333333333333333333333333333f;
-   public static final long            XP_AWARD_TIME   = 5 * 60 * 1000;
+   public static final float XP_AWARD_AMOUNT = 0.08333333333333333333333333333333f;
+   public static final long XP_AWARD_TIME = 5 * 60 * 1000;
 
    public static int msgCount = 0;
 

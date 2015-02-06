@@ -26,20 +26,20 @@
  */
 package yeti.bot.cmds;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import yeti.bot.Faction;
 import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class CmdJoin extends Command
 {
-   private static long           COOLDOWN = 60 * 60 * 1000;
-   private HashMap<String, Long> cooling  = new HashMap<String, Long>();
+   private static long COOLDOWN = 60 * 60 * 1000;
+   private HashMap<String, Long> cooling = new HashMap<String, Long>();
 
    public CmdJoin()
    {

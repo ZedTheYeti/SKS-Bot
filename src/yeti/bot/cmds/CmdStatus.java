@@ -26,18 +26,18 @@
  */
 package yeti.bot.cmds;
 
+import yeti.bot.Globals;
+import yeti.bot.JIRC;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import yeti.bot.Globals;
-import yeti.bot.JIRC;
-
 public class CmdStatus extends Command
 {
-   private static long           COOLDOWN = 2 * 60 * 1000;
-   private HashMap<String, Long> cooling  = new HashMap<String, Long>();
+   private static long COOLDOWN = 2 * 60 * 1000;
+   private HashMap<String, Long> cooling = new HashMap<String, Long>();
 
    public CmdStatus()
    {
@@ -48,7 +48,7 @@ public class CmdStatus extends Command
          public void run()
          {
             Iterator<String> it = cooling.keySet().iterator();
-            while(it.hasNext())
+            while (it.hasNext())
             {
                String user = it.next();
                long value = cooling.get(user);

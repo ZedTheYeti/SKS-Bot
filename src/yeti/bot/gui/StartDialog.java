@@ -26,31 +26,25 @@
  */
 package yeti.bot.gui;
 
+import yeti.bot.util.Options;
+
+import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
-
-import yeti.bot.util.Options;
-
 public class StartDialog extends JDialog
 {
-   private Options         options;
-   private JTextField      txtUsername;
-   private JTextField      txtOauth;
-   private JTextField      txtServer;
-   private JTextField      txtChannel;
-   private JTextField      txtPort;
-   private JButton         btnReset;
-   private JButton         btnOk;
-   private JButton         btnClose;
+   private Options options;
+   private JTextField txtUsername;
+   private JTextField txtOauth;
+   private JTextField txtServer;
+   private JTextField txtChannel;
+   private JTextField txtPort;
+   private JButton btnReset;
+   private JButton btnOk;
+   private JButton btnClose;
 
    /**
     * Create the dialog.
@@ -84,7 +78,7 @@ public class StartDialog extends JDialog
    }
 
    /**
-    * 
+    *
     */
    private void createGUI()
    {
@@ -160,43 +154,43 @@ public class StartDialog extends JDialog
       groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
             .addGroup(
                   groupLayout
+                        .createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(
+                              groupLayout
+                                    .createParallelGroup(Alignment.LEADING)
+                                    .addGroup(groupLayout.createSequentialGroup().addComponent(lblUsername).addGap(19).addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(groupLayout.createSequentialGroup().addComponent(lblOauthToken).addGap(4).addComponent(txtOauth, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(groupLayout.createSequentialGroup().addComponent(lblIrcServer).addGap(14).addComponent(txtServer, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(groupLayout.createSequentialGroup().addComponent(lblChannel).addGap(28).addComponent(txtChannel, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(groupLayout.createSequentialGroup().addComponent(lblPort).addGap(47).addComponent(txtPort, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(
+                                          groupLayout.createSequentialGroup().addComponent(btnReset).addGap(18).addComponent(btnClose).addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnOk))).addContainerGap()));
+      groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(
+            groupLayout
                   .createSequentialGroup()
                   .addContainerGap()
                   .addGroup(
-                        groupLayout
-                        .createParallelGroup(Alignment.LEADING)
-                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblUsername).addGap(19).addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblOauthToken).addGap(4).addComponent(txtOauth, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblIrcServer).addGap(14).addComponent(txtServer, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblChannel).addGap(28).addComponent(txtChannel, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblPort).addGap(47).addComponent(txtPort, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-                        .addGroup(
-                              groupLayout.createSequentialGroup().addComponent(btnReset).addGap(18).addComponent(btnClose).addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                              .addComponent(btnOk))).addContainerGap()));
-      groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(
-            groupLayout
-            .createSequentialGroup()
-            .addContainerGap()
-            .addGroup(
-                  groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblUsername))
-                  .addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblUsername))
+                              .addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                   .addGap(6)
                   .addGroup(
                         groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblOauthToken))
-                        .addComponent(txtOauth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addGap(6)
-                        .addGroup(
-                              groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblIrcServer))
+                              .addComponent(txtOauth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                  .addGap(6)
+                  .addGroup(
+                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblIrcServer))
                               .addComponent(txtServer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                              .addGap(6)
-                              .addGroup(
-                                    groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblChannel))
-                                    .addComponent(txtChannel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                    .addGap(6)
-                                    .addGroup(
-                                          groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblPort))
-                                          .addComponent(txtPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.UNRELATED)
-                                          .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnReset).addComponent(btnOk).addComponent(btnClose)).addContainerGap(34, Short.MAX_VALUE)));
+                  .addGap(6)
+                  .addGroup(
+                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblChannel))
+                              .addComponent(txtChannel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                  .addGap(6)
+                  .addGroup(
+                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblPort))
+                              .addComponent(txtPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.UNRELATED)
+                  .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnReset).addComponent(btnOk).addComponent(btnClose)).addContainerGap(34, Short.MAX_VALUE)));
       getContentPane().setLayout(groupLayout);
    }
 }

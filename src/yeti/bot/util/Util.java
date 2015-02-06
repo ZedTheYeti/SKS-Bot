@@ -1,15 +1,11 @@
 package yeti.bot.util;
 
-import java.awt.Frame;
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.filechooser.FileFilter;
 
 /* Copyright (c) 2014-Onwards, Yeti Games
  * All rights reserved.
@@ -41,7 +37,7 @@ import javax.swing.filechooser.FileFilter;
 public class Util
 {
    public static final File DATA_FOLDER;
-   public static final String FILE_SEPARATOR  = System.getProperty("file.separator");
+   public static final String FILE_SEPARATOR = System.getProperty("file.separator");
    public static final String NEW_LINE = System.getProperty("line.separator");
    private static final Random rand = new Random();
 
@@ -93,7 +89,8 @@ public class Util
             Logger.logError("Error: Could not set the hidden attribute for \"" + src.getPath() + "\"");
             e.printStackTrace();
          } catch (InterruptedException exc)
-         {}
+         {
+         }
       } else if (!src.getName().startsWith(".")) // If the file is already
          // hidden to UNIX systems don't
          // add another dot
@@ -179,14 +176,14 @@ public class Util
             file = new File(file.getPath() + exts[0]);
          if (!file.exists())
             try
-         {
+            {
                file.createNewFile();
-         } catch (IOException e1)
-         {
-            e1.printStackTrace();
-            Logger.logError("Could not create the file \"" + file.getName() + "\"!");
-            return null;
-         }
+            } catch (IOException e1)
+            {
+               e1.printStackTrace();
+               Logger.logError("Could not create the file \"" + file.getName() + "\"!");
+               return null;
+            }
          else
          {
             opt = JOptionPane.showConfirmDialog(null, "The file \"" + file.getName() + "\" already exists. Would you like to overwrite it?", "Overwrite?", JOptionPane.YES_NO_OPTION);
