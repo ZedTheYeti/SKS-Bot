@@ -92,7 +92,7 @@ public class JIRC
          Files.copy(save.getFile().toPath(), new File(save.getPath() + ".bkp").toPath(), StandardCopyOption.REPLACE_EXISTING);
       } catch (IOException e)
       {
-         // TODO Auto-generated catch block
+         Logger.logError("Error backing up user.info file to " + save.getPath() + ".bkp\n" + e.getMessage(), true);
          e.printStackTrace();
       }
 
