@@ -120,39 +120,29 @@ public class JIRC
 
       try
       {
-         EventQueue.invokeAndWait(new Runnable()
-         {
-            @Override
-            public void run()
+         EventQueue.invokeAndWait(() -> {
+            try
             {
-               try
+               frame = new ChatFrame();
+               frame.setVisible(true);
+               frame.addWindowListener(new WindowAdapter()
                {
-                  frame = new ChatFrame();
-                  frame.setVisible(true);
-                  frame.addWindowListener(new WindowAdapter()
+                  @Override
+                  public void windowClosing(WindowEvent e)
                   {
-                     @Override
-                     public void windowClosing(WindowEvent e)
-                     {
-                        Logger.logDebug("Saving on close.");
-                        saveAll();
-                     }
-                  });
-                  frame.setSendListener(new SendListener()
-                  {
-                     @Override
-                     public void send(String text)
-                     {
-                        if (text.startsWith("/") && !text.startsWith("/me"))
-                           server.processCmd(text.substring(1));
-                        else
-                           sendMessage(Globals.channel, text);
-                     }
-                  });
-               } catch (Exception e)
-               {
-                  e.printStackTrace();
-               }
+                     Logger.logDebug("Saving on close.");
+                     saveAll();
+                  }
+               });
+               frame.setSendListener(text -> {
+                  if (text.startsWith("/") && !text.startsWith("/me"))
+                     server.processCmd(text.substring(1));
+                  else
+                     sendMessage(Globals.channel, text);
+               });
+            } catch (Exception e)
+            {
+               e.printStackTrace();
             }
          });
       } catch (Exception e1)
@@ -166,20 +156,15 @@ public class JIRC
 
       try
       {
-         EventQueue.invokeAndWait(new Runnable()
-         {
-            @Override
-            public void run()
+         EventQueue.invokeAndWait(() -> {
+            try
             {
-               try
-               {
-                  StartDialog dialog = new StartDialog(frame, true, options);
-                  dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                  dialog.setVisible(true);
-               } catch (Exception e)
-               {
-                  e.printStackTrace();
-               }
+               StartDialog dialog = new StartDialog(frame, true, options);
+               dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+               dialog.setVisible(true);
+            } catch (Exception e)
+            {
+               e.printStackTrace();
             }
          });
       } catch (InvocationTargetException e)
@@ -204,141 +189,131 @@ public class JIRC
       server.setRealName(username);
       server.setServerPass(oauth);
 
-      server.addMsgParser(new Parser()
-      {
-         @Override
-         public void parse(String input)
+      server.addMsgParser(input -> {
+         if (input.startsWith("PING "))
+            server.sendLine("PONG " + input.substring(5));
+         else if (input.contains(":jtv PRIVMSG " + server.getNick() + " :SPECIALUSER"))
          {
-            if (input.startsWith("PING "))
-               server.sendLine("PONG " + input.substring(5));
-            else if (input.contains(":jtv PRIVMSG " + server.getNick() + " :SPECIALUSER"))
+            String[] args = input.substring(input.indexOf(':', 1) + 1).split(" ");
+            if (args[0].equals("SPECIALUSER"))
             {
-               String[] args = input.substring(input.indexOf(':', 1) + 1).split(" ");
-               if (args[0].equals("SPECIALUSER"))
-               {
-                  User user = getOrCreateUser(args[1]);
-                  user.inChannel = true;
-                  user.isSub = true;
-               }
-            } else if (input.contains(":jtv MODE "))
-            {
-               String[] parts = input.substring(input.indexOf("MODE") + "MODE ".length()).split(" ");
+               User user = getOrCreateUser(args[1]);
+               user.inChannel = true;
+               user.isSub = true;
+            }
+         } else if (input.contains(":jtv MODE "))
+         {
+            String[] parts = input.substring(input.indexOf("MODE") + "MODE ".length()).split(" ");
 
-               if (parts[1].equalsIgnoreCase("+o"))
-               {
-                  User sub = getOrCreateUser(parts[2]);
-                  sub.captain = true;
-                  Logger.logDebug(sub.name + " is a mod " + sub.captain);
-               } else if (parts[1].equalsIgnoreCase("-o"))
-               {
-                  User sub = users.get(parts[2]);
-                  if (sub != null)
-                  {
-                     sub.captain = false;
-                     Logger.logDebug(sub.name + " is no longer a mod " + sub.captain);
-                  }
-               }
-            } else if (input.contains(" PRIVMSG " + channel))
+            if (parts[1].equalsIgnoreCase("+o"))
             {
-               String name = input.substring(1, input.indexOf("!"));
-               String msg = input.substring(input.indexOf(':', 1) + 1);
-               frame.addText(name + ": " + msg + "\n");
+               User sub = getOrCreateUser(parts[2]);
+               sub.captain = true;
+               Logger.logDebug(sub.name + " is a mod " + sub.captain);
+            } else if (parts[1].equalsIgnoreCase("-o"))
+            {
+               User sub = users.get(parts[2]);
+               if (sub != null)
+               {
+                  sub.captain = false;
+                  Logger.logDebug(sub.name + " is no longer a mod " + sub.captain);
+               }
+            }
+         } else if (input.contains(" PRIVMSG " + channel))
+         {
+            String name = input.substring(1, input.indexOf("!"));
+            String msg = input.substring(input.indexOf(':', 1) + 1);
+            frame.addText(name + ": " + msg + "\n");
 
-               if (msg.length() == 0 || msg.charAt(0) != '!')
+            if (msg.length() == 0 || msg.charAt(0) != '!')
+               return;
+
+            User user = users.get(name);
+            if (user != null && user.captain)
+               if (msg.startsWith("!beta"))
+               {
+                  sendMessage(channel,
+                        "/me The faction portion of this bot is still in a VERY early beta. So expect hiccups ;) Zedtheyeti is monitoring things and will do his best to fix any bugs that pop up. Most importantly just have fun and don't worry about it koolWALLY");
                   return;
+               }
 
-               User user = users.get(name);
-               if (user != null && user.captain)
-                  if (msg.startsWith("!beta"))
-                  {
-                     sendMessage(channel,
-                           "/me The faction portion of this bot is still in a VERY early beta. So expect hiccups ;) Zedtheyeti is monitoring things and will do his best to fix any bugs that pop up. Most importantly just have fun and don't worry about it koolWALLY");
-                     return;
-                  }
+            boolean isSub = user != null && user.isSub;
+            boolean isMod = user != null && user.captain;
 
-               boolean isSub = user != null && user.isSub;
-               boolean isMod = user != null && user.captain;
-
-               if (isMod)
-                  for (Command cmd : modCommands)
-                     if (cmd.check(name, msg.toLowerCase(), isSub))
-                     {
-                        cmd.process(name, msg);
-                        return;
-                     }
-
-               if (isSub || isMod)
-                  for (Command cmd : subCommands)
-                     if (cmd.check(name, msg.toLowerCase(), isSub))
-                     {
-                        cmd.process(name, msg);
-                        return;
-                     }
-
-               for (Command cmd : commands)
+            if (isMod)
+               for (Command cmd : modCommands)
                   if (cmd.check(name, msg.toLowerCase(), isSub))
                   {
                      cmd.process(name, msg);
-                     break;
+                     return;
                   }
-            } else if (input.contains(" JOIN "))
-            {
-               String name = input.substring(1, input.indexOf('!'));
-               Logger.logDebug(name + " joined");
 
-               User user = getOrCreateUser(name);
+            if (isSub || isMod)
+               for (Command cmd : subCommands)
+                  if (cmd.check(name, msg.toLowerCase(), isSub))
+                  {
+                     cmd.process(name, msg);
+                     return;
+                  }
 
-               user.inChannel = true;
-
-               long time = System.currentTimeMillis();
-               // No idea how this would happen, but oh well
-               if (user.joinTime > time || user.joinTime == 0)
-                  user.joinTime = time;
-            } else if (input.contains(" PART "))
-            {
-               String name = input.substring(1, input.indexOf('!'));
-               Logger.logDebug(name + " left");
-               User user = users.remove(name);
-               if (user != null)
+            for (Command cmd : commands)
+               if (cmd.check(name, msg.toLowerCase(), isSub))
                {
-                  Logger.logDebug("Moving " + name + " from online users to offline users");
-                  user.inChannel = false;
-                  offlineUsers.put(name, user);
+                  cmd.process(name, msg);
+                  break;
                }
-            }
-            // 353 wallythewizard = #sourkoolaidshow :
-            else if (input.contains("353 " + Globals.username + " = " + channel + " :"))
-            {
-               int index = input.indexOf(':', 1);
-               String[] names = input.substring(index + 1).split(" ");
-               for (String name : names)
-               {
-                  User usr = getOrCreateUser(name);
-                  usr.inChannel = true;
-                  usr.joinTime = System.currentTimeMillis();
-               }
-            }
+         } else if (input.contains(" JOIN "))
+         {
+            String name = input.substring(1, input.indexOf('!'));
+            Logger.logDebug(name + " joined");
 
+            User user = getOrCreateUser(name);
+
+            user.inChannel = true;
+
+            long time = System.currentTimeMillis();
+            // No idea how this would happen, but oh well
+            if (user.joinTime > time || user.joinTime == 0)
+               user.joinTime = time;
+         } else if (input.contains(" PART "))
+         {
+            String name = input.substring(1, input.indexOf('!'));
+            Logger.logDebug(name + " left");
+            User user = users.remove(name);
+            if (user != null)
+            {
+               Logger.logDebug("Moving " + name + " from online users to offline users");
+               user.inChannel = false;
+               offlineUsers.put(name, user);
+            }
          }
+         // 353 wallythewizard = #sourkoolaidshow :
+         else if (input.contains("353 " + Globals.username + " = " + channel + " :"))
+         {
+            int index = input.indexOf(':', 1);
+            String[] names = input.substring(index + 1).split(" ");
+            for (String name : names)
+            {
+               User usr = getOrCreateUser(name);
+               usr.inChannel = true;
+               usr.joinTime = System.currentTimeMillis();
+            }
+         }
+
       });
 
-      server.addCmdParser(new Parser()
-      {
-         @Override
-         public void parse(String line)
-         {
-            String[] parts = line.split(" ");
-            if (parts.length >= 2 && parts[0].equalsIgnoreCase("join"))
-               server.sendLine("JOIN " + parts[1]);
-            else if (parts.length >= 2 && parts[0].equalsIgnoreCase("leave"))
-               server.sendLine("PART " + parts[1]);
-            else if (parts.length >= 2 && parts[0].equalsIgnoreCase("pm"))
-               server.sendMessage(parts[1], parts[2]);
-            else if (parts[0].equalsIgnoreCase("exit"))
-               System.exit(0);
-            else if (parts[0].equalsIgnoreCase("raw"))
-               server.sendLine(line.substring(line.indexOf(' ') + 1));
-         }
+      server.addCmdParser(line -> {
+         String[] parts = line.split(" ");
+         if (parts.length >= 2 && parts[0].equalsIgnoreCase("join"))
+            server.sendLine("JOIN " + parts[1]);
+         else if (parts.length >= 2 && parts[0].equalsIgnoreCase("leave"))
+            server.sendLine("PART " + parts[1]);
+         else if (parts.length >= 2 && parts[0].equalsIgnoreCase("pm"))
+            server.sendMessage(parts[1], parts[2]);
+         else if (parts[0].equalsIgnoreCase("exit"))
+            System.exit(0);
+         else if (parts[0].equalsIgnoreCase("raw"))
+            server.sendLine(line.substring(line.indexOf(' ') + 1));
       });
 
       Logger.logDebug("Loading user info..");
