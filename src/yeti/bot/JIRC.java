@@ -63,14 +63,13 @@ public class JIRC
       try
       {
          String logging = System.getProperty("logging", "none");
-         if (logging.equalsIgnoreCase("none"))
-            Logger.setLevel(Logger.NONE);
-         else if (logging.equalsIgnoreCase("error"))
-            Logger.setLevel(Logger.ERROR);
-         else if (logging.equalsIgnoreCase("DEBUG"))
-            Logger.setLevel(Logger.DEBUG);
-         else if (logging.equalsIgnoreCase("ALL"))
-            Logger.setLevel(Logger.ALL);
+         switch(logging.toLowerCase())
+         {
+            case "error": Logger.setLevel(Logger.ERROR); break;
+            case "debug": Logger.setLevel(Logger.DEBUG); break;
+            case "all": Logger.setLevel(Logger.ALL); break;
+            default: Logger.setLevel(Logger.NONE); break;
+         }
 
          main();
       } catch (Exception ex)
