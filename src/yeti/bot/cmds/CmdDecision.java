@@ -6,6 +6,7 @@ import yeti.bot.JIRC;
 import yeti.bot.User;
 import yeti.bot.util.Logger;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -97,22 +98,44 @@ public class CmdDecision extends Command
             @Override
             public void run()
             {
-               int total = Globals.yays + Globals.nays;
+               ArrayList<Integer> winners = new ArrayList<>(votes.length);
 
                Logger.logDebug("Votes: " + votes);
 
                StringBuilder bldr = new StringBuilder("/me The voting has ended. ");
-               bldr.append(votingFaction.getName()).append(" have agreed upon choice ");
 
-               // TODO Deal with ties better
-
-               int mostIndex = 0;
+               int highest = -1;
                for (int i = 0; i < votes.length; i++)
                {
-                  if (votes[i] > votes[mostIndex])
-                     mostIndex = i;
+                  if (votes[i] > highest)
+                  {
+                     highest = votes[i];
+                     winners.clear();
+                     winners.add(i);
+                  } else if(votes[i] == highest)
+                  {
+                     winners.add(i);
+                  }
                }
-               bldr.append(mostIndex + 1).append('.');
+
+               if(winners.size() > 1)
+               {
+                  bldr.append(votingFaction.getName()).append(" have tied voting for ");
+                  for (int i = 0; i < winners.size(); i++)
+                  {
+                     bldr.append(winners.get(i));
+                     if(i != winners.size() - 1)
+                        bldr.append(", ");
+                  }
+                  bldr.append('.');
+               }else
+               {
+                  if(winners.isEmpty())
+                     bldr.append(" No votes were cast.");
+                  else
+                     bldr.append(votingFaction.getName()).append(" have agreed upon choice ");
+                     bldr.append(winners.get(0)).append('.');
+               }
 
                JIRC.sendMessage(Globals.channel, bldr.toString());
                voting = false;
