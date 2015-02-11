@@ -6,16 +6,16 @@ import yeti.bot.User;
 import yeti.bot.util.Logger;
 import yeti.bot.util.Util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TimerTask;
 
 /**
  * Created by Z on 1/15/2015.
  */
 public class CmdDuel extends Command
 {
-   // TODO Change to HashMap<String, ArrayList<DuelInfo>> to allow multiple challenges then !accept them in order
-
-   private HashMap<String, DuelInfo> duels = new HashMap<String, DuelInfo>();
+   private HashMap<String, ArrayList<DuelInfo>> duels = new HashMap<>();
 
    class DuelInfo
    {
@@ -80,23 +80,27 @@ public class CmdDuel extends Command
             return;
          }
 
-         duels.put(opponent.name, new DuelInfo(challenger, opponent, amount, System.currentTimeMillis()));
+         ArrayList<DuelInfo> infoList = duels.get(opponent.name);
+         if(infoList == null)
+         {
+            infoList = new ArrayList<>();
+            duels.put(opponent.name, infoList);
+         }
+         infoList.add(new DuelInfo(challenger, opponent, amount, System.currentTimeMillis()));
          JIRC.sendMessage(Globals.channel, "/me " + challenger.name + " has challenged " + opponent.name + " to a duel for " + amount + " xp! " + opponent.name + ", use !accept or !decline to answer the challenge.");
       } else if (msg.startsWith("!accept"))
       {
          User usr = Globals.users.get(user);
 
-         System.err.println("accept");
-
          if (usr == null)
             return;
 
-         System.err.println("boop");
-
-         DuelInfo info = duels.remove(usr.name);
-         if (info != null)
+         ArrayList<DuelInfo> infoList = duels.get(usr.name);
+         if(infoList != null)
          {
-            System.err.println("bedoop");
+            DuelInfo info = infoList.remove(0);
+            if(infoList.isEmpty())
+               duels.remove(usr.name);
 
             int challengerRoll = Util.rollDie(20), opponentRoll = Util.rollDie(20);
 
@@ -136,19 +140,17 @@ public class CmdDuel extends Command
                bldr.append("It's a tie!");
             }
 
-            // Need to push this waiting off to a new thread
-            // so it doesn't eat time on the main thread
-            // Maybe a TimerTask
-            Thread.yield();
-            try
-            {
-               Thread.sleep(5000);
-            } catch (InterruptedException e)
-            {
-               e.printStackTrace();
-            }
-
-            JIRC.sendMessage(Globals.channel, bldr.toString());
+            new Thread(() -> {
+               Thread.yield();
+               try
+               {
+                  Thread.sleep(5000);
+               } catch (InterruptedException e)
+               {
+                  e.printStackTrace();
+               }
+               JIRC.sendMessage(Globals.channel, bldr.toString());
+            }).start();
          }
       } else if (msg.startsWith("!decline"))
       {
@@ -157,9 +159,15 @@ public class CmdDuel extends Command
          if (usr == null)
             return;
 
-         DuelInfo info = duels.remove(usr);
-         if (info != null)
-            JIRC.sendMessage(Globals.channel, info.opponent + " has declined " + info.challenger + "'s challenge.");
+         ArrayList<DuelInfo> infoList = duels.get(usr.name);
+         if(infoList != null)
+         {
+            DuelInfo info = infoList.remove(0);
+            if(infoList.isEmpty())
+               duels.remove(usr.name);
+
+            JIRC.sendMessage(Globals.channel, info.opponent.name + " has declined " + info.challenger.name + "'s challenge.");
+         }
       }
    }
 
