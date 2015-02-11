@@ -229,13 +229,6 @@ public class JIRC
                return;
 
             User user = users.get(name);
-            if (user != null && user.captain)
-               if (msg.startsWith("!beta"))
-               {
-                  sendMessage(channel,
-                        "/me The faction portion of this bot is still in a VERY early beta. So expect hiccups ;) Zedtheyeti is monitoring things and will do his best to fix any bugs that pop up. Most importantly just have fun and don't worry about it koolWALLY");
-                  return;
-               }
 
             boolean isSub = user != null && user.isSub;
             boolean isMod = user != null && user.captain;
