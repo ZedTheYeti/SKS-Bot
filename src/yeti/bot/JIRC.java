@@ -297,12 +297,15 @@ public class JIRC
 
       server.addCmdParser(line -> {
          String[] parts = line.split(" ");
-         if (parts.length >= 2 && parts[0].equalsIgnoreCase("join"))
-            server.sendLine("JOIN " + parts[1]);
-         else if (parts.length >= 2 && parts[0].equalsIgnoreCase("leave"))
-            server.sendLine("PART " + parts[1]);
-         else if (parts.length >= 2 && parts[0].equalsIgnoreCase("pm"))
-            server.sendMessage(parts[1], parts[2]);
+         if(parts.length >= 2)
+         {
+            if (parts[0].equalsIgnoreCase("join"))
+               server.sendLine("JOIN " + parts[1]);
+            else if (parts[0].equalsIgnoreCase("leave"))
+               server.sendLine("PART " + parts[1]);
+            else if (parts[0].equalsIgnoreCase("pm"))
+               server.sendMessage(parts[1], parts[2]);
+         }
          else if (parts[0].equalsIgnoreCase("exit"))
             System.exit(0);
          else if (parts[0].equalsIgnoreCase("raw"))
