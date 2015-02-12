@@ -107,6 +107,7 @@ public class Globals
       modCommands.add(new CmdInfo());
       modCommands.add(new CmdToggle());
       modCommands.add(new CmdCount());
+      modCommands.add(new CmdGitEm());
    }
 
    public static User getOrCreateUser(String name)
