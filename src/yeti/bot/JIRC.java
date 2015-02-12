@@ -164,17 +164,23 @@ public class JIRC
          public void run()
          {
             Logger.logDebug("Live check for " + Globals.channel.substring(1));
-            if(streamIsLive(Globals.channel.substring(1)) && Globals.xpAwardAmount != Globals.XP_LIVE_AWARD_AMOUNT)
+            if(streamIsLive(Globals.channel.substring(1)))
             {
-               Logger.logDebug("Switching to live");
-               Globals.xpAwardAmount = Globals.XP_LIVE_AWARD_AMOUNT;
-               JIRC.sendMessage(Globals.channel, "/me SKS is live! The amount of XP awarded per hour has been set to full.");
+               Logger.logDebug(Globals.channel + " is live");
+               if(Globals.xpAwardAmount != Globals.XP_LIVE_AWARD_AMOUNT)
+               {
+                  Globals.xpAwardAmount = Globals.XP_LIVE_AWARD_AMOUNT;
+                  JIRC.sendMessage(Globals.channel, "/me SKS is live! The amount of XP awarded per hour has been set to full.");
+               }
             }
-            else if(Globals.xpAwardAmount != Globals.XP_OFFLINE_AWARD_AMOUNT)
+            else
             {
-               Logger.logDebug("Switching to offline");
-               Globals.xpAwardAmount = Globals.XP_OFFLINE_AWARD_AMOUNT;
-               JIRC.sendMessage(Globals.channel, "/me SKS is offline. The amount of XP awarded per hour has be set to half.");
+               Logger.logDebug(Globals.channel + " is offline");
+               if(Globals.xpAwardAmount != Globals.XP_OFFLINE_AWARD_AMOUNT)
+               {
+                  Globals.xpAwardAmount = Globals.XP_OFFLINE_AWARD_AMOUNT;
+                  JIRC.sendMessage(Globals.channel, "/me SKS is offline. The amount of XP awarded per hour has be set to half.");
+               }
             }
          }
       };
