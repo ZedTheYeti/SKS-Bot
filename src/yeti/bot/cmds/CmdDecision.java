@@ -123,7 +123,7 @@ public class CmdDecision extends Command
                   bldr.append(votingFaction.getName()).append(" have tied voting for ");
                   for (int i = 0; i < winners.size(); i++)
                   {
-                     bldr.append(winners.get(i));
+                     bldr.append(winners.get(i) + 1);
                      if(i != winners.size() - 1)
                         bldr.append(", ");
                   }
@@ -134,7 +134,7 @@ public class CmdDecision extends Command
                      bldr.append(" No votes were cast.");
                   else
                      bldr.append(votingFaction.getName()).append(" have agreed upon choice ");
-                     bldr.append(winners.get(0)).append('.');
+                     bldr.append(winners.get(0) + 1).append('.');
                }
 
                JIRC.sendMessage(Globals.channel, bldr.toString());
