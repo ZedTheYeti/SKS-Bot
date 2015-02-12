@@ -65,9 +65,6 @@ public class JIRC
 
    public static void main(String args[])
    {
-      System.out.println("sourkoolaidshow: " + streamIsLive("sourkoolaidshow"));
-      System.out.println("brainsgames: " + streamIsLive("brainsgames"));
-
       try
       {
          String logging = System.getProperty("logging", "none");
@@ -166,13 +163,16 @@ public class JIRC
          @Override
          public void run()
          {
-            if(streamIsLive(Globals.channel) && Globals.xpAwardAmount != Globals.XP_LIVE_AWARD_AMOUNT)
+            Logger.logDebug("Live check for " + Globals.channel.substring(1));
+            if(streamIsLive(Globals.channel.substring(1)) && Globals.xpAwardAmount != Globals.XP_LIVE_AWARD_AMOUNT)
             {
+               Logger.logDebug("Switching to live");
                Globals.xpAwardAmount = Globals.XP_LIVE_AWARD_AMOUNT;
                JIRC.sendMessage(Globals.channel, "/me SKS is live! The amount of XP awarded per hour has been set to full.");
             }
             else if(Globals.xpAwardAmount != Globals.XP_OFFLINE_AWARD_AMOUNT)
             {
+               Logger.logDebug("Switching to offline");
                Globals.xpAwardAmount = Globals.XP_OFFLINE_AWARD_AMOUNT;
                JIRC.sendMessage(Globals.channel, "/me SKS is offline. The amount of XP awarded per hour has be set to half.");
             }
@@ -249,8 +249,6 @@ public class JIRC
       channel = options.get("channel").toLowerCase();
       if (channel.charAt(0) != '#')
          channel = "#" + channel;
-
-      startLiveTimer();
 
       server = new IRCServer(serverName, port);
       server.setNick(username);
@@ -408,6 +406,7 @@ public class JIRC
       server.sendLine("TWITCHCLIENT 1");
       sendMessage(channel, "/me has returned from the astral plane!");
 
+      startLiveTimer();
 
       Timer timer = new Timer();
       TimerTask task = new TimerTask()
