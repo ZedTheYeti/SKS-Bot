@@ -36,13 +36,18 @@ import yeti.bot.util.Util;
 import yeti.irc.IRCServer;
 import yeti.irc.Parser;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Map.Entry;
@@ -60,6 +65,9 @@ public class JIRC
 
    public static void main(String args[])
    {
+      System.out.println("sourkoolaidshow: " + streamIsLive("sourkoolaidshow"));
+      System.out.println("brainsgames: " + streamIsLive("brainsgames"));
+
       try
       {
          String logging = System.getProperty("logging", "none");
@@ -112,6 +120,65 @@ public class JIRC
          server.sendMessage(channel, msg);
       if (frame != null)
          frame.addText(username + ": " + msg + "\n");
+   }
+
+   public static boolean streamIsLive(String channel)
+   {
+      String httpsUrl = "https://api.twitch.tv/kraken/streams/" + channel;
+      boolean live = false;
+      try
+      {
+         URL url = new URL(httpsUrl);
+         HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
+         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+         String line;
+
+         while((line = in.readLine()) != null)
+         {
+            if(line.contains("\"stream\":null"))
+            {
+               live = false;
+               break;
+            }else if(line.contains("\"stream\":{"))
+            {
+               live = true;
+               break;
+            }
+         }
+
+         in.close();
+      }catch(MalformedURLException muex)
+      {
+
+      }catch(IOException ioex)
+      {
+
+      }
+
+      return live;
+   }
+
+   public static void startLiveTimer()
+   {
+      Timer timer = new Timer();
+      TimerTask timerTask = new TimerTask()
+      {
+         @Override
+         public void run()
+         {
+            if(streamIsLive(Globals.channel))
+            {
+               Globals.xpAwardAmount = Globals.XP_LIVE_AWARD_AMOUNT;
+               JIRC.sendMessage(Globals.channel, "/me SKS is live! The amount of XP awarded per hour has been set to full.");
+            }
+            else
+            {
+               Globals.xpAwardAmount = Globals.XP_OFFLINE_AWARD_AMOUNT;
+               JIRC.sendMessage(Globals.channel, "/me SKS is offline. The amount of XP awarded per hour has be set to half.");
+            }
+         }
+      };
+      timer.scheduleAtFixedRate(timerTask, 0, 5 * 60 * 1000);
    }
 
    public static void main()
@@ -182,6 +249,8 @@ public class JIRC
       channel = options.get("channel").toLowerCase();
       if (channel.charAt(0) != '#')
          channel = "#" + channel;
+
+      startLiveTimer();
 
       server = new IRCServer(serverName, port);
       server.setNick(username);
@@ -378,7 +447,7 @@ public class JIRC
                   Logger.logDebug(sub.name + " joined at " + sub.joinTime + " the difference between then and now is " + diff + " award time is " + XP_AWARD_TIME);
                   Logger.logDebug(sub.name + " is at " + sub.exp + "10xp");
                   Logger.logDebug("We are " + (diff - XP_AWARD_TIME) + " behind");
-                  sub.exp += XP_AWARD_AMOUNT;
+                  sub.exp += Globals.xpAwardAmount;
                   sub.joinTime += XP_AWARD_TIME;
                }
 

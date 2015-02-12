@@ -62,11 +62,13 @@ public class Globals
    public static int draws = 0;
    public static final long VOTE_TIME = 1 * 60 * 1000;
 
+   public static final float XP_LIVE_AWARD_AMOUNT = 0.08333333333333333333333333333333f;
+   public static final float XP_OFFLINE_AWARD_AMOUNT = XP_LIVE_AWARD_AMOUNT / 2.0f;
+   public static final long XP_AWARD_TIME = 5 * 60 * 1000;
    public static boolean trackXp = false;
    public static long xpStartTime = 0;
    public static long xpTrackTime = 0;
-   public static final float XP_AWARD_AMOUNT = 0.08333333333333333333333333333333f;
-   public static final long XP_AWARD_TIME = 5 * 60 * 1000;
+   public static float xpAwardAmount;
 
    public static int msgCount = 0;
 
