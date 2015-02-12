@@ -166,12 +166,12 @@ public class JIRC
          @Override
          public void run()
          {
-            if(streamIsLive(Globals.channel))
+            if(streamIsLive(Globals.channel) && Globals.xpAwardAmount != Globals.XP_LIVE_AWARD_AMOUNT)
             {
                Globals.xpAwardAmount = Globals.XP_LIVE_AWARD_AMOUNT;
                JIRC.sendMessage(Globals.channel, "/me SKS is live! The amount of XP awarded per hour has been set to full.");
             }
-            else
+            else if(Globals.xpAwardAmount != Globals.XP_OFFLINE_AWARD_AMOUNT)
             {
                Globals.xpAwardAmount = Globals.XP_OFFLINE_AWARD_AMOUNT;
                JIRC.sendMessage(Globals.channel, "/me SKS is offline. The amount of XP awarded per hour has be set to half.");
