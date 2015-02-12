@@ -10,6 +10,8 @@ import yeti.bot.util.Util;
  */
 public class CmdRoll extends Command
 {
+   // TODO Add ability to d !xdy where x is the number of die and y is the number of sides Ex: !2d4 is 2 four sided die
+
    @Override
    public boolean check(String name, String cmd, boolean isSub)
    {
