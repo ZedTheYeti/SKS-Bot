@@ -88,14 +88,14 @@ public class JIRC
          main();
       } catch (Exception ex)
       {
-         Logger.logError("An unhandled exception has occurred: " + ex.getMessage() + "\n" + Logger.getStackTrace(ex), true);
+         Logger.logError("An error occurred in the program, please check the error log. Error Message:\n" + ex.getMessage(), true);
          ex.printStackTrace();
          if (save != null)
             saveAll();
          throw ex;
       } catch(Error e)
       {
-         Logger.logError("An error occurred in the program: " + e.getMessage() + "\n" + Logger.getStackTrace(e), true);
+         Logger.logError("An error occurred in the program, please check the error log. Error Message:\n" + e.getMessage(), true);
          e.printStackTrace();
          if(save != null)
             saveAll();
