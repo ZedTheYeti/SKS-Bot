@@ -50,6 +50,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -67,26 +69,33 @@ public class JIRC
    {
       try
       {
-         String logging = System.getProperty("logging", "none");
+         String logging = System.getProperty("logging", "error");
          switch(logging.toLowerCase())
          {
-            case "error": Logger.setLevel(Logger.ERROR); break;
             case "debug": Logger.setLevel(Logger.DEBUG); break;
             case "all": Logger.setLevel(Logger.ALL); break;
-            default: Logger.setLevel(Logger.NONE); break;
+            case "none": Logger.setLevel(Logger.NONE); break;
+            default: Logger.setLevel(Logger.ERROR); break;
+         }
+
+         String redirect = System.getProperty("redirect.output", "true");
+         switch(redirect.toLowerCase())
+         {
+            case "false": break;
+            default: Logger.redirectOutput();
          }
 
          main();
       } catch (Exception ex)
       {
-         Logger.logError("An unhandled exception has occurred: " + ex.getMessage() + "\n" + ex.getStackTrace(), true);
+         Logger.logError("An unhandled exception has occurred: " + ex.getMessage() + "\n" + Logger.getStackTrace(ex), true);
          ex.printStackTrace();
          if (save != null)
             saveAll();
          throw ex;
       } catch(Error e)
       {
-         Logger.logError("An error occurred in the program: " + e.getMessage() + "\n" + e.getStackTrace(), true);
+         Logger.logError("An error occurred in the program: " + e.getMessage() + "\n" + Logger.getStackTrace(e), true);
          e.printStackTrace();
          if(save != null)
             saveAll();
