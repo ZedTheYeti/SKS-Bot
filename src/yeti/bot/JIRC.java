@@ -79,10 +79,18 @@ public class JIRC
          main();
       } catch (Exception ex)
       {
-         Logger.logError("An unhandled exception has occurred: " + ex.getMessage());
+         Logger.logError("An unhandled exception has occurred: " + ex.getMessage() + "\n" + ex.getStackTrace(), true);
          ex.printStackTrace();
          if (save != null)
             saveAll();
+         throw ex;
+      } catch(Error e)
+      {
+         Logger.logError("An error occurred in the program: " + e.getMessage() + "\n" + e.getStackTrace(), true);
+         e.printStackTrace();
+         if(save != null)
+            saveAll();
+         throw e;
       }
    }
 
