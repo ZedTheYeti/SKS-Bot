@@ -77,28 +77,28 @@ public class CmdJoin extends Command
          return;
       String faction = msg.substring(index).toLowerCase();
 
-      User sub = Globals.users.get(user);
+      User sub = Globals.getOnlineUser(user);
 
       if (faction.contains("guild") || faction.contains("koolbreath"))
-         sub.faction = Faction.GUILD;
+         sub.setFaction(Faction.GUILD);
       else if (faction.contains("knights") || faction.contains("koolknights"))
-         sub.faction = Faction.KNIGHTS;
+         sub.setFaction(Faction.KNIGHTS);
       else if (faction.contains("school") || faction.contains("koolschool"))
-         sub.faction = Faction.SCHOOL;
+         sub.setFaction(Faction.SCHOOL);
       else if (faction.contains("rockbiter") || faction.contains("koolclan"))
-         sub.faction = Faction.ROCKBITER;
+         sub.setFaction(Faction.ROCKBITER);
       else
          return;
 
-      cooling.put(sub.name, System.currentTimeMillis());
-      String str = "/me " + sub.name + " has joined the " + sub.faction.getName() + "!";
-      if (sub.faction == Faction.GUILD)
+      cooling.put(sub.getName(), System.currentTimeMillis());
+      String str = "/me " + sub.getName() + " has joined the " + sub.getFaction().getName() + "!";
+      if (sub.getFaction() == Faction.GUILD)
          str += " koolBREATH Make sure to change the color of your name to green.";
-      else if (sub.faction == Faction.KNIGHTS)
+      else if (sub.getFaction() == Faction.KNIGHTS)
          str += " koolKNIGHTS Make sure to change the color of your name to blue.";
-      else if (sub.faction == Faction.ROCKBITER)
+      else if (sub.getFaction() == Faction.ROCKBITER)
          str += " koolCLAN Make sure to change the color of your name to yellow.";
-      else if (sub.faction == Faction.SCHOOL)
+      else if (sub.getFaction() == Faction.SCHOOL)
          str += " koolSchool Make sure to change the color of your name to red.";
 
       JIRC.sendMessage("#sourkoolaidshow", str);

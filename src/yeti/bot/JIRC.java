@@ -26,15 +26,15 @@
  */
 package yeti.bot;
 
+import sun.rmi.runtime.Log;
 import yeti.bot.cmds.Command;
 import yeti.bot.gui.ChatFrame;
-import yeti.bot.gui.SendListener;
 import yeti.bot.gui.StartDialog;
 import yeti.bot.util.Logger;
+import yeti.bot.util.MySQL;
 import yeti.bot.util.Options;
 import yeti.bot.util.Util;
 import yeti.irc.IRCServer;
-import yeti.irc.Parser;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.*;
@@ -50,9 +50,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -64,6 +62,7 @@ public class JIRC
    private static Options save;
    private static boolean saved = false;
    private static boolean saving = false;
+   private static boolean saveToDb = true;
 
    public static void main(String args[])
    {
@@ -118,10 +117,10 @@ public class JIRC
          e.printStackTrace();
       }
 
-      for (User usr : offlineUsers.values())
-         save.set(usr.name, usr.getInfo());
-      for (User usr : users.values())
-         save.set(usr.name, usr.getInfo());
+      for (User usr : Globals.getOfflineUsers())
+         save.set(usr.getName(), usr.getInfo());
+      for (User usr : Globals.getOnlineUsers())
+         save.set(usr.getName(), usr.getInfo());
       save.save();
 
       Logger.logDebug("Finished saving all users");
@@ -267,6 +266,8 @@ public class JIRC
 
       username = options.get("username").toLowerCase();
       String oauth = options.get("oauth");
+      if(oauth.startsWith("oauth:"))
+         oauth = oauth.substring(oauth.indexOf(':') + 1);
       serverName = options.get("server");
       port = Integer.parseInt(options.get("port"));
       channel = options.get("channel").toLowerCase();
@@ -277,7 +278,8 @@ public class JIRC
       server.setNick(username);
       server.setIdent(username);
       server.setRealName(username);
-      server.setServerPass(oauth);
+      MySQL.setPassword(oauth);
+      server.setServerPass("oauth:" + oauth);
 
       server.addMsgParser(input -> {
          if (input.startsWith("PING "))
@@ -299,14 +301,14 @@ public class JIRC
             {
                User sub = getOrCreateUser(parts[2]);
                sub.captain = true;
-               Logger.logDebug(sub.name + " is a mod " + sub.captain);
+               Logger.logDebug(sub.getName() + " is a mod");
             } else if (parts[1].equalsIgnoreCase("-o"))
             {
-               User sub = users.get(parts[2]);
+               User sub = Globals.getOnlineUser(parts[2]);
                if (sub != null)
                {
                   sub.captain = false;
-                  Logger.logDebug(sub.name + " is no longer a mod " + sub.captain);
+                  Logger.logDebug(sub.getName() + " is no longer a mod");
                }
             }
          } else if (input.contains(" PRIVMSG " + channel))
@@ -318,7 +320,7 @@ public class JIRC
             if (msg.length() == 0 || msg.charAt(0) != '!')
                return;
 
-            User user = users.get(name);
+            User user = Globals.getOnlineUser(name);
 
             boolean isSub = user != null && user.isSub;
             boolean isMod = user != null && user.captain;
@@ -348,26 +350,35 @@ public class JIRC
          } else if (input.contains(" JOIN "))
          {
             String name = input.substring(1, input.indexOf('!'));
-            Logger.logDebug(name + " joined");
+            Logger.logMsg(name + " joined");
 
-            User user = getOrCreateUser(name);
+            User user = Globals.getOnlineUser(name);
+            if(user == null)
+            {
+               user = Globals.removeOfflineUser(name);
+               if(user != null)
+                  Globals.addOnlineUser(name, user);
+            }
 
-            user.inChannel = true;
+            if(user != null)
+            {
+               user.inChannel = true;
 
-            long time = System.currentTimeMillis();
-            // No idea how this would happen, but oh well
-            if (user.joinTime > time || user.joinTime == 0)
-               user.joinTime = time;
+               long time = System.currentTimeMillis();
+               // No idea how this would happen, but oh well
+               if (user.joinTime > time || user.joinTime == 0)
+                  user.joinTime = time;
+            }
          } else if (input.contains(" PART "))
          {
             String name = input.substring(1, input.indexOf('!'));
-            Logger.logDebug(name + " left");
-            User user = users.remove(name);
+            Logger.logMsg(name + " left");
+            User user = removeOnlineUser(name);
             if (user != null)
             {
-               Logger.logDebug("Moving " + name + " from online users to offline users");
+               Logger.logMsg("Moving " + name + " from online users to offline users");
                user.inChannel = false;
-               offlineUsers.put(name, user);
+               Globals.addOnlineUser(name, user);
             }
          }
          // 353 wallythewizard = #sourkoolaidshow :
@@ -377,9 +388,21 @@ public class JIRC
             String[] names = input.substring(index + 1).split(" ");
             for (String name : names)
             {
-               User usr = getOrCreateUser(name);
-               usr.inChannel = true;
-               usr.joinTime = System.currentTimeMillis();
+               User user = Globals.getOnlineUser(name);
+               if(user == null)
+               {
+                  user = Globals.removeOfflineUser(name);
+                  if(user != null)
+                     Globals.addOnlineUser(name, user);
+               }
+
+               if(user != null)
+               {
+                  user.inChannel = true;
+                  long time = System.currentTimeMillis();
+                  if (user.joinTime > time || user.joinTime == 0)
+                     user.joinTime = time;
+               }
             }
          }
 
@@ -402,25 +425,39 @@ public class JIRC
             server.sendLine(line.substring(line.indexOf(' ') + 1));
       });
 
-      Logger.logDebug("Loading user info..");
       save = new Options("sksbot/user.info");
+      /*frame.addText("Local cache: " + save.getPath() + "\n");
+      Logger.logDebug("Loading local user info cache...");
+      frame.addText("Loading local user info cache...\n");
+
       save.load();
-      frame.addText(save.getPath() + "\n");
-      for (Entry<String, String> entry : save.getAllOptions())
+      for (Map.Entry<String, String> entry : save.getAllOptions())
       {
          //Logger.logDebug(entry.getValue());
          String name = entry.getKey().toLowerCase();
          User sub = new User(name);
          String[] parts = entry.getValue().split(",");
-         sub.faction = Faction.valueOf(parts[0]);
-         sub.level = Integer.parseInt(parts[1]);
-         sub.exp = Float.valueOf(parts[2]);
+         sub.setFaction(Faction.valueOf(parts[0]));
+         sub.setLevel(Integer.parseInt(parts[1]));
+         sub.setExp(Float.valueOf(parts[2]));
+         if(sub.getExp() < 0.5 && sub.getFaction() == Faction.COUNCIL)
+            continue;
          if (parts.length > 3)
-            sub.userClass = UserClass.valueOf(parts[3]);
+            sub.setUserClass(UserClass.valueOf(parts[3]));
          // sub.exp = 0f;
-         offlineUsers.put(name, sub);
+         Globals.addOfflineUser(name, sub);
       }
       Logger.logDebug("Done.");
+      frame.addText("Done.");*/
+
+      //// MySQL DATABASE TESTING ////
+      //MySQL.compareUsers();
+      frame.addText("Loading users from the database...\n");
+      MySQL.loadUsers(Globals.getOfflineMap());
+      frame.addText("Done.\n");
+      //MySQL.compareUsers();
+      //System.exit(0);
+      //// MySQL DATABASE TESTING ////
 
       Logger.logDebug("Connecting to " + server + ":" + port + "...");
       server.connect();
@@ -437,72 +474,78 @@ public class JIRC
          @Override
          public void run()
          {
-            if (!trackXp)
+            if(trackXp)
             {
-               if (!saved)
-                  saveAll();
-               saved = !saved;
-               return;
-            }
-
-            if (!saved)
-               for (User usr : offlineUsers.values())
-                  save.set(usr.name, usr.getInfo());
-
-            long time = System.currentTimeMillis();
-            for (User sub : users.values())
-            {
-               if (sub.joinTime == 0)
+               Logger.logDebug("Beginning xp update...");
+               long time = System.currentTimeMillis();
+               for (User sub : Globals.getOnlineUsers())
                {
-                  if (sub.inChannel)
+                  if (sub.joinTime == 0)
                   {
-                     Logger.logError("0 JOIN TIME " + sub.name);
-                     sub.joinTime = time;
-                  } else
-                     Logger.logError("NOT IN CHANNEL " + sub.name);
-                  continue;
-               }
+                     if (sub.inChannel)
+                     {
+                        Logger.logError("0 JOIN TIME " + sub.getName());
+                        sub.joinTime = time;
+                     } else
+                        Logger.logError("NOT IN CHANNEL " + sub.getName());
+                     continue;
+                  }
 
-               long diff = time - sub.joinTime;
-               if (diff >= XP_AWARD_TIME)
+                  long diff = time - sub.joinTime;
+                  if (diff >= XP_AWARD_TIME)
+                  {
+                     //Logger.logDebug(sub.getName() + " joined at " + sub.joinTime + " the difference between then and now is " + diff + " award time is " + XP_AWARD_TIME);
+                     //Logger.logDebug(sub.getName() + " is at " + sub.getExp() + "10xp");
+                     //Logger.logDebug("We are " + (diff - XP_AWARD_TIME) + " behind");
+                     sub.setExp(sub.getExp() + Globals.xpAwardAmount);
+                     sub.joinTime += XP_AWARD_TIME;
+                     save.set(sub.getName(), sub.getInfo());
+                  }
+               }
+               Logger.logDebug("Finished xp update.");
+
+               if (xpTrackTime != 0)
                {
-                  Logger.logDebug(sub.name + " joined at " + sub.joinTime + " the difference between then and now is " + diff + " award time is " + XP_AWARD_TIME);
-                  Logger.logDebug(sub.name + " is at " + sub.exp + "10xp");
-                  Logger.logDebug("We are " + (diff - XP_AWARD_TIME) + " behind");
-                  sub.exp += Globals.xpAwardAmount;
-                  sub.joinTime += XP_AWARD_TIME;
+                  if (time - xpStartTime >= xpTrackTime)
+                  {
+                     trackXp = false;
+                     JIRC.sendMessage(Globals.channel, "XP tracking has been turned off.");
+                  }
                }
-
-               if (!saved)
-                  save.set(sub.name, sub.getInfo());
             }
-
-            if (xpTrackTime != 0)
-            {
-               if (time - xpStartTime >= xpTrackTime)
-               {
-                  trackXp = false;
-                  JIRC.sendMessage(Globals.channel, "XP tracking has been turned off.");
-               }
-            }
-
-            if (!saved)
-            {
-               Logger.logDebug("Saving...");
-               try
-               {
-                  Files.copy(save.getFile().toPath(), new File(save.getPath() + ".bkp").toPath(), StandardCopyOption.REPLACE_EXISTING);
-               } catch (IOException e)
-               {
-                  e.printStackTrace();
-               }
-
-               save.save();
-               Logger.logDebug("Done.");
-            }
-            saved = !saved;
          }
       };
-      timer.scheduleAtFixedRate(task, 4 * 60 * 1000, 1 * 60 * 1000);
+      timer.scheduleAtFixedRate(task, 2 * 60 * 1000, 5 * 60 * 1000);
+
+      TimerTask saveTask = new TimerTask()
+      {
+         @Override
+         public void run()
+         {
+            if(saveToDb)
+            {
+               frame.addText("Saving users to database.\n");
+               Logger.logDebug("Saving users to database.");
+               MySQL.updateUsers();
+               Logger.logDebug("Done saving users to database.");
+               frame.addText("Done saving users to database.\n");
+               saveToDb = false;
+            } else
+            {
+               if(!saving)
+               {
+                  saving = true;
+                  Logger.logDebug("Saving users to local cache.");
+                  frame.addText("Saving users to local cache.\n");
+                  save.save();
+                  saving = false;
+                  Logger.logDebug("Done saving users to local cache.");
+                  frame.addText("Done saving users to local cache.\n");
+               }
+               saveToDb = true;
+            }
+         }
+      };
+      timer.scheduleAtFixedRate(saveTask, 5* 60 * 1000, 5 * 50 * 1000);
    }
 }

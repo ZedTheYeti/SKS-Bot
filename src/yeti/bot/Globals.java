@@ -31,13 +31,15 @@ import yeti.bot.util.Logger;
 import yeti.irc.IRCServer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class Globals
 {
-   public static HashMap<String, User> users = new HashMap<String, User>();
-   public static HashMap<String, User> offlineUsers = new HashMap<String, User>();
+   private static HashMap<String, User> users = new HashMap<String, User>();
+   private static HashMap<String, User> offlineUsers = new HashMap<String, User>();
    public static IRCServer server;
    public static ArrayList<Command> modCommands = new ArrayList<Command>();
    public static ArrayList<Command> subCommands = new ArrayList<Command>();
@@ -65,7 +67,7 @@ public class Globals
    public static final float XP_LIVE_AWARD_AMOUNT = 0.08333333333333333333333333333333f;
    public static final float XP_OFFLINE_AWARD_AMOUNT = XP_LIVE_AWARD_AMOUNT / 2.0f;
    public static final long XP_AWARD_TIME = 5 * 60 * 1000;
-   public static boolean trackXp = false;
+   public static boolean trackXp = true;
    public static long xpStartTime = 0;
    public static long xpTrackTime = 0;
    public static float xpAwardAmount;
@@ -112,6 +114,8 @@ public class Globals
 
    public static User getOrCreateUser(String name)
    {
+      name = name.toLowerCase();
+
       User usr = users.get(name);
       if (usr == null)
       {
@@ -129,5 +133,74 @@ public class Globals
          }
       }
       return usr;
+   }
+
+   public static User getOnlineUser(String name)
+   {
+      synchronized(users) { return users.get(name.toLowerCase()); }
+   }
+
+   public static void addOnlineUser(String name, User user)
+   {
+      synchronized(users) { users.put(name.toLowerCase(), user); }
+   }
+
+   public static User removeOnlineUser(String name)
+   {
+      synchronized(users) { return users.remove(name.toLowerCase()); }
+   }
+
+   public static Collection<User> getOnlineUsers()
+   {
+      return users.values();
+   }
+
+   public static HashMap<String, User> getOnlineMap()
+   {
+      return offlineUsers;
+   }
+
+   public static User getOfflineUser(String name)
+   {
+      synchronized(users) { return offlineUsers.get(name.toLowerCase()); }
+   }
+
+   public static void addOfflineUser(String name, User user)
+   {
+      synchronized(users) { offlineUsers.put(name.toLowerCase(), user); }
+   }
+
+   public static User removeOfflineUser(String name)
+   {
+      synchronized(users) { return offlineUsers.remove(name.toLowerCase()); }
+   }
+
+   public static Collection<User> getOfflineUsers()
+   {
+      return offlineUsers.values();
+   }
+
+   public static HashMap<String, User> getOfflineMap()
+   {
+      return offlineUsers;
+   }
+
+   public static ArrayList<User> getChangedUsers()
+   {
+      ArrayList<User> list = new ArrayList<>();
+      synchronized (users)
+      {
+         for(User user : users.values())
+            if(user.hasChanged)
+               list.add(user);
+      }
+
+      synchronized (offlineUsers)
+      {
+         for(User user : offlineUsers.values())
+            if(user.hasChanged)
+               list.add(user);
+      }
+      return list;
    }
 }

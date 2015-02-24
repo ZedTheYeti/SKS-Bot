@@ -255,9 +255,9 @@ public class ChatFrame extends JFrame
          {
             StringBuilder bldr = new StringBuilder();
 
-            for (User usr : Globals.users.values())
+            for (User usr : Globals.getOnlineUsers())
             {
-               bldr.append(usr.name);
+               bldr.append(usr.getName());
                bldr.append('=');
                bldr.append(usr.getInfo());
                bldr.append(',');
@@ -288,9 +288,9 @@ public class ChatFrame extends JFrame
          {
             StringBuilder bldr = new StringBuilder();
 
-            for (User usr : Globals.offlineUsers.values())
+            for (User usr : Globals.getOfflineUsers())
             {
-               bldr.append(usr.name);
+               bldr.append(usr.getName());
                bldr.append('=');
                bldr.append(usr.getInfo());
                bldr.append(',');
@@ -321,9 +321,9 @@ public class ChatFrame extends JFrame
          {
             StringBuilder bldr = new StringBuilder();
 
-            for (User usr : Globals.offlineUsers.values())
+            for (User usr : Globals.getOfflineUsers())
             {
-               bldr.append(usr.name);
+               bldr.append(usr.getName());
                bldr.append('=');
                bldr.append(usr.getInfo());
                bldr.append(',');
@@ -333,9 +333,9 @@ public class ChatFrame extends JFrame
                bldr.append('\n');
             }
 
-            for (User usr : Globals.users.values())
+            for (User usr : Globals.getOnlineUsers())
             {
-               bldr.append(usr.name);
+               bldr.append(usr.getName());
                bldr.append('=');
                bldr.append(usr.getInfo());
                bldr.append(',');
@@ -442,13 +442,13 @@ public class ChatFrame extends JFrame
                input = input.trim().toLowerCase();
                StringBuilder bldr = new StringBuilder();
 
-               for (User usr : Globals.users.values())
-                  if (usr.name.toLowerCase().contains(input))
-                     bldr.append(usr.name).append(" = ").append(usr.getInfo().replaceAll(",", ", ")).append('\n');
+               for (User usr : Globals.getOnlineUsers())
+                  if (usr.getName().contains(input))
+                     bldr.append(usr.getName()).append(" = ").append(usr.getInfo().replaceAll(",", ", ")).append('\n');
 
-               for (User usr : Globals.offlineUsers.values())
-                  if (usr.name.toLowerCase().contains(input))
-                     bldr.append(usr.name).append(" = ").append(usr.getInfo().replaceAll(",", ", ")).append('\n');
+               for (User usr : Globals.getOfflineUsers())
+                  if (usr.getName().contains(input))
+                     bldr.append(usr.getName()).append(" = ").append(usr.getInfo().replaceAll(",", ", ")).append('\n');
 
                DebugDialog dialog = new DebugDialog(frame, true, bldr.toString());
                dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

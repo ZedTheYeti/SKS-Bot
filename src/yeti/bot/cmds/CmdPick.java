@@ -29,29 +29,29 @@ public class CmdPick extends Command
          return;
       String userClass = msg.substring(index).toLowerCase();
 
-      User user = Globals.users.get(name);
+      User user = Globals.getOnlineUser(name);
 
       // || user.userClass != UserClass.NEWB
       if (user == null)
          return;
 
       if (userClass.contains("rogue"))
-         user.userClass = UserClass.ROGUE;
+         user.setUserClass(UserClass.ROGUE);
       else if (userClass.contains("fighter"))
-         user.userClass = UserClass.FIGHTER;
+         user.setUserClass(UserClass.FIGHTER);
       else if (userClass.contains("ranger"))
-         user.userClass = UserClass.RANGER;
+         user.setUserClass(UserClass.RANGER);
       else if (userClass.contains("adept"))
-         user.userClass = UserClass.ADEPT;
+         user.setUserClass(UserClass.ADEPT);
       else if (userClass.contains("cleric"))
-         user.userClass = UserClass.CLERIC;
+         user.setUserClass(UserClass.CLERIC);
       else if (userClass.contains("alchemist"))
-         user.userClass = UserClass.ALCHEMIST;
+         user.setUserClass(UserClass.ALCHEMIST);
       else
          return;
 
-      cooling.put(user.name, System.currentTimeMillis());
-      String str = "/me " + user.name + " has become a " + user.userClass.getName() + "!";
+      cooling.put(user.getName(), System.currentTimeMillis());
+      String str = "/me " + user.getName() + " has become a " + user.getUserClass().getName() + "!";
 
       JIRC.sendMessage("#sourkoolaidshow", str);
    }

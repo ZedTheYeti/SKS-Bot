@@ -41,7 +41,7 @@ public class CmdDouble extends Command
    {
       if (isEnabled() && !Globals.voting && !Globals.doubleUsed)
       {
-         User sub = Globals.users.get(user);
+         User sub = Globals.getOnlineUser(user);
          if (sub != null && sub.captain && cmd.startsWith("!double"))
             return true;
       }

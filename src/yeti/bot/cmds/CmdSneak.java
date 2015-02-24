@@ -41,7 +41,7 @@ public class CmdSneak extends Command
    {
       if (isEnabled() && !Globals.voting && !Globals.sneakUsed)
       {
-         User sub = Globals.users.get(user);
+         User sub = Globals.getOnlineUser(user);
          if (sub != null && sub.captain && cmd.startsWith("!sneakattack"))
             return true;
       }

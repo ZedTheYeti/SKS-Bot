@@ -30,14 +30,16 @@ import yeti.bot.util.Logger;
 
 public class User
 {
-   public Faction faction;
-   public UserClass userClass;
-   public int level;
-   public float exp;
-   public String name;
+   private Faction faction;
+   private UserClass userClass;
+   private int level;
+   private float exp;
+   private String name;
    public boolean captain;
    public boolean isSub;
    public boolean inChannel = false;
+   public boolean hasChanged = false;
+   public boolean isInDb = false;
    public long joinTime;
 
    public User(String name)
@@ -67,21 +69,22 @@ public class User
          captain = true;
          Logger.logDebug(name + " is a mod " + captain);
       }
-      this.name = name.substring(0, 1).toUpperCase() + name.substring(1);
-      faction = fac;
-      this.userClass = userClass;
-      this.level = level;
-      this.exp = exp;
+      this.setName(name.substring(0, 1).toUpperCase() + name.substring(1));
+      setFaction(fac);
+      this.setUserClass(userClass);
+      this.setLevel(level);
+      this.setExp(exp);
+      hasChanged = false;
    }
 
    public String getInfo()
    {
       StringBuilder str = new StringBuilder();
 
-      str.append(faction).append(',');
-      str.append(level).append(',');
-      str.append(exp).append(',');
-      str.append(userClass);
+      str.append(getFaction()).append(',');
+      str.append(getLevel()).append(',');
+      str.append(getExp()).append(',');
+      str.append(getUserClass());
 
       return str.toString();
    }
@@ -89,16 +92,16 @@ public class User
    @Override
    public String toString()
    {
-      String str = name + " - ";
+      String str = getName() + " - ";
       if (captain)
          str += "Captain and ";
-      if (name.equalsIgnoreCase("zeldaslullaby"))
+      if (getName().equalsIgnoreCase("zeldaslullaby"))
          str += "Dragon Demon Raider Person";
       else
-         str += userClass.getLevelName(exp);
-      str += " of the " + faction.getName();
+         str += getUserClass().getLevelName(getExp());
+      str += " of the " + getFaction().getName();
 
-      switch (faction)
+      switch (getFaction())
       {
          case GUILD:
             str += " koolBREATH";
@@ -114,8 +117,62 @@ public class User
             break;
       }
 
-      str += " | Exp: " + (int) exp;
+      str += " | Exp: " + (int) getExp();
 
       return str;
+   }
+
+   public Faction getFaction()
+   {
+      return faction;
+   }
+
+   public void setFaction(Faction faction)
+   {
+      hasChanged = hasChanged || (faction != this.faction);
+      this.faction = faction;
+   }
+
+   public UserClass getUserClass()
+   {
+      return userClass;
+   }
+
+   public void setUserClass(UserClass userClass)
+   {
+      hasChanged = hasChanged || (userClass != this.userClass);
+      this.userClass = userClass;
+   }
+
+   public int getLevel()
+   {
+      return level;
+   }
+
+   public void setLevel(int level)
+   {
+      hasChanged = hasChanged || (level != this.level);
+      this.level = level;
+   }
+
+   public float getExp()
+   {
+      return exp;
+   }
+
+   public void setExp(float exp)
+   {
+      hasChanged = hasChanged || (exp != this.exp);
+      this.exp = exp;
+   }
+
+   public String getName()
+   {
+      return name;
+   }
+
+   public void setName(String name)
+   {
+      this.name = name;
    }
 }

@@ -8,7 +8,6 @@ import yeti.bot.util.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TimerTask;
 
 /**
  * Created by Z on 1/15/2015.
@@ -35,7 +34,7 @@ public class CmdDuel extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      User usr = Globals.users.get(user);
+      User usr = Globals.getOnlineUser(user);
       return isEnabled() && Globals.duelEnabled && usr != null && (cmd.startsWith("!duel") || cmd.startsWith("!accept") || cmd.startsWith("!decline"));
    }
 
@@ -47,11 +46,14 @@ public class CmdDuel extends Command
          Logger.logDebug("DUEL " + msg);
          String[] parts = msg.split(" ");
 
-         if (parts.length < 3)
+         if (parts.length < 2)
             return;
 
-         User challenger = Globals.users.get(user),
-               opponent = Globals.users.get(parts[1].toLowerCase());
+         User challenger = Globals.getOnlineUser(user),
+               opponent = Globals.getOnlineUser(parts[1]);
+
+         if(challenger == opponent || opponent.getName() == Globals.username)
+            return;
 
          if (challenger == null || opponent == null)
          {
@@ -62,7 +64,10 @@ public class CmdDuel extends Command
          int amount;
          try
          {
-            amount = Integer.parseInt(parts[2]);
+            if(parts.length >= 3)
+               amount = Integer.parseInt(parts[2]);
+            else
+               amount = 0;
          } catch (NumberFormatException exc)
          {
             exc.printStackTrace();
@@ -70,44 +75,47 @@ public class CmdDuel extends Command
             return;
          }
 
-         if (challenger.exp < amount)
-         {
-            JIRC.sendMessage(Globals.channel, "You don't have enough xp for that wager " + challenger.name + "!");
+         if(amount < 0)
             return;
-         } else if (opponent.exp < amount)
+
+         if (challenger.getExp() < amount)
          {
-            JIRC.sendMessage(Globals.channel, opponent.name + " doesn't have enough xp for that wager, " + challenger.name + ".");
+            JIRC.sendMessage(Globals.channel, "You don't have enough xp for that wager " + challenger.getName() + "!");
+            return;
+         } else if (opponent.getExp() < amount)
+         {
+            JIRC.sendMessage(Globals.channel, opponent.getName() + " doesn't have enough xp for that wager, " + challenger.getName() + ".");
             return;
          }
 
-         ArrayList<DuelInfo> infoList = duels.get(opponent.name);
+         ArrayList<DuelInfo> infoList = duels.get(opponent.getName());
          if(infoList == null)
          {
             infoList = new ArrayList<>();
-            duels.put(opponent.name, infoList);
+            duels.put(opponent.getName(), infoList);
          }
          infoList.add(new DuelInfo(challenger, opponent, amount, System.currentTimeMillis()));
-         JIRC.sendMessage(Globals.channel, "/me " + challenger.name + " has challenged " + opponent.name + " to a duel for " + amount + " xp! " + opponent.name + ", use !accept or !decline to answer the challenge.");
+         JIRC.sendMessage(Globals.channel, "/me " + challenger.getName() + " has challenged " + opponent.getName() + " to a duel for " + amount + " xp! " + opponent.getName() + ", use !accept or !decline to answer the challenge.");
       } else if (msg.startsWith("!accept"))
       {
-         User usr = Globals.users.get(user);
+         User usr = Globals.getOnlineUser(user);
 
          if (usr == null)
             return;
 
-         ArrayList<DuelInfo> infoList = duels.get(usr.name);
+         ArrayList<DuelInfo> infoList = duels.get(usr.getName());
          if(infoList != null)
          {
             DuelInfo info = infoList.remove(0);
             if(infoList.isEmpty())
-               duels.remove(usr.name);
+               duels.remove(usr.getName());
 
             int challengerRoll = Util.rollDie(20), opponentRoll = Util.rollDie(20);
 
-            JIRC.sendMessage(Globals.channel, "/me " + info.opponent.name + " has accepted " + info.challenger.name + "'s challenge! A vicious battle ensues.");
+            JIRC.sendMessage(Globals.channel, "/me " + info.opponent.getName() + " has accepted " + info.challenger.getName() + "'s challenge! A vicious battle ensues.");
 
             StringBuilder bldr = new StringBuilder("/me ");
-            bldr.append(info.challenger.name).append(" rolls a ");
+            bldr.append(info.challenger.getName()).append(" rolls a ");
             if (challengerRoll == 20)
                bldr.append("koolCRIT");
             else if (challengerRoll == 1)
@@ -116,7 +124,7 @@ public class CmdDuel extends Command
                bldr.append(challengerRoll);
             bldr.append(", ");
 
-            bldr.append(info.opponent.name).append(" rolls a ");
+            bldr.append(info.opponent.getName()).append(" rolls a ");
             if (opponentRoll == 20)
                bldr.append("koolCRIT");
             else if (opponentRoll == 1)
@@ -127,14 +135,14 @@ public class CmdDuel extends Command
 
             if (challengerRoll > opponentRoll)
             {
-               bldr.append(info.challenger.name).append(" wins ").append(info.xpAmount).append(" xp!");
-               info.challenger.exp += info.xpAmount;
-               info.opponent.exp -= info.xpAmount;
+               bldr.append(info.challenger.getName()).append(" wins ").append(info.xpAmount).append(" xp!");
+               info.challenger.setExp(info.challenger.getExp() + info.xpAmount);
+               info.opponent.setExp(info.opponent.getExp() - info.xpAmount);
             } else if (opponentRoll > challengerRoll)
             {
-               bldr.append(info.opponent.name).append(" wins ").append(info.xpAmount).append(" xp!");
-               info.opponent.exp += info.xpAmount;
-               info.challenger.exp -= info.xpAmount;
+               bldr.append(info.opponent.getName()).append(" wins ").append(info.xpAmount).append(" xp!");
+               info.opponent.setExp(info.opponent.getExp() + info.xpAmount);
+               info.challenger.setExp(info.challenger.getExp() - info.xpAmount);
             } else
             {
                bldr.append("It's a tie!");
@@ -154,19 +162,19 @@ public class CmdDuel extends Command
          }
       } else if (msg.startsWith("!decline"))
       {
-         User usr = Globals.users.get(user);
+         User usr = Globals.getOnlineUser(user);
 
          if (usr == null)
             return;
 
-         ArrayList<DuelInfo> infoList = duels.get(usr.name);
+         ArrayList<DuelInfo> infoList = duels.get(usr.getName());
          if(infoList != null)
          {
             DuelInfo info = infoList.remove(0);
             if(infoList.isEmpty())
-               duels.remove(usr.name);
+               duels.remove(usr.getName());
 
-            JIRC.sendMessage(Globals.channel, info.opponent.name + " has declined " + info.challenger.name + "'s challenge.");
+            JIRC.sendMessage(Globals.channel, info.opponent.getName() + " has declined " + info.challenger.getName() + "'s challenge.");
          }
       }
    }

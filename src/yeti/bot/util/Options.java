@@ -150,6 +150,11 @@ public class Options
       }
    }
 
+   public void clear()
+   {
+      options.clear();
+   }
+
    public void save()
    {
       if (!optionsFile.exists())

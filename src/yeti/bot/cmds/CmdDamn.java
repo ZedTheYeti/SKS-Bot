@@ -41,7 +41,7 @@ public class CmdDamn extends Command
    {
       if (isEnabled() && !Globals.voting && !Globals.damnUsed)
       {
-         User sub = Globals.users.get(user);
+         User sub = Globals.getOnlineUser(user);
          return sub != null && sub.captain && cmd.startsWith("!damn");
       }
       return false;

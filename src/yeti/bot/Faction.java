@@ -45,6 +45,8 @@ public enum Faction
 
    public static Faction getByName(String facName)
    {
+      facName = facName.toLowerCase();
+
       if (facName.contains("all"))
          return Faction.ALL;
       else if (facName.contains("guild") || facName.contains("koolbreath"))

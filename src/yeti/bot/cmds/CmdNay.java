@@ -39,12 +39,12 @@ public class CmdNay extends Command
       if (isEnabled() && Globals.voting)
          if (Globals.votingFaction == Faction.COUNCIL)
          {
-            User sub = Globals.users.get(user);
+            User sub = Globals.getOnlineUser(user);
             return (sub == null || !isSub) && !Globals.voted.contains(user) && cmd.startsWith("!nay");
          } else if (isSub)
          {
-            User sub = Globals.users.get(user);
-            return sub.faction == Globals.votingFaction && !Globals.voted.contains(user) && cmd.startsWith("!nay");
+            User sub = Globals.getOnlineUser(user);
+            return sub.getFaction() == Globals.votingFaction && !Globals.voted.contains(user) && cmd.startsWith("!nay");
          }
       return false;
    }

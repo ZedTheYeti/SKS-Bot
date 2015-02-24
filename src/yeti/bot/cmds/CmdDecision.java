@@ -25,7 +25,7 @@ public class CmdDecision extends Command
 
    public boolean check(String name, String cmd, boolean isSub)
    {
-      User usr = Globals.users.get(name);
+      User usr = Globals.getOnlineUser(name);
 
       if (voting)
       {
@@ -44,7 +44,7 @@ public class CmdDecision extends Command
                if (votingFaction == Faction.ALL)
                   return isEnabled() && (isSub || (usr != null && usr.captain)) && !voted.contains(name);
                else
-                  return isEnabled() && usr != null && usr.faction == votingFaction && !voted.contains(name);
+                  return isEnabled() && usr != null && usr.getFaction() == votingFaction && !voted.contains(name);
             }
          }
       } else

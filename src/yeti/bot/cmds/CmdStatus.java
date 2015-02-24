@@ -28,6 +28,7 @@ package yeti.bot.cmds;
 
 import yeti.bot.Globals;
 import yeti.bot.JIRC;
+import yeti.bot.User;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -63,13 +64,14 @@ public class CmdStatus extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      return isEnabled() && Globals.statusEnabled && !cooling.containsKey(user) && Globals.users.containsKey(user) && cmd.startsWith("!status");
+      User usr = Globals.getOnlineUser(user);
+      return isEnabled() && Globals.statusEnabled && !cooling.containsKey(user) && usr != null && cmd.startsWith("!status");
    }
 
    @Override
    public void process(String user, String msg)
    {
-      JIRC.sendMessage(Globals.channel, "/me " + Globals.users.get(user).toString());
+      JIRC.sendMessage(Globals.channel, "/me " + Globals.getOnlineUser(user).toString());
       cooling.put(user, System.currentTimeMillis());
    }
 

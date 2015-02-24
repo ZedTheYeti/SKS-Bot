@@ -3,7 +3,6 @@ package yeti.bot.cmds;
 import yeti.bot.*;
 
 import static yeti.bot.Globals.channel;
-import static yeti.bot.Globals.users;
 
 /**
  * Created by zed on 2/6/15.
@@ -13,7 +12,7 @@ public class CmdCount extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      User usr = Globals.users.get(user);
+      User usr = Globals.getOnlineUser(user);
       return isEnabled() && usr != null && usr.captain && cmd.startsWith("!count");
    }
 
@@ -25,18 +24,18 @@ public class CmdCount extends Command
       if (parts.length < 2)
          return;
 
-      parts[1] = parts[1].toLowerCase();
+      parts[1] = parts[1];
 
       if (parts[1].contains("faction"))
       {
          int guildies = 0, rockbiters = 0, knights = 0, students = 0, other = 0;
 
-         for (User usr : users.values())
+         for (User usr : Globals.getOnlineUsers())
          {
             if (!usr.inChannel)
                continue;
 
-            Faction fac = usr.faction;
+            Faction fac = usr.getFaction();
             switch (fac)
             {
                case GUILD:
@@ -60,12 +59,12 @@ public class CmdCount extends Command
       } else if (parts[1].contains("class"))
       {
          int rouges = 0, fighters = 0, adepts = 0, rangers = 0, clerics = 0, other = 0;
-         for (User usr : users.values())
+         for (User usr : Globals.getOnlineUsers())
          {
             if (!usr.inChannel)
                continue;
 
-            UserClass uClass = usr.userClass;
+            UserClass uClass = usr.getUserClass();
             switch (uClass)
             {
                case ROGUE:

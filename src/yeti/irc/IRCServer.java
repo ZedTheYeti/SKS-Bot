@@ -129,6 +129,7 @@ public class IRCServer
       } catch (IOException ioe)
       {
          ioe.printStackTrace();
+         // TODO Better handle connection getting reset, attempt to reconnect etc
       }
    }
 

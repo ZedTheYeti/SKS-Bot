@@ -15,7 +15,7 @@ public class CmdRoll extends Command
    @Override
    public boolean check(String name, String cmd, boolean isSub)
    {
-      User usr = Globals.users.get(name);
+      User usr = Globals.getOnlineUser(name);
 
       return isEnabled() && usr != null && (cmd.startsWith("!d4") || cmd.startsWith("!d6") || cmd.startsWith("!d8") || cmd.startsWith("!d10") || cmd.startsWith("!d12") || cmd.startsWith("!d20") || cmd.startsWith("!d100"));
    }

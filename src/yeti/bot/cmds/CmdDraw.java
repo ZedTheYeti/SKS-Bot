@@ -41,7 +41,7 @@ public class CmdDraw extends Command
    {
       if (isEnabled() && !Globals.voting && Globals.draws < 2)
       {
-         User sub = Globals.users.get(user);
+         User sub = Globals.getOnlineUser(user);
          if (sub != null && sub.captain && cmd.startsWith("!draw"))
             return true;
       }

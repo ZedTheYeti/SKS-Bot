@@ -36,7 +36,7 @@ public class CmdResetPowers extends Command
    public boolean check(String user, String cmd, boolean isSub)
    {
 
-      User sub = Globals.users.get(user);
+      User sub = Globals.getOnlineUser(user);
       return isEnabled() && sub != null && sub.captain && cmd.startsWith("!resetpowers");
    }
 

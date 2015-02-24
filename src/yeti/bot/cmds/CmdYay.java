@@ -39,12 +39,12 @@ public class CmdYay extends Command
       if (isEnabled() && Globals.voting)
          if (Globals.votingFaction == Faction.COUNCIL)
          {
-            User sub = Globals.users.get(user);
+            User sub = Globals.getOnlineUser(user);
             return !Globals.voted.contains(user) && cmd.startsWith("!yay");
          } else if (isSub)
          {
-            User sub = Globals.users.get(user);
-            return sub.faction == Globals.votingFaction && !Globals.voted.contains(user) && cmd.startsWith("!yay");
+            User sub = Globals.getOnlineUser(user);
+            return sub.getFaction() == Globals.votingFaction && !Globals.voted.contains(user) && cmd.startsWith("!yay");
          }
       return false;
    }

@@ -15,8 +15,8 @@ public class CmdAddXP extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      User usr = Globals.users.get(user);
-      return isEnabled() && usr != null && (usr.captain || usr.name.equalsIgnoreCase("sourkoolaidshow")) && (cmd.startsWith("!addxp"));
+      User usr = Globals.getOnlineUser(user);
+      return isEnabled() && usr != null && (usr.captain || usr.getName().equalsIgnoreCase("sourkoolaidshow")) && (cmd.startsWith("!addxp"));
    }
 
    @Override
@@ -40,7 +40,7 @@ public class CmdAddXP extends Command
          return;
       }
 
-      User targetUsr = Globals.users.get(parts[1].toLowerCase());
+      User targetUsr = Globals.getOnlineUser(parts[1]);
       if (targetUsr == null)
       {
          if (parts[1].equalsIgnoreCase("rockbitters"))
@@ -64,8 +64,8 @@ public class CmdAddXP extends Command
          return;
       }
 
-      targetUsr.exp += amount;
-      JIRC.sendMessage(Globals.channel, "/me " + targetUsr.name + " has been given " + amount + " xp point(s)");
+      targetUsr.setExp(targetUsr.getExp() + amount);
+      JIRC.sendMessage(Globals.channel, "/me " + targetUsr.getName() + " has been given " + amount + " xp point(s)");
    }
 
    private void awardFactionXP(final Faction faction, final int amount)
@@ -75,10 +75,10 @@ public class CmdAddXP extends Command
          @Override
          public void run()
          {
-            for (User usr : Globals.users.values())
+            for (User usr : Globals.getOnlineUsers())
             {
-               if (usr.faction == faction)
-                  usr.exp += amount;
+               if (usr.getFaction() == faction)
+                  usr.setExp(usr.getExp() + amount);
             }
             JIRC.sendMessage(Globals.channel, "/me All members of " + faction.getName() + " have been given " + amount + " xp point(s)");
          }

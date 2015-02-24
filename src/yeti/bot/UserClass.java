@@ -37,6 +37,20 @@ public enum UserClass
       ALCHEMIST.levelNames = new String[]{"Herbalist", "Technician", "Chemist", "Thaumaturge", "Alchemist"};
    }
 
+   public static UserClass getByName(String facName)
+   {
+      switch(facName.toLowerCase())
+      {
+         case "rogue": return ROGUE;
+         case "fighter": return FIGHTER;
+         case "ranger": return RANGER;
+         case "adept": return ADEPT;
+         case "cleric": return CLERIC;
+         case "alchemist": return ALCHEMIST;
+         default: return NEWB;
+      }
+   }
+
    public String getLevelName(float xp)
    {
       for (int i = levelThresholds.length - 1; i >= 0; i--)

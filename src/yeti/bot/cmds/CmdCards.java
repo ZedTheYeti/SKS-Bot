@@ -29,7 +29,7 @@ public class CmdCards extends Command
 
    public boolean check(String name, String cmd, boolean isSub)
    {
-      User usr = Globals.users.get(name);
+      User usr = Globals.getOnlineUser(name);
 
       if (!isEnabled() || usr == null)
          return false;
@@ -41,7 +41,7 @@ public class CmdCards extends Command
          if (cmd.startsWith("!endvote"))
             return usr.captain;
          else if (cmd.startsWith("!card1") || cmd.startsWith("!card2"))
-            return usr.faction != Faction.COUNCIL && !voted.contains(name);
+            return usr.getFaction() != Faction.COUNCIL && !voted.contains(name);
       }
       return false;
    }
@@ -72,11 +72,11 @@ public class CmdCards extends Command
          JIRC.sendMessage(Globals.channel, bldr.toString());
       } else
       {
-         User usr = Globals.users.get(name);
+         User usr = Globals.getOnlineUser(name);
 
          if (cmd.startsWith("!card1"))
          {
-            switch (usr.faction)
+            switch (usr.getFaction())
             {
                case GUILD:
                   guildVotes.card1++;
@@ -93,7 +93,7 @@ public class CmdCards extends Command
             }
          } else
          {
-            switch (usr.faction)
+            switch (usr.getFaction())
             {
                case GUILD:
                   guildVotes.card2++;

@@ -55,7 +55,7 @@ public class CmdCommands extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      User usr = Globals.users.get(user);
+      User usr = Globals.getOnlineUser(user);
       return isEnabled() && usr != null && usr.captain && cmd.startsWith("!commands");
    }
 

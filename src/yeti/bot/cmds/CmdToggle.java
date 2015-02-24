@@ -36,7 +36,7 @@ public class CmdToggle extends Command
    @Override
    public boolean check(String user, String cmd, boolean isSub)
    {
-      User sub = Globals.users.get(user);
+      User sub = Globals.getOnlineUser(user);
       return isEnabled() && sub != null && (cmd.startsWith("!toggle") || cmd.startsWith("!enable") || cmd.startsWith("!disable"));
    }
 
@@ -60,7 +60,7 @@ public class CmdToggle extends Command
                str += "off.";
 
             long time = System.currentTimeMillis();
-            for (User usr : Globals.users.values())
+            for (User usr : Globals.getOnlineUsers())
                usr.joinTime = time;
 
             JIRC.sendMessage(Globals.channel, str);
@@ -70,7 +70,7 @@ public class CmdToggle extends Command
             {
                Logger.logDebug("Resetting join times");
                long time = System.currentTimeMillis();
-               for (User usr : Globals.users.values())
+               for (User usr : Globals.getOnlineUsers())
                   usr.joinTime = time;
             }
 

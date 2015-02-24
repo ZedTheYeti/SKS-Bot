@@ -41,7 +41,7 @@ public class CmdVeto extends Command
    {
       if (isEnabled() && !Globals.voting && !Globals.vetoUsed)
       {
-         User sub = Globals.users.get(user);
+         User sub = Globals.getOnlineUser(user);
          if (sub != null && sub.captain && cmd.startsWith("!veto"))
             return true;
       }
