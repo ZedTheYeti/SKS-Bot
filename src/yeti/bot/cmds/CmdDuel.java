@@ -52,14 +52,14 @@ public class CmdDuel extends Command
          User challenger = Globals.getOnlineUser(user),
                opponent = Globals.getOnlineUser(parts[1]);
 
-         if(challenger == opponent || opponent.getName() == Globals.username)
-            return;
-
          if (challenger == null || opponent == null)
          {
             Logger.logDebug("DUEL user not found");
             return;
          }
+
+         if(challenger == opponent || opponent.getName() == Globals.username)
+            return;
 
          int amount;
          try
