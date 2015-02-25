@@ -30,10 +30,7 @@ import sun.rmi.runtime.Log;
 import yeti.bot.cmds.Command;
 import yeti.bot.gui.ChatFrame;
 import yeti.bot.gui.StartDialog;
-import yeti.bot.util.Logger;
-import yeti.bot.util.MySQL;
-import yeti.bot.util.Options;
-import yeti.bot.util.Util;
+import yeti.bot.util.*;
 import yeti.irc.IRCServer;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -265,6 +262,7 @@ public class JIRC
       }
 
       username = options.get("username").toLowerCase();
+      Globals.pushbulletKey = options.get("pushbullet_key");
       String oauth = options.get("oauth");
       if(oauth.startsWith("oauth:"))
          oauth = oauth.substring(oauth.indexOf(':') + 1);

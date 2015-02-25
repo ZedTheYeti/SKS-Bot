@@ -79,6 +79,8 @@ public class Globals
       reloadCommands();
    }
 
+   public static String pushbulletKey;
+
    public static void reloadCommands()
    {
       commands.clear();
