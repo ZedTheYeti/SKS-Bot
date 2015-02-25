@@ -30,6 +30,7 @@ import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
 import yeti.bot.util.Logger;
+import yeti.bot.util.Util;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -65,6 +66,7 @@ public class ChatFrame extends JFrame
    private TrayIcon trayIcon;
 
    private final String debugText = "Shtuff";
+   private JMenuItem mntmRestart;
 
    public ChatFrame()
    {
@@ -229,16 +231,20 @@ public class ChatFrame extends JFrame
       });
       mnFile.add(mntmSave);
 
-      mntmExit = new JMenuItem("Exit");
-      mntmExit.addActionListener(new ActionListener()
+      mntmRestart = new JMenuItem("Restart");
+      mntmRestart.addActionListener(arg0 ->
       {
-         @Override
-         public void actionPerformed(ActionEvent arg0)
-         {
-            JIRC.saveAll();
-            setVisible(false);
-            System.exit(0);
-         }
+         JIRC.saveAll();
+         setVisible(false);
+         Util.restart();
+      });
+      mnFile.add(mntmRestart);
+
+      mntmExit = new JMenuItem("Exit");
+      mntmExit.addActionListener(arg0 -> {
+         JIRC.saveAll();
+         setVisible(false);
+         System.exit(0);
       });
       mnFile.add(mntmExit);
 

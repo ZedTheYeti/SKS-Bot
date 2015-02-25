@@ -1,10 +1,14 @@
 package yeti.bot.util;
 
+import yeti.bot.Globals;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Random;
 
 /* Copyright (c) 2014-Onwards, Yeti Games
@@ -62,6 +66,53 @@ public class Util
          Logger.logError("The default data path does not exist, or cannot be accessed! Path: \"" + DATA_FOLDER.getPath() + "\"");
          Thread.dumpStack();
          System.exit(0);
+      }
+   }
+
+   public static void restart()
+   {
+      // Don't restart more than 3 times in quick succession, if that happens something else is likely wrong
+      if(Globals.numRestarts > 3)
+      {
+         Logger.logError("Too many restarts in a row, disabling restart.", true);
+         return;
+      }
+
+      File currentExecutable;
+      try
+      {
+         currentExecutable = new File(Util.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+
+         ArrayList<String> command = new ArrayList<>();
+
+         if(currentExecutable.getName().endsWith(".jar"))
+         {
+            command.add("java");
+            command.add("-jar");
+            command.add(currentExecutable.getPath());
+            command.add("-autostart");
+            command.add("" + Globals.numRestarts);
+         }
+         else if(currentExecutable.getName().endsWith(".exe"))
+         {
+            command.add(currentExecutable.getPath());
+            command.add("-autostart");
+            command.add("" + Globals.numRestarts);
+         }
+
+         if(!command.isEmpty())
+         {
+            ProcessBuilder bldr = new ProcessBuilder(command);
+            bldr.start();
+            System.exit(0);
+         }else
+            Logger.logError("Could not restart, unsupported run type.");
+      } catch (URISyntaxException e)
+      {
+         e.printStackTrace();
+      } catch (IOException e)
+      {
+         e.printStackTrace();
       }
    }
 

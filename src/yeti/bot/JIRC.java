@@ -60,6 +60,7 @@ public class JIRC
    private static boolean saved = false;
    private static boolean saving = false;
    private static boolean saveToDb = true;
+   private static boolean autoStart = false;
 
    public static void main(String args[])
    {
@@ -81,6 +82,11 @@ public class JIRC
             default: Logger.redirectOutput();
          }
 
+         if(args.length > 0)
+            autoStart = args[0].contains("autostart");
+         if(args.length > 1)
+            numRestarts = Integer.valueOf(args[1]);
+
          main();
       } catch (Exception ex)
       {
@@ -89,6 +95,7 @@ public class JIRC
          ex.printStackTrace();
          if (save != null)
             saveAll();
+         Util.restart();
          throw ex;
       } catch(Error e)
       {
@@ -97,6 +104,7 @@ public class JIRC
          e.printStackTrace();
          if(save != null)
             saveAll();
+         Util.restart();
          throw e;
       }
    }
@@ -243,25 +251,29 @@ public class JIRC
       frame.addText(options.getPath() + "\n");
       options.load();
 
-      try
+
+      if(!autoStart)
       {
-         EventQueue.invokeAndWait(() -> {
-            try
-            {
-               StartDialog dialog = new StartDialog(frame, true, options);
-               dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-               dialog.setVisible(true);
-            } catch (Exception e)
-            {
-               e.printStackTrace();
-            }
-         });
-      } catch (InvocationTargetException e)
-      {
-         e.printStackTrace();
-      } catch (InterruptedException e)
-      {
-         e.printStackTrace();
+         try
+         {
+            EventQueue.invokeAndWait(() -> {
+               try
+               {
+                  StartDialog dialog = new StartDialog(frame, true, options);
+                  dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                  dialog.setVisible(true);
+               } catch (Exception e)
+               {
+                  e.printStackTrace();
+               }
+            });
+         } catch (InvocationTargetException e)
+         {
+            e.printStackTrace();
+         } catch (InterruptedException e)
+         {
+            e.printStackTrace();
+         }
       }
 
       username = options.get("username").toLowerCase();
@@ -548,5 +560,8 @@ public class JIRC
          }
       };
       timer.scheduleAtFixedRate(saveTask, 5* 60 * 1000, 5 * 50 * 1000);
+
+      // After a successful start, clear numRestarts
+      Globals.numRestarts = 0;
    }
 }

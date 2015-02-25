@@ -72,6 +72,8 @@ public class Globals
    public static long xpTrackTime = 0;
    public static float xpAwardAmount;
 
+   public static int numRestarts = 0;
+
    public static int msgCount = 0;
 
    static
