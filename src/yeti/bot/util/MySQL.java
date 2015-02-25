@@ -69,6 +69,7 @@ public class MySQL
       }catch(SQLException sqle)
       {
          Logger.logError("Error inserting user named \"" + user.getName() + "\" into the database.");
+         PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", "An error occurred inserting a user into the database.");
          sqle.printStackTrace();
       }
    }
@@ -92,6 +93,7 @@ public class MySQL
       }catch(SQLException sqle)
       {
          Logger.logError("Error updating user named \"" + user.getName() + "\" in the database.");
+         PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", "An error occurred updating a user in the database.");
          sqle.printStackTrace();
       }
    }
@@ -166,6 +168,7 @@ public class MySQL
       catch (SQLException e)
       {
          Logger.logError("An error occurred while loading users from the database.");
+         PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", "An error occurred while loading users from the database.");
          e.printStackTrace();
       }
    }
@@ -231,7 +234,8 @@ public class MySQL
       }
       catch (SQLException e)
       {
-         Logger.logError("Error connecting to MySQL database!");
+         Logger.logError("Error connecting to MySQL database to update users!");
+         PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", "Error connecting to MySQL database to update users!");
          e.printStackTrace();
       }
    }

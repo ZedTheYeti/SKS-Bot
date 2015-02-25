@@ -85,6 +85,7 @@ public class JIRC
       } catch (Exception ex)
       {
          Logger.logError("An error occurred in the program, please check the error log. Error Message:\n" + ex.getMessage(), true);
+         PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", ex.getMessage());
          ex.printStackTrace();
          if (save != null)
             saveAll();
@@ -92,6 +93,7 @@ public class JIRC
       } catch(Error e)
       {
          Logger.logError("An error occurred in the program, please check the error log. Error Message:\n" + e.getMessage(), true);
+         PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", e.getMessage());
          e.printStackTrace();
          if(save != null)
             saveAll();
@@ -111,6 +113,7 @@ public class JIRC
       } catch (IOException e)
       {
          Logger.logError("Error backing up user.info file to " + save.getPath() + ".bkp\n" + e.getMessage(), true);
+         PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", "Error backing up user.info file. " + e.getMessage());
          e.printStackTrace();
       }
 
@@ -159,10 +162,10 @@ public class JIRC
          in.close();
       }catch(MalformedURLException muex)
       {
-
+         muex.printStackTrace();
       }catch(IOException ioex)
       {
-
+         ioex.printStackTrace();
       }
 
       return live;
