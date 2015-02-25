@@ -55,7 +55,10 @@ public class PushbulletAPI
          out.write(json);
          out.flush();
 
-         System.out.println(connection.getResponseCode());
+         int response = connection.getResponseCode();
+         if(response != 200)
+            Logger.logError("Error sending pushbullet notification, non-200 HTTP Response code. Code: " + connection.getResponseCode());
+
          out.close();
       }catch(IOException ioe)
       {
