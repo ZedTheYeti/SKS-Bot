@@ -15,7 +15,7 @@ public class PushbulletAPI
    private static int pushes = 0;
    private static final String apiUrl = "https://api.pushbullet.com/v2/pushes";
 
-   public static void sendPush(String auth, String title, String message) throws IOException
+   public static void sendPush(String auth, String title, String message)
    {
       if (!allowPushes)
          return;
@@ -38,22 +38,29 @@ public class PushbulletAPI
 
       pushes++;
 
-      URL url = new URL(apiUrl);
-      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-      connection.setDoOutput(true);
-      connection.setInstanceFollowRedirects(false);
-      connection.setRequestMethod("POST");
-      connection.setRequestProperty("Content-Type", "application/json");
-      connection.setRequestProperty("Authorization", "Bearer " + auth);
+      try
+      {
+         URL url = new URL(apiUrl);
+         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+         connection.setDoOutput(true);
+         connection.setInstanceFollowRedirects(false);
+         connection.setRequestMethod("POST");
+         connection.setRequestProperty("Content-Type", "application/json");
+         connection.setRequestProperty("Authorization", "Bearer " + auth);
 
-      BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-      connection.connect();
+         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+         connection.connect();
 
-      String json = "{\"type\": \"note\", \"title\": \"" + title + "\", \"body\": \"" + message + "\"}";
-      out.write(json);
-      out.flush();
+         String json = "{\"type\": \"note\", \"title\": \"" + title + "\", \"body\": \"" + message + "\"}";
+         out.write(json);
+         out.flush();
 
-      System.out.println(connection.getResponseCode());
-      out.close();
+         System.out.println(connection.getResponseCode());
+         out.close();
+      }catch(IOException ioe)
+      {
+         Logger.logError("Error sending Pushbullet notification. Message: " + ioe.getMessage());
+         ioe.printStackTrace();
+      }
    }
 }
