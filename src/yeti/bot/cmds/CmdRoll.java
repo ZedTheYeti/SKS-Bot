@@ -16,38 +16,78 @@ public class CmdRoll extends Command
    public boolean check(String name, String cmd, boolean isSub)
    {
       User usr = Globals.getOnlineUser(name);
-
-      return isEnabled() && usr != null && (cmd.startsWith("!d4") || cmd.startsWith("!d6") || cmd.startsWith("!d8") || cmd.startsWith("!d10") || cmd.startsWith("!d12") || cmd.startsWith("!d20") || cmd.startsWith("!d100"));
+      int index = cmd.toLowerCase().indexOf('d');
+      return isEnabled() && usr != null && (index == 1 || index != cmd.length() - 1);
    }
 
    public void process(String name, String cmd)
    {
-      String[] parts = cmd.trim().split(" ");
+      cmd = cmd.trim();
+      String[] parts = cmd.split(" ");
 
       if (parts.length < 1)
          return;
 
-      parts[0] = parts[0].substring(2);
-      int sides = Integer.parseInt(parts[0]);
-      if (sides > 0)
+      int index = cmd.toLowerCase().indexOf('d');
+
+      if(index == 1)
       {
-         int outcome = Util.rollDie(sides);
-         int index = cmd.indexOf(' ');
+         int sides = Integer.parseInt(parts[0].substring(index + 1));
 
-         StringBuilder bldr = new StringBuilder();
-         bldr.append("/me rolls a ").append(outcome);
-         bldr.append(" on a d").append(sides);
+         if (sides > 0)
+         {
+            int outcome = Util.rollDie(sides);
+            index = cmd.indexOf(' ');
 
-         if (index != -1)
-            bldr.append(" for ").append(cmd.substring(index));
-         bldr.append('.');
+            StringBuilder bldr = new StringBuilder();
+            bldr.append("/me rolls a ").append(outcome);
+            bldr.append(" on a d").append(sides);
 
-         if (outcome == sides)
-            bldr.append(" Critical!");
-         else if (outcome == 1)
-            bldr.append(" Critical failure!");
+            if (index != -1)
+               bldr.append(" for ").append(cmd.substring(index));
+            bldr.append('.');
 
-         JIRC.sendMessage(Globals.channel, bldr.toString());
+            if (outcome == sides)
+               bldr.append(" Critical!");
+            else if (outcome == 1)
+               bldr.append(" Critical failure!");
+
+            JIRC.sendMessage(Globals.channel, bldr.toString());
+         }
+      }else
+      {
+         int times = Integer.parseInt(parts[0].substring(1, index));
+         int sides = Integer.parseInt(parts[0].substring(index + 1));
+         index = cmd.indexOf(' ');
+
+         if(times > 0 && sides > 0)
+         {
+            int outcome = 0;
+            StringBuilder bldr = new StringBuilder("/me rolls ");
+
+            for(int i = 0; i < times; i++)
+            {
+               int roll = Util.rollDie(sides);
+               if(roll == sides && sides == 20)
+                  bldr.append("koolCRIT");
+               else if(roll == 1)
+                  bldr.append("koolFAIL");
+               else
+                  bldr.append(roll);
+               if(i < times - 1)
+                  bldr.append(", ");
+               outcome += roll;
+            }
+
+            bldr.append(" for a total of ").append(outcome);
+            bldr.append(" out of ").append(sides * times).append(" possible");
+            bldr.append(" on a ").append(times).append('d').append(sides);
+            if (index != -1)
+               bldr.append(" for ").append(cmd.substring(index));
+            bldr.append('.');
+
+            JIRC.sendMessage(Globals.channel, bldr.toString());
+         }
       }
    }
 
