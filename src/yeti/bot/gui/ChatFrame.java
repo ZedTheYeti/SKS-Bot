@@ -30,6 +30,7 @@ import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
 import yeti.bot.util.Logger;
+import yeti.bot.util.MySQL;
 import yeti.bot.util.Util;
 
 import javax.imageio.ImageIO;
@@ -67,6 +68,7 @@ public class ChatFrame extends JFrame
 
    private final String debugText = "Shtuff";
    private JMenuItem mntmRestart;
+   private JMenuItem mntmSaveDb;
 
    public ChatFrame()
    {
@@ -190,11 +192,9 @@ public class ChatFrame extends JFrame
       setTitle("SKS Bot");
       setBounds(100, 100, 450, 400);
 
-      addWindowListener(new WindowAdapter()
-      {
+      addWindowListener(new WindowAdapter() {
          @Override
-         public void windowClosing(WindowEvent e)
-         {
+         public void windowClosing(WindowEvent e) {
             super.windowClosing(e);
 
             JIRC.saveAll();
@@ -205,8 +205,7 @@ public class ChatFrame extends JFrame
             System.exit(0);
          }
 
-         public void windowIconified(WindowEvent e)
-         {
+         public void windowIconified(WindowEvent e) {
             super.windowIconified(e);
 
             if (trayIcon != null)
@@ -221,15 +220,19 @@ public class ChatFrame extends JFrame
       menuBar.add(mnFile);
 
       mntmSave = new JMenuItem("Save");
-      mntmSave.addActionListener(new ActionListener()
-      {
-         @Override
-         public void actionPerformed(ActionEvent arg0)
-         {
-            JIRC.saveAll();
-         }
-      });
+      mntmSave.addActionListener(arg0 -> JIRC.saveAll());
       mnFile.add(mntmSave);
+
+      mntmSaveDb = new JMenuItem("Save to DB");
+      mntmSaveDb.addActionListener(arg0 ->
+      {
+         addText("Saving users to database.\n");
+         Logger.logDebug("Saving users to database.");
+         MySQL.updateUsers();
+         Logger.logDebug("Done saving users to database.");
+         addText("Done saving users to database.\n");
+      });
+      mnFile.add(mntmSaveDb);
 
       mntmRestart = new JMenuItem("Restart");
       mntmRestart.addActionListener(arg0 ->
