@@ -3,6 +3,7 @@ package yeti.bot.cmds;
 import yeti.bot.Globals;
 import yeti.bot.JIRC;
 import yeti.bot.User;
+import yeti.bot.util.Logger;
 import yeti.bot.util.Util;
 
 /**
@@ -17,7 +18,12 @@ public class CmdRoll extends Command
    {
       User usr = Globals.getOnlineUser(name);
       int index = cmd.toLowerCase().indexOf('d');
-      return isEnabled() && usr != null && (index == 1 || index != cmd.length() - 1);
+      return isEnabled() && usr != null && (index == 1 || index != cmd.length() - 1) && isNum(cmd.charAt(index + 1));
+   }
+
+   private boolean isNum(char c)
+   {
+      return c >= '0' && c <= '9';
    }
 
    public void process(String name, String cmd)
@@ -29,10 +35,22 @@ public class CmdRoll extends Command
          return;
 
       int index = cmd.toLowerCase().indexOf('d');
+      if(index <= 0)
+         return;
 
       if(index == 1)
       {
-         int sides = Integer.parseInt(parts[0].substring(index + 1));
+         int sides;
+
+         try
+         {
+            sides = Integer.parseInt(parts[0].substring(index + 1));
+         }catch(NumberFormatException nfe)
+         {
+            Logger.logError(nfe.getMessage());
+            Logger.logError(Logger.getStackTrace(nfe));
+            return;
+         }
 
          if (sides > 0)
          {
@@ -56,8 +74,19 @@ public class CmdRoll extends Command
          }
       }else
       {
-         int times = Integer.parseInt(parts[0].substring(1, index));
-         int sides = Integer.parseInt(parts[0].substring(index + 1));
+         int times, sides;
+
+         try
+         {
+            times = Integer.parseInt(parts[0].substring(1, index));
+            sides = Integer.parseInt(parts[0].substring(index + 1));
+         }catch(NumberFormatException nfe)
+         {
+            Logger.logError(nfe.getMessage());
+            Logger.logError(Logger.getStackTrace(nfe));
+            return;
+         }
+
          index = cmd.indexOf(' ');
 
          if(times > 0 && sides > 0)
