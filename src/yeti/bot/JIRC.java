@@ -232,7 +232,7 @@ public class JIRC
                   }
                });
                frame.setSendListener(text -> {
-                  if (text.startsWith("/") && !text.startsWith("/me"))
+                  if (text.startsWith("/") && !text.startsWith("/me") && !text.startsWith("/color"))
                      server.processCmd(text.substring(1));
                   else
                      sendMessage(Globals.channel, text);
