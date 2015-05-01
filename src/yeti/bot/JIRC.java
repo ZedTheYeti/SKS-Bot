@@ -26,7 +26,6 @@
  */
 package yeti.bot;
 
-import sun.rmi.runtime.Log;
 import yeti.bot.cmds.Command;
 import yeti.bot.gui.ChatFrame;
 import yeti.bot.gui.StartDialog;
@@ -47,7 +46,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -67,24 +65,34 @@ public class JIRC
       try
       {
          String logging = System.getProperty("logging", "error");
-         switch(logging.toLowerCase())
+         switch (logging.toLowerCase())
          {
-            case "debug": Logger.setLevel(Logger.DEBUG); break;
-            case "all": Logger.setLevel(Logger.ALL); break;
-            case "none": Logger.setLevel(Logger.NONE); break;
-            default: Logger.setLevel(Logger.ERROR); break;
+            case "debug":
+               Logger.setLevel(Logger.DEBUG);
+               break;
+            case "all":
+               Logger.setLevel(Logger.ALL);
+               break;
+            case "none":
+               Logger.setLevel(Logger.NONE);
+               break;
+            default:
+               Logger.setLevel(Logger.ERROR);
+               break;
          }
 
          String redirect = System.getProperty("redirect.output", "true");
-         switch(redirect.toLowerCase())
+         switch (redirect.toLowerCase())
          {
-            case "false": break;
-            default: Logger.redirectOutput();
+            case "false":
+               break;
+            default:
+               Logger.redirectOutput();
          }
 
-         if(args.length > 0)
+         if (args.length > 0)
             autoStart = args[0].contains("autostart");
-         if(args.length > 1)
+         if (args.length > 1)
             numRestarts = Integer.valueOf(args[1]);
 
          main();
@@ -97,12 +105,12 @@ public class JIRC
             saveAll();
          Util.restart();
          throw ex;
-      } catch(Error e)
+      } catch (Error e)
       {
          Logger.logError("An error occurred in the program, please check the error log. Error Message:\n" + e.getMessage(), true);
          PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", e.getMessage());
          e.printStackTrace();
-         if(save != null)
+         if (save != null)
             saveAll();
          Util.restart();
          throw e;
@@ -150,17 +158,17 @@ public class JIRC
       try
       {
          URL url = new URL(httpsUrl);
-         HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
+         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
          BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
          String line;
 
-         while((line = in.readLine()) != null)
+         while ((line = in.readLine()) != null)
          {
-            if(line.contains("\"stream\":null"))
+            if (line.contains("\"stream\":null"))
             {
                live = false;
                break;
-            }else if(line.contains("\"stream\":{"))
+            } else if (line.contains("\"stream\":{"))
             {
                live = true;
                break;
@@ -168,10 +176,10 @@ public class JIRC
          }
 
          in.close();
-      }catch(MalformedURLException muex)
+      } catch (MalformedURLException muex)
       {
          muex.printStackTrace();
-      }catch(IOException ioex)
+      } catch (IOException ioex)
       {
          ioex.printStackTrace();
       }
@@ -188,19 +196,18 @@ public class JIRC
          public void run()
          {
             Logger.logDebug("Live check for " + Globals.channel.substring(1));
-            if(streamIsLive(Globals.channel.substring(1)))
+            if (streamIsLive(Globals.channel.substring(1)))
             {
                Logger.logDebug(Globals.channel + " is live");
-               if(Globals.xpAwardAmount != Globals.XP_LIVE_AWARD_AMOUNT)
+               if (Globals.xpAwardAmount != Globals.XP_LIVE_AWARD_AMOUNT)
                {
                   Globals.xpAwardAmount = Globals.XP_LIVE_AWARD_AMOUNT;
                   JIRC.sendMessage(Globals.channel, "/me SKS is live! The amount of XP awarded per hour has been set to full.");
                }
-            }
-            else
+            } else
             {
                Logger.logDebug(Globals.channel + " is offline");
-               if(Globals.xpAwardAmount != Globals.XP_OFFLINE_AWARD_AMOUNT)
+               if (Globals.xpAwardAmount != Globals.XP_OFFLINE_AWARD_AMOUNT)
                {
                   Globals.xpAwardAmount = Globals.XP_OFFLINE_AWARD_AMOUNT;
                   JIRC.sendMessage(Globals.channel, "/me SKS is offline. The amount of XP awarded per hour has be set to half.");
@@ -252,7 +259,7 @@ public class JIRC
       options.load();
 
 
-      if(!autoStart)
+      if (!autoStart)
       {
          try
          {
@@ -279,7 +286,7 @@ public class JIRC
       username = options.get("username").toLowerCase();
       Globals.pushbulletKey = options.get("pushbullet");
       String oauth = options.get("oauth");
-      if(oauth.startsWith("oauth:"))
+      if (oauth.startsWith("oauth:"))
          oauth = oauth.substring(oauth.indexOf(':') + 1);
       serverName = options.get("server");
       port = Integer.parseInt(options.get("port"));
@@ -366,14 +373,14 @@ public class JIRC
             Logger.logMsg(name + " joined");
 
             User user = Globals.getOnlineUser(name);
-            if(user == null)
+            if (user == null)
             {
                user = Globals.removeOfflineUser(name);
-               if(user != null)
+               if (user != null)
                   Globals.addOnlineUser(name, user);
             }
 
-            if(user != null)
+            if (user != null)
             {
                user.inChannel = true;
 
@@ -402,14 +409,14 @@ public class JIRC
             for (String name : names)
             {
                User user = Globals.getOnlineUser(name);
-               if(user == null)
+               if (user == null)
                {
                   user = Globals.removeOfflineUser(name);
-                  if(user != null)
+                  if (user != null)
                      Globals.addOnlineUser(name, user);
                }
 
-               if(user != null)
+               if (user != null)
                {
                   user.inChannel = true;
                   long time = System.currentTimeMillis();
@@ -423,7 +430,7 @@ public class JIRC
 
       server.addCmdParser(line -> {
          String[] parts = line.split(" ");
-         if(parts.length >= 2)
+         if (parts.length >= 2)
          {
             if (parts[0].equalsIgnoreCase("join"))
                server.sendLine("JOIN " + parts[1]);
@@ -431,8 +438,7 @@ public class JIRC
                server.sendLine("PART " + parts[1]);
             else if (parts[0].equalsIgnoreCase("pm"))
                server.sendMessage(parts[1], parts[2]);
-         }
-         else if (parts[0].equalsIgnoreCase("exit"))
+         } else if (parts[0].equalsIgnoreCase("exit"))
             System.exit(0);
          else if (parts[0].equalsIgnoreCase("raw"))
             server.sendLine(line.substring(line.indexOf(' ') + 1));
@@ -487,7 +493,7 @@ public class JIRC
          @Override
          public void run()
          {
-            if(trackXp)
+            if (trackXp)
             {
                Logger.logDebug("Beginning xp update...");
                long time = System.currentTimeMillis();
@@ -535,7 +541,7 @@ public class JIRC
          @Override
          public void run()
          {
-            if(saveToDb)
+            if (saveToDb)
             {
                frame.addText("Saving users to database.\n");
                Logger.logDebug("Saving users to database.");
@@ -545,7 +551,7 @@ public class JIRC
                saveToDb = false;
             } else
             {
-               if(!saving)
+               if (!saving)
                {
                   saving = true;
                   Logger.logDebug("Saving users to local cache.");
@@ -559,7 +565,7 @@ public class JIRC
             }
          }
       };
-      timer.scheduleAtFixedRate(saveTask, 5* 60 * 1000, 5 * 50 * 1000);
+      timer.scheduleAtFixedRate(saveTask, 5 * 60 * 1000, 5 * 50 * 1000);
 
       // After a successful start, clear numRestarts
       Globals.numRestarts = 0;

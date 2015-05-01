@@ -194,9 +194,11 @@ public class ChatFrame extends JFrame
       setTitle("SKS Bot");
       setBounds(100, 100, 450, 400);
 
-      addWindowListener(new WindowAdapter() {
+      addWindowListener(new WindowAdapter()
+      {
          @Override
-         public void windowClosing(WindowEvent e) {
+         public void windowClosing(WindowEvent e)
+         {
             super.windowClosing(e);
 
             JIRC.saveAll();
@@ -207,7 +209,8 @@ public class ChatFrame extends JFrame
             System.exit(0);
          }
 
-         public void windowIconified(WindowEvent e) {
+         public void windowIconified(WindowEvent e)
+         {
             super.windowIconified(e);
 
             if (trayIcon != null)
@@ -259,12 +262,15 @@ public class ChatFrame extends JFrame
       final JFrame frame = this;
 
       mntmListOnlineUsers = new JMenuItem("List Online Users");
-      mntmListOnlineUsers.addActionListener(new ActionListener() {
+      mntmListOnlineUsers.addActionListener(new ActionListener()
+      {
          @Override
-         public void actionPerformed(ActionEvent arg0) {
+         public void actionPerformed(ActionEvent arg0)
+         {
             StringBuilder bldr = new StringBuilder();
 
-            for (User usr : Globals.getOnlineUsers()) {
+            for (User usr : Globals.getOnlineUsers())
+            {
                bldr.append(usr.getName());
                bldr.append('=');
                bldr.append(usr.getInfo());
@@ -275,11 +281,13 @@ public class ChatFrame extends JFrame
                bldr.append('\n');
             }
 
-            try {
+            try
+            {
                DebugDialog dialog = new DebugDialog(frame, true, bldr.toString());
                dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                dialog.setVisible(true);
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                e.printStackTrace();
             }
          }
@@ -287,12 +295,15 @@ public class ChatFrame extends JFrame
       mnDebug.add(mntmListOnlineUsers);
 
       mntmListOfflineUsers = new JMenuItem("List Offline Users");
-      mntmListOfflineUsers.addActionListener(new ActionListener() {
+      mntmListOfflineUsers.addActionListener(new ActionListener()
+      {
          @Override
-         public void actionPerformed(ActionEvent arg0) {
+         public void actionPerformed(ActionEvent arg0)
+         {
             StringBuilder bldr = new StringBuilder();
 
-            for (User usr : Globals.getOfflineUsers()) {
+            for (User usr : Globals.getOfflineUsers())
+            {
                bldr.append(usr.getName());
                bldr.append('=');
                bldr.append(usr.getInfo());
@@ -303,11 +314,13 @@ public class ChatFrame extends JFrame
                bldr.append('\n');
             }
 
-            try {
+            try
+            {
                DebugDialog dialog = new DebugDialog(frame, true, bldr.toString());
                dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                dialog.setVisible(true);
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                e.printStackTrace();
             }
          }
@@ -315,12 +328,15 @@ public class ChatFrame extends JFrame
       mnDebug.add(mntmListOfflineUsers);
 
       mntmListAllUsers = new JMenuItem("List All Users");
-      mntmListAllUsers.addActionListener(new ActionListener() {
+      mntmListAllUsers.addActionListener(new ActionListener()
+      {
          @Override
-         public void actionPerformed(ActionEvent arg0) {
+         public void actionPerformed(ActionEvent arg0)
+         {
             StringBuilder bldr = new StringBuilder();
 
-            for (User usr : Globals.getOfflineUsers()) {
+            for (User usr : Globals.getOfflineUsers())
+            {
                bldr.append(usr.getName());
                bldr.append('=');
                bldr.append(usr.getInfo());
@@ -331,7 +347,8 @@ public class ChatFrame extends JFrame
                bldr.append('\n');
             }
 
-            for (User usr : Globals.getOnlineUsers()) {
+            for (User usr : Globals.getOnlineUsers())
+            {
                bldr.append(usr.getName());
                bldr.append('=');
                bldr.append(usr.getInfo());
@@ -342,11 +359,13 @@ public class ChatFrame extends JFrame
                bldr.append('\n');
             }
 
-            try {
+            try
+            {
                DebugDialog dialog = new DebugDialog(frame, true, bldr.toString());
                dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                dialog.setVisible(true);
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                e.printStackTrace();
             }
          }
@@ -354,14 +373,18 @@ public class ChatFrame extends JFrame
       mnDebug.add(mntmListAllUsers);
 
       mntmGeneralDebug = new JMenuItem("General Debug");
-      mntmGeneralDebug.addActionListener(new ActionListener() {
+      mntmGeneralDebug.addActionListener(new ActionListener()
+      {
          @Override
-         public void actionPerformed(ActionEvent arg0) {
-            try {
+         public void actionPerformed(ActionEvent arg0)
+         {
+            try
+            {
                DebugDialog dialog = new DebugDialog(frame, true, Globals.msgCount + " message count");
                dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                dialog.setVisible(true);
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                e.printStackTrace();
             }
             textPane.setText("");
@@ -373,33 +396,41 @@ public class ChatFrame extends JFrame
 
 
       mntmReload = new JMenuItem("Reload Commands");
-      mntmReload.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent ae) {
+      mntmReload.addActionListener(new ActionListener()
+      {
+         public void actionPerformed(ActionEvent ae)
+         {
             Globals.reloadCommands();
 
             StringBuilder bldr = new StringBuilder("/me ");
 
-            if (Globals.commands.size() > 0) {
+            if (Globals.commands.size() > 0)
+            {
                bldr.append("General Commands: ");
-               for (int i = 0; i < Globals.commands.size(); i++) {
+               for (int i = 0; i < Globals.commands.size(); i++)
+               {
                   bldr.append(Globals.commands.get(i).getUsage());
                   if (i < Globals.commands.size() - 1)
                      bldr.append(',').append(' ');
                }
             }
 
-            if (Globals.subCommands.size() > 0) {
+            if (Globals.subCommands.size() > 0)
+            {
                bldr.append(" - Subscriber Commands: ");
-               for (int i = 0; i < Globals.subCommands.size(); i++) {
+               for (int i = 0; i < Globals.subCommands.size(); i++)
+               {
                   bldr.append(Globals.subCommands.get(i).getUsage());
                   if (i < Globals.subCommands.size() - 1)
                      bldr.append(',').append(' ');
                }
             }
 
-            if (Globals.modCommands.size() > 0) {
+            if (Globals.modCommands.size() > 0)
+            {
                bldr.append(" - General Commands: ");
-               for (int i = 0; i < Globals.modCommands.size(); i++) {
+               for (int i = 0; i < Globals.modCommands.size(); i++)
+               {
                   bldr.append(Globals.modCommands.get(i).getUsage());
                   if (i < Globals.modCommands.size() - 1)
                      bldr.append(',').append(' ');
@@ -414,11 +445,14 @@ public class ChatFrame extends JFrame
       mnDebug.add(mntmReload);
 
       mntmFind = new JMenuItem("Find User");
-      mntmFind.addActionListener(new ActionListener() {
+      mntmFind.addActionListener(new ActionListener()
+      {
          @Override
-         public void actionPerformed(ActionEvent e) {
+         public void actionPerformed(ActionEvent e)
+         {
             String input = JOptionPane.showInputDialog(frame, "Username:");
-            if (input != null) {
+            if (input != null)
+            {
                input = input.trim().toLowerCase();
                StringBuilder bldr = new StringBuilder();
 
@@ -439,10 +473,12 @@ public class ChatFrame extends JFrame
       mnDebug.add(mntmFind);
 
       mntmTestPushbullet = new JMenuItem("Test PushBullet");
-      mntmTestPushbullet.addActionListener(new ActionListener() {
+      mntmTestPushbullet.addActionListener(new ActionListener()
+      {
          @Override
-         public void actionPerformed(ActionEvent e) {
-            if(Globals.pushbulletKey != null && !Globals.pushbulletKey.isEmpty());
+         public void actionPerformed(ActionEvent e)
+         {
+            if (Globals.pushbulletKey != null && !Globals.pushbulletKey.isEmpty()) ;
             {
                PushbulletAPI.sendPush(Globals.pushbulletKey, "Test", "SKS-Bot Test");
             }

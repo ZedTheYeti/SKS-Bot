@@ -2,7 +2,6 @@ package yeti.bot.cmds;
 
 import yeti.bot.Globals;
 import yeti.bot.JIRC;
-import yeti.bot.User;
 
 /**
  * Created by Z on 2/11/2015.
@@ -22,13 +21,13 @@ public class CmdGitEm extends Command
       System.out.println("BEDOOP");
       String parts[] = msg.split(" ");
 
-      if(parts.length < 2)
+      if (parts.length < 2)
          return;
 
       StringBuilder bldr = new StringBuilder(".timeout ");
       bldr.append(parts[1].toLowerCase());
       bldr.append(' ');
-      if(parts.length >= 3)
+      if (parts.length >= 3)
          bldr.append(parts[2]);
       else
          bldr.append(10);

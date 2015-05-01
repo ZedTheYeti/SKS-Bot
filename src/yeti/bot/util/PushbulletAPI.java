@@ -56,11 +56,11 @@ public class PushbulletAPI
          out.flush();
 
          int response = connection.getResponseCode();
-         if(response != 200)
+         if (response != 200)
             Logger.logError("Error sending pushbullet notification, non-200 HTTP Response code. Code: " + connection.getResponseCode());
 
          out.close();
-      }catch(IOException ioe)
+      } catch (IOException ioe)
       {
          Logger.logError("Error sending Pushbullet notification. Message: " + ioe.getMessage());
          ioe.printStackTrace();

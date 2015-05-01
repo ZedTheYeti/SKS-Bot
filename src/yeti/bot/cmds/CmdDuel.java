@@ -42,18 +42,18 @@ public class CmdDuel extends Command
          @Override
          public void run()
          {
-            for(ArrayList<DuelInfo> list : duels.values())
+            for (ArrayList<DuelInfo> list : duels.values())
             {
-               if(list == null)
+               if (list == null)
                   continue;
 
                long currTime = System.currentTimeMillis();
 
-               for(int i = 0; i < list.size(); i++)
+               for (int i = 0; i < list.size(); i++)
                {
                   DuelInfo info = list.get(i);
 
-                  if(currTime - info.time >= DUEL_TIMEOUT)
+                  if (currTime - info.time >= DUEL_TIMEOUT)
                   {
                      Logger.logDebug("Clearing duel between " + info.challenger.getName() + " and " + info.opponent.getName());
                      list.remove(i);
@@ -81,16 +81,22 @@ public class CmdDuel extends Command
       User usr = Globals.getOnlineUser(user);
       String[] parts = msg.split(" ");
 
-      if(parts.length == 0 || usr == null)
+      if (parts.length == 0 || usr == null)
          return;
 
       parts[0] = parts[0].trim().toLowerCase();
 
-      switch(parts[0])
+      switch (parts[0])
       {
-         case "!duel": processDuel(usr, parts); break;
-         case "!accept": processAnswer(usr, true, parts); break;
-         case "!decline": processAnswer(usr, false, parts); break;
+         case "!duel":
+            processDuel(usr, parts);
+            break;
+         case "!accept":
+            processAnswer(usr, true, parts);
+            break;
+         case "!decline":
+            processAnswer(usr, false, parts);
+            break;
       }
    }
 
@@ -108,13 +114,13 @@ public class CmdDuel extends Command
          return;
       }
 
-      if(challenger == opponent || opponent.getName() == Globals.username)
+      if (challenger == opponent || opponent.getName() == Globals.username)
          return;
 
       int amount;
       try
       {
-         if(parts.length >= 3)
+         if (parts.length >= 3)
             amount = Math.max(0, Integer.parseInt(parts[2]));
          else
             amount = 0;
@@ -124,7 +130,7 @@ public class CmdDuel extends Command
          return;
       }
 
-      if(amount < 0)
+      if (amount < 0)
          return;
 
       if (challenger.getExp() < amount)
@@ -138,7 +144,7 @@ public class CmdDuel extends Command
       }
 
       ArrayList<DuelInfo> infoList = duels.get(opponent.getName().toLowerCase());
-      if(infoList == null)
+      if (infoList == null)
       {
          infoList = new ArrayList<>();
          duels.put(opponent.getName().toLowerCase(), infoList);
@@ -153,7 +159,7 @@ public class CmdDuel extends Command
          return;
 
       ArrayList<DuelInfo> infoList = duels.get(usr.getName().toLowerCase());
-      if(infoList != null)
+      if (infoList != null)
       {
          DuelInfo info = infoList.remove(0);
          if (infoList.isEmpty())
@@ -164,7 +170,7 @@ public class CmdDuel extends Command
             return;
          }
 
-         if(accepted)
+         if (accepted)
          {
             int challengerRoll = Util.rollDie(20), opponentRoll = Util.rollDie(20);
 
@@ -215,8 +221,7 @@ public class CmdDuel extends Command
                }
                JIRC.sendMessage(Globals.channel, bldr.toString());
             }).start();
-         }
-         else
+         } else
             JIRC.sendMessage(Globals.channel, info.opponent.getName() + " has declined " + info.challenger.getName() + "'s challenge.");
       }
    }

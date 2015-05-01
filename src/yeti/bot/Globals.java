@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.stream.Collectors;
 
 public class Globals
 {
@@ -141,17 +140,26 @@ public class Globals
 
    public static User getOnlineUser(String name)
    {
-      synchronized(users) { return users.get(name.toLowerCase()); }
+      synchronized (users)
+      {
+         return users.get(name.toLowerCase());
+      }
    }
 
    public static void addOnlineUser(String name, User user)
    {
-      synchronized(users) { users.put(name.toLowerCase(), user); }
+      synchronized (users)
+      {
+         users.put(name.toLowerCase(), user);
+      }
    }
 
    public static User removeOnlineUser(String name)
    {
-      synchronized(users) { return users.remove(name.toLowerCase()); }
+      synchronized (users)
+      {
+         return users.remove(name.toLowerCase());
+      }
    }
 
    public static Collection<User> getOnlineUsers()
@@ -166,17 +174,26 @@ public class Globals
 
    public static User getOfflineUser(String name)
    {
-      synchronized(users) { return offlineUsers.get(name.toLowerCase()); }
+      synchronized (users)
+      {
+         return offlineUsers.get(name.toLowerCase());
+      }
    }
 
    public static void addOfflineUser(String name, User user)
    {
-      synchronized(users) { offlineUsers.put(name.toLowerCase(), user); }
+      synchronized (users)
+      {
+         offlineUsers.put(name.toLowerCase(), user);
+      }
    }
 
    public static User removeOfflineUser(String name)
    {
-      synchronized(users) { return offlineUsers.remove(name.toLowerCase()); }
+      synchronized (users)
+      {
+         return offlineUsers.remove(name.toLowerCase());
+      }
    }
 
    public static Collection<User> getOfflineUsers()
@@ -194,15 +211,15 @@ public class Globals
       ArrayList<User> list = new ArrayList<>();
       synchronized (users)
       {
-         for(User user : users.values())
-            if(user.hasChanged)
+         for (User user : users.values())
+            if (user.hasChanged)
                list.add(user);
       }
 
       synchronized (offlineUsers)
       {
-         for(User user : offlineUsers.values())
-            if(user.hasChanged)
+         for (User user : offlineUsers.values())
+            if (user.hasChanged)
                list.add(user);
       }
       return list;

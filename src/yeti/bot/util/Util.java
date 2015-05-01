@@ -72,7 +72,7 @@ public class Util
    public static void restart()
    {
       // Don't restart more than 3 times in quick succession, if that happens something else is likely wrong
-      if(Globals.numRestarts > 3)
+      if (Globals.numRestarts > 3)
       {
          Logger.logError("Too many restarts in a row, disabling restart.", true);
          return;
@@ -85,27 +85,26 @@ public class Util
 
          ArrayList<String> command = new ArrayList<>();
 
-         if(currentExecutable.getName().endsWith(".jar"))
+         if (currentExecutable.getName().endsWith(".jar"))
          {
             command.add("java");
             command.add("-jar");
             command.add(currentExecutable.getPath());
             command.add("-autostart");
             command.add("" + Globals.numRestarts);
-         }
-         else if(currentExecutable.getName().endsWith(".exe"))
+         } else if (currentExecutable.getName().endsWith(".exe"))
          {
             command.add(currentExecutable.getPath());
             command.add("-autostart");
             command.add("" + Globals.numRestarts);
          }
 
-         if(!command.isEmpty())
+         if (!command.isEmpty())
          {
             ProcessBuilder bldr = new ProcessBuilder(command);
             bldr.start();
             System.exit(0);
-         }else
+         } else
             Logger.logError("Could not restart, unsupported run type.");
       } catch (URISyntaxException e)
       {

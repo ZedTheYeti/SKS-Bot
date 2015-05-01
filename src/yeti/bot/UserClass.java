@@ -39,15 +39,22 @@ public enum UserClass
 
    public static UserClass getByName(String facName)
    {
-      switch(facName.toLowerCase())
+      switch (facName.toLowerCase())
       {
-         case "rogue": return ROGUE;
-         case "fighter": return FIGHTER;
-         case "ranger": return RANGER;
-         case "adept": return ADEPT;
-         case "cleric": return CLERIC;
-         case "alchemist": return ALCHEMIST;
-         default: return NEWB;
+         case "rogue":
+            return ROGUE;
+         case "fighter":
+            return FIGHTER;
+         case "ranger":
+            return RANGER;
+         case "adept":
+            return ADEPT;
+         case "cleric":
+            return CLERIC;
+         case "alchemist":
+            return ALCHEMIST;
+         default:
+            return NEWB;
       }
    }
 

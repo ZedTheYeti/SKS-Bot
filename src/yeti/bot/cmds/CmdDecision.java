@@ -112,29 +112,29 @@ public class CmdDecision extends Command
                      highest = votes[i];
                      winners.clear();
                      winners.add(i);
-                  } else if(votes[i] == highest)
+                  } else if (votes[i] == highest)
                   {
                      winners.add(i);
                   }
                }
 
-               if(winners.size() > 1)
+               if (winners.size() > 1)
                {
                   bldr.append(votingFaction.getName()).append(" have tied voting for ");
                   for (int i = 0; i < winners.size(); i++)
                   {
                      bldr.append(winners.get(i) + 1);
-                     if(i != winners.size() - 1)
+                     if (i != winners.size() - 1)
                         bldr.append(", ");
                   }
                   bldr.append('.');
-               }else
+               } else
                {
-                  if(winners.isEmpty())
+                  if (winners.isEmpty())
                      bldr.append(" No votes were cast.");
                   else
                      bldr.append(votingFaction.getName()).append(" have agreed upon choice ");
-                     bldr.append(winners.get(0) + 1).append('.');
+                  bldr.append(winners.get(0) + 1).append('.');
                }
 
                JIRC.sendMessage(Globals.channel, bldr.toString());

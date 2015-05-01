@@ -35,17 +35,17 @@ public class CmdRoll extends Command
          return;
 
       int index = cmd.toLowerCase().indexOf('d');
-      if(index <= 0)
+      if (index <= 0)
          return;
 
-      if(index == 1)
+      if (index == 1)
       {
          int sides;
 
          try
          {
             sides = Integer.parseInt(parts[0].substring(index + 1));
-         }catch(NumberFormatException nfe)
+         } catch (NumberFormatException nfe)
          {
             Logger.logError(nfe.getMessage());
             Logger.logError(Logger.getStackTrace(nfe));
@@ -72,7 +72,7 @@ public class CmdRoll extends Command
 
             JIRC.sendMessage(Globals.channel, bldr.toString());
          }
-      }else
+      } else
       {
          int times, sides;
 
@@ -80,7 +80,7 @@ public class CmdRoll extends Command
          {
             times = Integer.parseInt(parts[0].substring(1, index));
             sides = Integer.parseInt(parts[0].substring(index + 1));
-         }catch(NumberFormatException nfe)
+         } catch (NumberFormatException nfe)
          {
             Logger.logError(nfe.getMessage());
             Logger.logError(Logger.getStackTrace(nfe));
@@ -89,21 +89,21 @@ public class CmdRoll extends Command
 
          index = cmd.indexOf(' ');
 
-         if(times > 0 && sides > 0)
+         if (times > 0 && sides > 0)
          {
             int outcome = 0;
             StringBuilder bldr = new StringBuilder("/me rolls ");
 
-            for(int i = 0; i < times; i++)
+            for (int i = 0; i < times; i++)
             {
                int roll = Util.rollDie(sides);
-               if(roll == sides && sides == 20)
+               if (roll == sides && sides == 20)
                   bldr.append("koolCRIT");
-               else if(roll == 1)
+               else if (roll == 1)
                   bldr.append("koolFAIL");
                else
                   bldr.append(roll);
-               if(i < times - 1)
+               if (i < times - 1)
                   bldr.append(", ");
                outcome += roll;
             }

@@ -21,14 +21,14 @@ public class Logger
 
    public static void redirectOutput()
    {
-      if(!errorRedirected)
+      if (!errorRedirected)
       {
          File errorLog = null;
          try
          {
             File codeLoc = new File(Logger.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
             errorLog = new File(codeLoc.getParentFile(), "ErrorLog.txt");
-            if(!errorLog.exists())
+            if (!errorLog.exists())
                errorLog.createNewFile();
             System.setErr(new PrintStream(new FileOutputStream(errorLog, true)));
             System.err.println();
@@ -45,14 +45,14 @@ public class Logger
          }
       }
 
-      if(!outRedirected && logLevel >= DEBUG)
+      if (!outRedirected && logLevel >= DEBUG)
       {
          File outLog = null;
          try
          {
             File codeLoc = new File(Logger.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
             outLog = new File(codeLoc.getParentFile(), "DebugLog.txt");
-            if(!outLog.exists())
+            if (!outLog.exists())
                outLog.createNewFile();
             System.setOut(new PrintStream(new FileOutputStream(outLog, true)));
             System.out.println();

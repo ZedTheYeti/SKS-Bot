@@ -26,185 +26,188 @@
  */
 package yeti.bot.gui;
 
+import yeti.bot.util.Options;
+
+import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
+public class StartDialog extends JDialog
+{
+   private Options options;
+   private JTextField txtUsername;
+   private JTextField txtOauth;
+   private JTextField txtServer;
+   private JTextField txtChannel;
+   private JTextField txtPort;
+   private JButton btnReset;
+   private JButton btnOk;
+   private JButton btnClose;
+   private JTextField txtPushbullet;
 
-import yeti.bot.util.Options;
+   /**
+    * Create the dialog.
+    */
+   public StartDialog(JFrame parent, boolean modal, Options opt)
+   {
+      super(parent, modal);
 
-public class StartDialog extends JDialog {
-    private Options options;
-    private JTextField txtUsername;
-    private JTextField txtOauth;
-    private JTextField txtServer;
-    private JTextField txtChannel;
-    private JTextField txtPort;
-    private JButton btnReset;
-    private JButton btnOk;
-    private JButton btnClose;
-    private JTextField txtPushbullet;
+      options = opt;
 
-    /**
-     * Create the dialog.
-     */
-    public StartDialog(JFrame parent, boolean modal, Options opt) {
-        super(parent, modal);
+      createGUI();
 
-        options = opt;
+      setLocationRelativeTo(parent);
 
-        createGUI();
+      String username = options.get("username");
+      String oauth = options.get("oauth");
+      String serverName = options.get("server");
+      String port = options.get("port");
+      String channel = options.get("channel");
+      String pushbullet = options.get("pushbullet");
 
-        setLocationRelativeTo(parent);
+      if (username != null)
+         txtUsername.setText(username.toLowerCase());
+      if (oauth != null)
+         txtOauth.setText(oauth);
+      if (serverName != null)
+         txtServer.setText(serverName);
+      if (port != null)
+         txtPort.setText(port);
+      if (channel != null)
+         txtChannel.setText(channel.toLowerCase());
+      if (pushbullet != null)
+         txtPushbullet.setText(pushbullet);
+   }
 
-        String username = options.get("username");
-        String oauth = options.get("oauth");
-        String serverName = options.get("server");
-        String port = options.get("port");
-        String channel = options.get("channel");
-        String pushbullet = options.get("pushbullet");
+   /**
+    *
+    */
+   private void createGUI()
+   {
+      setTitle("Startup");
+      setBounds(100, 100, 250, 240);
 
-        if (username != null)
-            txtUsername.setText(username.toLowerCase());
-        if (oauth != null)
-            txtOauth.setText(oauth);
-        if (serverName != null)
-            txtServer.setText(serverName);
-        if (port != null)
-            txtPort.setText(port);
-        if (channel != null)
-            txtChannel.setText(channel.toLowerCase());
-        if (pushbullet != null)
-            txtPushbullet.setText(pushbullet);
-    }
+      JLabel lblUsername = new JLabel("Username:");
 
-    /**
-     *
-     */
-    private void createGUI() {
-        setTitle("Startup");
-        setBounds(100, 100, 250, 240);
+      JLabel lblOauthToken = new JLabel("OAuth Token:");
 
-        JLabel lblUsername = new JLabel("Username:");
+      txtUsername = new JTextField();
+      txtUsername.setColumns(10);
 
-        JLabel lblOauthToken = new JLabel("OAuth Token:");
+      txtOauth = new JTextField();
+      txtOauth.setColumns(10);
 
-        txtUsername = new JTextField();
-        txtUsername.setColumns(10);
+      txtServer = new JTextField();
+      txtServer.setText("irc.twitch.tv");
+      txtServer.setColumns(10);
 
-        txtOauth = new JTextField();
-        txtOauth.setColumns(10);
+      JLabel lblIrcServer = new JLabel("IRC Server:");
 
-        txtServer = new JTextField();
-        txtServer.setText("irc.twitch.tv");
-        txtServer.setColumns(10);
+      txtChannel = new JTextField();
+      txtChannel.setText("SourKoolaidShow");
+      txtChannel.setColumns(10);
 
-        JLabel lblIrcServer = new JLabel("IRC Server:");
+      JLabel lblChannel = new JLabel("Channel:");
 
-        txtChannel = new JTextField();
-        txtChannel.setText("SourKoolaidShow");
-        txtChannel.setColumns(10);
+      txtPort = new JTextField();
+      txtPort.setText("6667");
+      txtPort.setColumns(10);
 
-        JLabel lblChannel = new JLabel("Channel:");
+      JLabel lblPort = new JLabel("Port:");
 
-        txtPort = new JTextField();
-        txtPort.setText("6667");
-        txtPort.setColumns(10);
+      btnReset = new JButton("Reset");
+      btnReset.addActionListener(new ActionListener()
+      {
+         @Override
+         public void actionPerformed(ActionEvent ae)
+         {
 
-        JLabel lblPort = new JLabel("Port:");
+         }
+      });
 
-        btnReset = new JButton("Reset");
-        btnReset.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
+      btnOk = new JButton("Start");
+      btnOk.addActionListener(new ActionListener()
+      {
+         @Override
+         public void actionPerformed(ActionEvent arg0)
+         {
+            options.set("username", txtUsername.getText().trim());
+            options.set("oauth", txtOauth.getText().trim());
+            options.set("server", txtServer.getText().trim());
+            options.set("channel", txtChannel.getText().trim());
+            options.set("port", txtPort.getText().trim());
+            options.set("pushbullet", txtPushbullet.getText().trim());
+            options.save();
 
-            }
-        });
+            setVisible(false);
+            dispose();
+         }
+      });
 
-        btnOk = new JButton("Start");
-        btnOk.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                options.set("username", txtUsername.getText().trim());
-                options.set("oauth", txtOauth.getText().trim());
-                options.set("server", txtServer.getText().trim());
-                options.set("channel", txtChannel.getText().trim());
-                options.set("port", txtPort.getText().trim());
-                options.set("pushbullet", txtPushbullet.getText().trim());
-                options.save();
+      btnClose = new JButton("Close");
+      btnClose.addActionListener(new ActionListener()
+      {
+         @Override
+         public void actionPerformed(ActionEvent e)
+         {
+            System.exit(0);
+         }
+      });
 
-                setVisible(false);
-                dispose();
-            }
-        });
+      JLabel lblPushbullet = new JLabel("PushBullet:");
 
-        btnClose = new JButton("Close");
-        btnClose.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-
-        JLabel lblPushbullet = new JLabel("PushBullet:");
-
-        txtPushbullet = new JTextField();
-        txtPushbullet.setColumns(10);
-        GroupLayout groupLayout = new GroupLayout(getContentPane());
-        groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(
-                groupLayout
-                        .createSequentialGroup()
-                        .addGroup(
-                                groupLayout
-                                        .createParallelGroup(Alignment.LEADING)
-                                        .addGroup(
+      txtPushbullet = new JTextField();
+      txtPushbullet.setColumns(10);
+      GroupLayout groupLayout = new GroupLayout(getContentPane());
+      groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(
+            groupLayout
+                  .createSequentialGroup()
+                  .addGroup(
+                        groupLayout
+                              .createParallelGroup(Alignment.LEADING)
+                              .addGroup(
+                                    groupLayout
+                                          .createSequentialGroup()
+                                          .addContainerGap()
+                                          .addGroup(
                                                 groupLayout
-                                                        .createSequentialGroup()
-                                                        .addContainerGap()
-                                                        .addGroup(
-                                                                groupLayout
-                                                                        .createParallelGroup(Alignment.LEADING)
-                                                                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblUsername).addGap(19).addComponent(txtUsername, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
-                                                                        .addGroup(
-                                                                                groupLayout.createSequentialGroup().addComponent(lblOauthToken).addPreferredGap(ComponentPlacement.RELATED).addComponent(txtOauth, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
-                                                                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblIrcServer).addGap(14).addComponent(txtServer, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
-                                                                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblChannel).addGap(28).addComponent(txtChannel, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
-                                                                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblPort).addGap(47).addComponent(txtPort, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
-                                                                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblPushbullet).addGap(18).addComponent(txtPushbullet, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))))
-                                        .addGroup(
-                                                groupLayout.createSequentialGroup().addGap(19).addComponent(btnReset).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnClose).addPreferredGap(ComponentPlacement.UNRELATED)
-                                                        .addComponent(btnOk))).addContainerGap()));
-        groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(
-                groupLayout
-                        .createSequentialGroup()
-                        .addGroup(
-                                groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(14).addComponent(lblUsername))
-                                        .addGroup(groupLayout.createSequentialGroup().addContainerGap().addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(ComponentPlacement.RELATED)
-                        .addGroup(
-                                groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblOauthToken))
-                                        .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtOauth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(ComponentPlacement.RELATED)
-                        .addGroup(
-                                groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblIrcServer))
-                                        .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtServer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(ComponentPlacement.RELATED)
-                        .addGroup(
-                                groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblChannel))
-                                        .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtChannel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(ComponentPlacement.RELATED)
-                        .addGroup(
-                                groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblPort))
-                                        .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))).addPreferredGap(ComponentPlacement.RELATED)
-                        .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING).addComponent(lblPushbullet).addComponent(txtPushbullet, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).addGap(11)
-                        .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnReset).addComponent(btnClose).addComponent(btnOk)).addContainerGap(26, Short.MAX_VALUE)));
-        getContentPane().setLayout(groupLayout);
-    }
+                                                      .createParallelGroup(Alignment.LEADING)
+                                                      .addGroup(groupLayout.createSequentialGroup().addComponent(lblUsername).addGap(19).addComponent(txtUsername, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                                                      .addGroup(
+                                                            groupLayout.createSequentialGroup().addComponent(lblOauthToken).addPreferredGap(ComponentPlacement.RELATED).addComponent(txtOauth, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                                                      .addGroup(groupLayout.createSequentialGroup().addComponent(lblIrcServer).addGap(14).addComponent(txtServer, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                                                      .addGroup(groupLayout.createSequentialGroup().addComponent(lblChannel).addGap(28).addComponent(txtChannel, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                                                      .addGroup(groupLayout.createSequentialGroup().addComponent(lblPort).addGap(47).addComponent(txtPort, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                                                      .addGroup(groupLayout.createSequentialGroup().addComponent(lblPushbullet).addGap(18).addComponent(txtPushbullet, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))))
+                              .addGroup(
+                                    groupLayout.createSequentialGroup().addGap(19).addComponent(btnReset).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnClose).addPreferredGap(ComponentPlacement.UNRELATED)
+                                          .addComponent(btnOk))).addContainerGap()));
+      groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(
+            groupLayout
+                  .createSequentialGroup()
+                  .addGroup(
+                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(14).addComponent(lblUsername))
+                              .addGroup(groupLayout.createSequentialGroup().addContainerGap().addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                  .addPreferredGap(ComponentPlacement.RELATED)
+                  .addGroup(
+                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblOauthToken))
+                              .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtOauth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                  .addPreferredGap(ComponentPlacement.RELATED)
+                  .addGroup(
+                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblIrcServer))
+                              .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtServer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                  .addPreferredGap(ComponentPlacement.RELATED)
+                  .addGroup(
+                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblChannel))
+                              .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtChannel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                  .addPreferredGap(ComponentPlacement.RELATED)
+                  .addGroup(
+                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblPort))
+                              .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))).addPreferredGap(ComponentPlacement.RELATED)
+                  .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING).addComponent(lblPushbullet).addComponent(txtPushbullet, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).addGap(11)
+                  .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnReset).addComponent(btnClose).addComponent(btnOk)).addContainerGap(26, Short.MAX_VALUE)));
+      getContentPane().setLayout(groupLayout);
+   }
 }

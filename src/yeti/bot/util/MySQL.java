@@ -7,7 +7,6 @@ import yeti.bot.UserClass;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -46,7 +45,7 @@ public class MySQL
 
    public static void insertUser(User user, Connection connection)
    {
-      if(user.getExp() == 0.0)
+      if (user.getExp() == 0.0)
          return;
 
       try
@@ -66,7 +65,7 @@ public class MySQL
             Logger.logError("Failed to insert " + user.getName() + " into the database.");
          else
             user.isInDb = true;
-      }catch(SQLException sqle)
+      } catch (SQLException sqle)
       {
          Logger.logError("Error inserting user named \"" + user.getName() + "\" into the database.");
          PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", "An error occurred inserting a user into the database.");
@@ -88,9 +87,9 @@ public class MySQL
          st.setString(5, user.getName());
          int val = st.executeUpdate();
 
-         if(val != 1)
+         if (val != 1)
             Logger.logError("Failed to update user named \"" + user.getName() + "\"");
-      }catch(SQLException sqle)
+      } catch (SQLException sqle)
       {
          Logger.logError("Error updating user named \"" + user.getName() + "\" in the database.");
          PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", "An error occurred updating a user in the database.");
@@ -100,7 +99,7 @@ public class MySQL
 
    public static void pushAllUsers()
    {
-      if(!sqlEnabled)
+      if (!sqlEnabled)
          return;
 
       Logger.logDebug("Connecting to MySQL database...");
@@ -112,16 +111,15 @@ public class MySQL
          Logger.logDebug("Inserting users into the MySQL database...");
 
          Iterator<User> it = Globals.getOfflineUsers().iterator();
-         while(it.hasNext())
+         while (it.hasNext())
             insertUser(it.next(), connection);
 
          it = Globals.getOnlineUsers().iterator();
-         while(it.hasNext())
+         while (it.hasNext())
             insertUser(it.next(), connection);
 
          Logger.logDebug("Done inserting users into the MySQL database.");
-      }
-      catch (SQLException e)
+      } catch (SQLException e)
       {
          Logger.logError("Error connecting to MySQL database!");
          e.printStackTrace();
@@ -137,12 +135,12 @@ public class MySQL
          ResultSet results;
 
          results = st.executeQuery("SELECT COUNT(*) FROM innodb.users");
-         if(!results.next())
+         if (!results.next())
             return;
 
          int chunkSize = 1000;
          int rows = results.getInt(1);
-         Logger.logDebug("Detected " + rows +" rows");
+         Logger.logDebug("Detected " + rows + " rows");
 
          int offset = 0, numLoaded = 0;
 
@@ -151,7 +149,7 @@ public class MySQL
             st = connection.createStatement();
             results = st.executeQuery("SELECT * FROM innodb.users LIMIT " + offset + ", " + chunkSize);
 
-            while(results.next())
+            while (results.next())
             {
                User usr = new User(results.getString("username").toLowerCase(), Faction.getByName(results.getString("faction")), UserClass.getByName(results.getString("class")), results.getInt("level"), results.getFloat("exp"));
                usr.isInDb = true;
@@ -160,12 +158,11 @@ public class MySQL
             }
 
             offset += chunkSize;
-            if(chunkSize > rows - offset)
+            if (chunkSize > rows - offset)
                chunkSize = rows - offset;
-         }while(numLoaded < rows);
+         } while (numLoaded < rows);
          Logger.logDebug("Loaded " + numLoaded + " users from the database.");
-      }
-      catch (SQLException e)
+      } catch (SQLException e)
       {
          Logger.logError("An error occurred while loading users from the database.");
          PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", "An error occurred while loading users from the database.");
@@ -180,7 +177,7 @@ public class MySQL
 
       try (Connection connection = DriverManager.getConnection(url + dbName, username, password))
       {
-         int inserted = 0, updated =0;
+         int inserted = 0, updated = 0;
 
          Logger.logDebug("Comparing local user info to database info...");
          for (User user : Globals.getOfflineUsers())
@@ -190,8 +187,7 @@ public class MySQL
             {
                insertUser(user, connection);
                inserted++;
-            }
-            else if(user.getExp() > dbUser.getExp() || user.getFaction() != dbUser.getFaction() || user.getUserClass() != dbUser.getUserClass())
+            } else if (user.getExp() > dbUser.getExp() || user.getFaction() != dbUser.getFaction() || user.getUserClass() != dbUser.getUserClass())
             {
                Logger.logDebug(user.getInfo() + " vs " + dbUser.getInfo());
                Logger.logDebug("Updating user " + user.getName() + " in the database");
@@ -201,7 +197,7 @@ public class MySQL
          }
 
          Logger.logDebug("Updated " + updated + " users and added " + inserted + " users.");
-      }catch(SQLException sqle)
+      } catch (SQLException sqle)
       {
          Logger.logError("An error occurred while comparing users from the database.");
          sqle.printStackTrace();
@@ -210,29 +206,27 @@ public class MySQL
 
    public static void updateUsers()
    {
-      if(!sqlEnabled)
+      if (!sqlEnabled)
          return;
 
       try (Connection connection = DriverManager.getConnection(url + dbName, username, password))
       {
          ArrayList<User> users = Globals.getChangedUsers();
          Logger.logDebug("Found " + users.size() + " users to update in the database.");
-         for(User user : users)
+         for (User user : users)
          {
-            if(!user.isInDb)
+            if (!user.isInDb)
             {
                user.hasChanged = false;
                insertUser(user, connection);
-            }
-            else if(user.hasChanged)
+            } else if (user.hasChanged)
             {
                user.hasChanged = false;
                updateUser(user, connection);
             }
          }
          users.clear();
-      }
-      catch (SQLException e)
+      } catch (SQLException e)
       {
          Logger.logError("Error connecting to MySQL database to update users!");
          PushbulletAPI.sendPush(Globals.pushbulletKey, "WallyBot Error", "Error connecting to MySQL database to update users!");
