@@ -277,7 +277,7 @@ public class JIRC
       }
 
       username = options.get("username").toLowerCase();
-      Globals.pushbulletKey = options.get("pushbullet_key");
+      Globals.pushbulletKey = options.get("pushbullet");
       String oauth = options.get("oauth");
       if(oauth.startsWith("oauth:"))
          oauth = oauth.substring(oauth.indexOf(':') + 1);

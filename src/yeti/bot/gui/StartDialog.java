@@ -3,18 +3,18 @@
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
- * 
+ *
  * * Redistributions in binary form must reproduce the above copyright notice, this list
  *   of conditions and the following disclaimer in the documentation and/or other materials
  *   provided with the distribution.
- * 
+ *
  * * Neither the name Yeti Games nor the names of its contributors may be used to
  *   endorse or promote products derived from this software without specific prior written
  *   permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -26,171 +26,185 @@
  */
 package yeti.bot.gui;
 
-import yeti.bot.util.Options;
-
-import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class StartDialog extends JDialog
-{
-   private Options options;
-   private JTextField txtUsername;
-   private JTextField txtOauth;
-   private JTextField txtServer;
-   private JTextField txtChannel;
-   private JTextField txtPort;
-   private JButton btnReset;
-   private JButton btnOk;
-   private JButton btnClose;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
-   /**
-    * Create the dialog.
-    */
-   public StartDialog(JFrame parent, boolean modal, Options opt)
-   {
-      super(parent, modal);
+import yeti.bot.util.Options;
 
-      options = opt;
+public class StartDialog extends JDialog {
+    private Options options;
+    private JTextField txtUsername;
+    private JTextField txtOauth;
+    private JTextField txtServer;
+    private JTextField txtChannel;
+    private JTextField txtPort;
+    private JButton btnReset;
+    private JButton btnOk;
+    private JButton btnClose;
+    private JTextField txtPushbullet;
 
-      createGUI();
+    /**
+     * Create the dialog.
+     */
+    public StartDialog(JFrame parent, boolean modal, Options opt) {
+        super(parent, modal);
 
-      setLocationRelativeTo(parent);
+        options = opt;
 
-      String username = options.get("username");
-      String oauth = options.get("oauth");
-      String serverName = options.get("server");
-      String port = options.get("port");
-      String channel = options.get("channel");
+        createGUI();
 
-      if (username != null)
-         txtUsername.setText(username.toLowerCase());
-      if (oauth != null)
-         txtOauth.setText(oauth);
-      if (serverName != null)
-         txtServer.setText(serverName);
-      if (port != null)
-         txtPort.setText(port);
-      if (channel != null)
-         txtChannel.setText(channel.toLowerCase());
-   }
+        setLocationRelativeTo(parent);
 
-   /**
-    *
-    */
-   private void createGUI()
-   {
-      setTitle("Startup");
-      setBounds(100, 100, 240, 205);
+        String username = options.get("username");
+        String oauth = options.get("oauth");
+        String serverName = options.get("server");
+        String port = options.get("port");
+        String channel = options.get("channel");
+        String pushbullet = options.get("pushbullet");
 
-      JLabel lblUsername = new JLabel("Username:");
+        if (username != null)
+            txtUsername.setText(username.toLowerCase());
+        if (oauth != null)
+            txtOauth.setText(oauth);
+        if (serverName != null)
+            txtServer.setText(serverName);
+        if (port != null)
+            txtPort.setText(port);
+        if (channel != null)
+            txtChannel.setText(channel.toLowerCase());
+        if (pushbullet != null)
+            txtPushbullet.setText(pushbullet);
+    }
 
-      JLabel lblOauthToken = new JLabel("OAuth Token:");
+    /**
+     *
+     */
+    private void createGUI() {
+        setTitle("Startup");
+        setBounds(100, 100, 250, 240);
 
-      txtUsername = new JTextField();
-      txtUsername.setColumns(10);
+        JLabel lblUsername = new JLabel("Username:");
 
-      txtOauth = new JTextField();
-      txtOauth.setColumns(10);
+        JLabel lblOauthToken = new JLabel("OAuth Token:");
 
-      txtServer = new JTextField();
-      txtServer.setText("irc.twitch.tv");
-      txtServer.setColumns(10);
+        txtUsername = new JTextField();
+        txtUsername.setColumns(10);
 
-      JLabel lblIrcServer = new JLabel("IRC Server:");
+        txtOauth = new JTextField();
+        txtOauth.setColumns(10);
 
-      txtChannel = new JTextField();
-      txtChannel.setText("SourKoolaidShow");
-      txtChannel.setColumns(10);
+        txtServer = new JTextField();
+        txtServer.setText("irc.twitch.tv");
+        txtServer.setColumns(10);
 
-      JLabel lblChannel = new JLabel("Channel:");
+        JLabel lblIrcServer = new JLabel("IRC Server:");
 
-      txtPort = new JTextField();
-      txtPort.setText("6667");
-      txtPort.setColumns(10);
+        txtChannel = new JTextField();
+        txtChannel.setText("SourKoolaidShow");
+        txtChannel.setColumns(10);
 
-      JLabel lblPort = new JLabel("Port:");
+        JLabel lblChannel = new JLabel("Channel:");
 
-      btnReset = new JButton("Reset");
-      btnReset.addActionListener(new ActionListener()
-      {
-         @Override
-         public void actionPerformed(ActionEvent ae)
-         {
+        txtPort = new JTextField();
+        txtPort.setText("6667");
+        txtPort.setColumns(10);
 
-         }
-      });
+        JLabel lblPort = new JLabel("Port:");
 
-      btnOk = new JButton("Start");
-      btnOk.addActionListener(new ActionListener()
-      {
-         @Override
-         public void actionPerformed(ActionEvent arg0)
-         {
-            options.set("username", txtUsername.getText().trim());
-            options.set("oauth", txtOauth.getText().trim());
-            options.set("server", txtServer.getText().trim());
-            options.set("channel", txtChannel.getText().trim());
-            options.set("port", txtPort.getText().trim());
-            options.save();
+        btnReset = new JButton("Reset");
+        btnReset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
 
-            setVisible(false);
-            dispose();
-         }
-      });
+            }
+        });
 
-      btnClose = new JButton("Close");
-      btnClose.addActionListener(new ActionListener()
-      {
-         @Override
-         public void actionPerformed(ActionEvent e)
-         {
-            System.exit(0);
-         }
-      });
-      GroupLayout groupLayout = new GroupLayout(getContentPane());
-      groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-            .addGroup(
-                  groupLayout
+        btnOk = new JButton("Start");
+        btnOk.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                options.set("username", txtUsername.getText().trim());
+                options.set("oauth", txtOauth.getText().trim());
+                options.set("server", txtServer.getText().trim());
+                options.set("channel", txtChannel.getText().trim());
+                options.set("port", txtPort.getText().trim());
+                options.set("pushbullet", txtPushbullet.getText().trim());
+                options.save();
+
+                setVisible(false);
+                dispose();
+            }
+        });
+
+        btnClose = new JButton("Close");
+        btnClose.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        JLabel lblPushbullet = new JLabel("PushBullet:");
+
+        txtPushbullet = new JTextField();
+        txtPushbullet.setColumns(10);
+        GroupLayout groupLayout = new GroupLayout(getContentPane());
+        groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(
+                groupLayout
                         .createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(
-                              groupLayout
-                                    .createParallelGroup(Alignment.LEADING)
-                                    .addGroup(groupLayout.createSequentialGroup().addComponent(lblUsername).addGap(19).addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(groupLayout.createSequentialGroup().addComponent(lblOauthToken).addGap(4).addComponent(txtOauth, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(groupLayout.createSequentialGroup().addComponent(lblIrcServer).addGap(14).addComponent(txtServer, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(groupLayout.createSequentialGroup().addComponent(lblChannel).addGap(28).addComponent(txtChannel, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(groupLayout.createSequentialGroup().addComponent(lblPort).addGap(47).addComponent(txtPort, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(
-                                          groupLayout.createSequentialGroup().addComponent(btnReset).addGap(18).addComponent(btnClose).addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(btnOk))).addContainerGap()));
-      groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(
-            groupLayout
-                  .createSequentialGroup()
-                  .addContainerGap()
-                  .addGroup(
-                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblUsername))
-                              .addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                  .addGap(6)
-                  .addGroup(
-                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblOauthToken))
-                              .addComponent(txtOauth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                  .addGap(6)
-                  .addGroup(
-                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblIrcServer))
-                              .addComponent(txtServer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                  .addGap(6)
-                  .addGroup(
-                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblChannel))
-                              .addComponent(txtChannel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                  .addGap(6)
-                  .addGroup(
-                        groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(3).addComponent(lblPort))
-                              .addComponent(txtPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).addPreferredGap(ComponentPlacement.UNRELATED)
-                  .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnReset).addComponent(btnOk).addComponent(btnClose)).addContainerGap(34, Short.MAX_VALUE)));
-      getContentPane().setLayout(groupLayout);
-   }
+                                groupLayout
+                                        .createParallelGroup(Alignment.LEADING)
+                                        .addGroup(
+                                                groupLayout
+                                                        .createSequentialGroup()
+                                                        .addContainerGap()
+                                                        .addGroup(
+                                                                groupLayout
+                                                                        .createParallelGroup(Alignment.LEADING)
+                                                                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblUsername).addGap(19).addComponent(txtUsername, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                                                                        .addGroup(
+                                                                                groupLayout.createSequentialGroup().addComponent(lblOauthToken).addPreferredGap(ComponentPlacement.RELATED).addComponent(txtOauth, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                                                                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblIrcServer).addGap(14).addComponent(txtServer, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                                                                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblChannel).addGap(28).addComponent(txtChannel, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                                                                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblPort).addGap(47).addComponent(txtPort, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                                                                        .addGroup(groupLayout.createSequentialGroup().addComponent(lblPushbullet).addGap(18).addComponent(txtPushbullet, GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))))
+                                        .addGroup(
+                                                groupLayout.createSequentialGroup().addGap(19).addComponent(btnReset).addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnClose).addPreferredGap(ComponentPlacement.UNRELATED)
+                                                        .addComponent(btnOk))).addContainerGap()));
+        groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(
+                groupLayout
+                        .createSequentialGroup()
+                        .addGroup(
+                                groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(14).addComponent(lblUsername))
+                                        .addGroup(groupLayout.createSequentialGroup().addContainerGap().addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(ComponentPlacement.RELATED)
+                        .addGroup(
+                                groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblOauthToken))
+                                        .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtOauth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(ComponentPlacement.RELATED)
+                        .addGroup(
+                                groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblIrcServer))
+                                        .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtServer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(ComponentPlacement.RELATED)
+                        .addGroup(
+                                groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblChannel))
+                                        .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtChannel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(ComponentPlacement.RELATED)
+                        .addGroup(
+                                groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup().addGap(9).addComponent(lblPort))
+                                        .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(txtPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))).addPreferredGap(ComponentPlacement.RELATED)
+                        .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING).addComponent(lblPushbullet).addComponent(txtPushbullet, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)).addGap(11)
+                        .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnReset).addComponent(btnClose).addComponent(btnOk)).addContainerGap(26, Short.MAX_VALUE)));
+        getContentPane().setLayout(groupLayout);
+    }
 }
